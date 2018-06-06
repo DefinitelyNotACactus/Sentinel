@@ -11,7 +11,8 @@ package executable;
  */
 public class Constants {
     
-    public static String VERSION = "1.0.0";
+    public static String VERSION = "1.1.0 Friends Edition";
     
     public static String WINDOW_CLOSE_MESSAGE[] = {"Você deseja mesmo sair?", "Aviso"};
+    public static String DEFAULT_SEARCH_MESSAGE = "Digite e-mail para pesquisar...";
 }

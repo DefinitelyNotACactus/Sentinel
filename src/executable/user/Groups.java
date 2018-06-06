@@ -5,11 +5,13 @@
  */
 package executable.user;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author David
  */
-public class Groups extends javax.swing.JPanel {
+public class Groups extends JPanel {
 
     /**
      * Creates new form Groups

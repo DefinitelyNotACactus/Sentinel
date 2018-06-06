@@ -5,11 +5,13 @@
  */
 package executable.user;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author David
  */
-public class Profile extends javax.swing.JPanel {
+public class Profile extends JPanel {
 
     /**
      * Creates new form User

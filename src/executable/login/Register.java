@@ -6,6 +6,7 @@
 package executable.login;
 
 import executable.Client;
+import executable.user.Home;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -207,8 +208,9 @@ public class Register extends JPanel {
             JOptionPane.showMessageDialog(client, "O e-mail já está em uso!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             client.getDatabase().addUserToDb(new User(regNameField.getText(), regEmailField.getText().toLowerCase(), new String(regPasswordField.getPassword()), genderBox.getSelectedIndex()-1, ddBox.getSelectedItem() +"/"+ mmBox.getSelectedItem() +"/" + yyyyBox.getSelectedItem()));
+            client.setCurrentUser(client.getDatabase().getFromMail(regEmailField.getText()));
             client.remove(this);
-            client.add(new Login(client));
+            client.add(new Home(client));
             client.revalidate();
         }   
     }//GEN-LAST:event_btRegisterActionPerformed

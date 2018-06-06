@@ -6,7 +6,8 @@
 package server;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -20,10 +21,10 @@ public class User implements Serializable{
     private int gender;
     private final String dob;
     
-    private HashMap<String, User> friends;
-    private HashMap<String, User> friend_request;
+    private ArrayList<User> friends;
+    private ArrayList<User> friend_request;
     
-    private HashMap<String, User> blocked;
+    private ArrayList<User> blocked;
     
     public User(String name, String email, String password, int gender, String dob){
         this.name = name;
@@ -32,9 +33,9 @@ public class User implements Serializable{
         this.gender = gender;
         this.dob = dob;
         
-        friends = new HashMap<>();
-        friend_request = new HashMap<>();
-        blocked = new HashMap<>();
+        friends = new ArrayList<>();
+        friend_request = new ArrayList<>();
+        blocked = new ArrayList<>();
     }
     
     public String getName(){
@@ -70,16 +71,103 @@ public class User implements Serializable{
     }
     
     public void addFriend(User newFriend){
-        friends.putIfAbsent(newFriend.getEmail(), newFriend);
+        if(!isFriend(newFriend)){
+            friends.add(newFriend);
+            newFriend.addFriend(this);
+        }
+        removeFriendRequest(newFriend);
     }
     
     public void removeFriend(User friendToRemove){
-        if(isFriend(friendToRemove)){
-            friends.remove(friendToRemove.getEmail());
+        Iterator<User> it = friends.iterator();
+        while(it.hasNext()){
+            if(friendToRemove.getEmail().equals(it.next().getEmail())){
+                it.remove();
+                friendToRemove.removeFriend(this);
+                break;
+            }
         }
     }
     
     public boolean isFriend(User friend){
-        return friends.containsKey(friend.getEmail());
-    } 
+        Iterator<User> it = friends.iterator();
+        while(it.hasNext()){
+            if(friend.getEmail().equals(it.next().getEmail())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public ArrayList<User> getFriends(){
+        return friends;
+    }
+    
+    public void newFriendRequest(User requester){
+        if(!isRequestSent(requester)){
+            friend_request.add(requester);
+        }
+    }
+    
+    public ArrayList<User> getFriendRequests(){
+        return friend_request;
+    }
+    
+    public void removeFriendRequest(User toRemove){
+        Iterator<User> it = friend_request.iterator();
+        while(it.hasNext()){
+            if(toRemove.getEmail().equals(it.next().getEmail())){
+                it.remove();
+                break;
+            }
+        }
+    }
+    
+    public boolean isRequestSent(User requester){
+        Iterator<User> it = friend_request.iterator();
+        while(it.hasNext()){
+            if(requester.getEmail().equals(it.next().getEmail())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public ArrayList<User> getBlocked(){
+        return blocked;
+    }
+    
+    public boolean isBlocked(User toSearch){
+        Iterator<User> it = blocked.iterator();
+        while(it.hasNext()){
+            if(toSearch.getEmail().equals(it.next().getEmail())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void block(User victim){
+        if(!isBlocked(victim)){
+            blocked.add(victim);
+            removeFriend(victim);
+            victim.removeFriend(this);
+            removeFriendRequest(victim);
+        }
+    }
+    
+    public void unblock (User toUnblock){
+        Iterator<User> it = blocked.iterator();
+        while(it.hasNext()){
+            if(toUnblock.getEmail().equals(it.next().getEmail())){
+                it.remove();
+                break;
+            }
+        }
+    }
+    
+    @Override
+    public String toString(){
+        return name;
+    }
 }

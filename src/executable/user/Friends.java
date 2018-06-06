@@ -5,19 +5,85 @@
  */
 package executable.user;
 
+import executable.Client;
+import executable.Constants;
+import java.awt.Toolkit;
+import java.util.Iterator;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import server.User;
+
 /**
  *
  * @author David
  */
-public class Friends extends javax.swing.JPanel {
+public class Friends extends JPanel {
 
     /**
      * Creates new form Friends
      */
-    public Friends() {
+    //JButton[][] friendButton = new JButton[10][2];
+    //JLabel[] friendLabel = new JLabel[11];
+    private final Client client;
+    private DefaultListModel friendModel;
+    private DefaultListModel requestModel;
+    private DefaultListModel blockedModel;
+
+    public Friends(Client c) {
+        friendModel = new DefaultListModel();
+        requestModel = new DefaultListModel();
+        blockedModel = new DefaultListModel();
+        this.client = c;
         initComponents();
+        listFriendPanel(false);
     }
 
+    private void listFriendPanel(boolean reload){
+        if(reload){
+            friendModel.clear();
+            requestModel.clear();
+            blockedModel.clear();   
+        }
+        Iterator it = client.getCurrentUser().getFriends().iterator();
+        while (it.hasNext()) {
+            int i = 0;
+            friendModel.add(i, it.next().toString());
+        }
+        it = client.getCurrentUser().getFriendRequests().iterator();
+        while (it.hasNext()) {
+            int i = 0;
+            requestModel.add(i, it.next().toString());
+        }
+        it = client.getCurrentUser().getBlocked().iterator();
+        while (it.hasNext()) {
+            int i = 0;
+            blockedModel.add(i, it.next().toString());
+        }
+    }
+    
+    /*public void loadFriends(){
+        int y = 62;
+        for (int i = 0; i < 10; i++, y+= 48) {
+            for(int j = 0, x = 52, width = 499; j < 2; j++, x+= 505, width -= 426){
+                friendButton[i][j] = new JButton("" + i + j);
+                friendButton[i][j].setBounds(x, y, width, 38);
+                friendButton[i][j].addActionListener(listener);
+                add(friendButton[i][j]);
+            }
+            friendLabel[i] = new JLabel();
+            friendLabel[i].setText("" + i);
+            friendLabel[i].setBounds(10, y, 38, 38);        
+            add(friendLabel[i]);
+        }
+    }
+    
+    ActionListener listener = (ActionEvent e) -> {
+        if (e.getSource() instanceof JButton) {
+            System.out.println(e.getSource().toString());
+        }
+    };*/
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,21 +93,186 @@ public class Friends extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        friendListLabel = new javax.swing.JLabel();
+        friendRequestListLabel = new javax.swing.JLabel();
+        blockedListLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        friendList = new javax.swing.JList<>(friendModel);
+        searchBox = new javax.swing.JTextField();
+        btSearch = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        friendRequestList = new javax.swing.JList<>(requestModel);
+        jScrollPane3 = new javax.swing.JScrollPane();
+        blockedList = new javax.swing.JList<>(blockedModel);
+
         setBackground(new java.awt.Color(255, 153, 0));
+        setPreferredSize(new java.awt.Dimension(1280, 660));
+
+        friendListLabel.setText("Amigos");
+
+        friendRequestListLabel.setText("Pedidos de Amizade");
+
+        blockedListLabel.setText("Bloqueados");
+
+        jScrollPane1.setViewportView(friendList);
+
+        searchBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBoxMouseClicked(evt);
+            }
+        });
+
+        btSearch.setText("Pesquisar");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSearchActionPerformed(evt);
+            }
+        });
+
+        friendRequestList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                friendRequestListMouseExited(evt);
+            }
+        });
+        friendRequestList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                friendRequestListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(friendRequestList);
+
+        jScrollPane3.setViewportView(blockedList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 10, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(friendListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(friendRequestListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(blockedListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(blockedListLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(friendListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(friendRequestListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
+
+        searchBox.setText(Constants.DEFAULT_SEARCH_MESSAGE);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBoxMouseClicked
+        if(searchBox.getText().equals(Constants.DEFAULT_SEARCH_MESSAGE)){
+            searchBox.setText("");
+        }
+    }//GEN-LAST:event_searchBoxMouseClicked
+
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+        Toolkit.getDefaultToolkit().beep();
+        String email = searchBox.getText().toLowerCase();
+        if(email.equals(client.getCurrentUser().getEmail())){
+            JOptionPane.showMessageDialog(client, "Você já é amigo de si mesmo (ou não!)", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        } else if(client.getDatabase().emailInUse(email)){
+            Toolkit.getDefaultToolkit().beep();
+            String[] options = {"Adicionar", "Bloquear", "Cancelar"};
+            if(client.getCurrentUser().isFriend(client.getDatabase().getFromMail(email))){
+                options[0] = "Remover";
+            }
+            User user = client.getDatabase().getFromMail(email);
+            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + user.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);           
+            switch(selection){
+                case 0:// add/remove friend
+                    if(client.getCurrentUser().isFriend(user)){
+                        JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        client.getCurrentUser().removeFriend(user);
+                        listFriendPanel(true);
+                    } else if(user.isBlocked(client.getCurrentUser())){
+                        JOptionPane.showMessageDialog(client, user.getName() + " bloqueoou você!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        user.newFriendRequest(client.getCurrentUser());
+                        listFriendPanel(true);
+                    }
+                    break;
+                case 1://block
+                    if(client.getCurrentUser().isBlocked(user)){
+                        JOptionPane.showMessageDialog(client, user.getName() + " já está bloqueado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(client, user.getName() + " foi bloqueado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        client.getCurrentUser().block(user);
+                        listFriendPanel(true);
+                    }
+                    break;               
+            }
+            searchBox.setText(Constants.DEFAULT_SEARCH_MESSAGE);  
+        } else {
+            JOptionPane.showMessageDialog(client, "O usuário não existe!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btSearchActionPerformed
+
+    private void friendRequestListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_friendRequestListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = friendRequestList.getSelectedIndex();
+        if(index >= 0){
+            User selected = client.getCurrentUser().getFriendRequests().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja adicionar " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                client.getCurrentUser().addFriend(selected);
+                friendRequestList.remove(index);
+            }
+            listFriendPanel(true);
+        }
+    }//GEN-LAST:event_friendRequestListValueChanged
+
+    private void friendRequestListMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_friendRequestListMouseExited
+        friendRequestList.clearSelection();
+    }//GEN-LAST:event_friendRequestListMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<User> blockedList;
+    private javax.swing.JLabel blockedListLabel;
+    private javax.swing.JButton btSearch;
+    private javax.swing.JList<User> friendList;
+    private javax.swing.JLabel friendListLabel;
+    private javax.swing.JList<User> friendRequestList;
+    private javax.swing.JLabel friendRequestListLabel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables
 }

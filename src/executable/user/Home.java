@@ -25,7 +25,7 @@ public class Home extends javax.swing.JPanel {
     public Home(Client c) {
         initComponents();
         client = c;
-        btUser.setText(client.getCurrentUser().getName());
+        btUser.setText(c.getCurrentUser().getName());
     }
 
     /**
@@ -128,7 +128,7 @@ public class Home extends javax.swing.JPanel {
 
     private void btFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFriendsActionPerformed
         page.removeAll();
-        page.add(new Friends());
+        page.add(new Friends(client));
         page.revalidate();
     }//GEN-LAST:event_btFriendsActionPerformed
 
