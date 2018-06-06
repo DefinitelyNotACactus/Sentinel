@@ -45,17 +45,17 @@ public class Friends extends JPanel {
             requestModel.clear();
             blockedModel.clear();   
         }
-        Iterator it = client.getCurrentUser().getFriends().iterator();
+        Iterator it = client.getUser().getFriends().iterator();
         while (it.hasNext()) {
             int i = 0;
             friendModel.add(i, it.next().toString());
         }
-        it = client.getCurrentUser().getFriendRequests().iterator();
+        it = client.getUser().getFriendRequests().iterator();
         while (it.hasNext()) {
             int i = 0;
             requestModel.add(i, it.next().toString());
         }
-        it = client.getCurrentUser().getBlocked().iterator();
+        it = client.getUser().getBlocked().iterator();
         while (it.hasNext()) {
             int i = 0;
             blockedModel.add(i, it.next().toString());
@@ -114,6 +114,11 @@ public class Friends extends JPanel {
 
         blockedListLabel.setText("Bloqueados");
 
+        friendList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                friendListValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(friendList);
 
         searchBox.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -141,6 +146,11 @@ public class Friends extends JPanel {
         });
         jScrollPane2.setViewportView(friendRequestList);
 
+        blockedList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                blockedListValueChanged(evt);
+            }
+        });
         jScrollPane3.setViewportView(blockedList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -182,9 +192,8 @@ public class Friends extends JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,36 +213,36 @@ public class Friends extends JPanel {
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
         Toolkit.getDefaultToolkit().beep();
         String email = searchBox.getText().toLowerCase();
-        if(email.equals(client.getCurrentUser().getEmail())){
+        if(email.equals(client.getUser().getEmail())){
             JOptionPane.showMessageDialog(client, "Você já é amigo de si mesmo (ou não!)", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         } else if(client.getDatabase().emailInUse(email)){
             Toolkit.getDefaultToolkit().beep();
             String[] options = {"Adicionar", "Bloquear", "Cancelar"};
-            if(client.getCurrentUser().isFriend(client.getDatabase().getFromMail(email))){
+            if(client.getUser().isFriend(client.getDatabase().getFromMail(email))){
                 options[0] = "Remover";
             }
             User user = client.getDatabase().getFromMail(email);
             int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + user.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);           
             switch(selection){
                 case 0:// add/remove friend
-                    if(client.getCurrentUser().isFriend(user)){
+                    if(client.getUser().isFriend(user)){
                         JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        client.getCurrentUser().removeFriend(user);
+                        client.getUser().removeFriend(user);
                         listFriendPanel(true);
-                    } else if(user.isBlocked(client.getCurrentUser())){
+                    } else if(user.isBlocked(client.getUser())){
                         JOptionPane.showMessageDialog(client, user.getName() + " bloqueoou você!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        user.newFriendRequest(client.getCurrentUser());
+                        user.newFriendRequest(client.getUser());
                         listFriendPanel(true);
                     }
                     break;
                 case 1://block
-                    if(client.getCurrentUser().isBlocked(user)){
+                    if(client.getUser().isBlocked(user)){
                         JOptionPane.showMessageDialog(client, user.getName() + " já está bloqueado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(client, user.getName() + " foi bloqueado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        client.getCurrentUser().block(user);
+                        client.getUser().block(user);
                         listFriendPanel(true);
                     }
                     break;               
@@ -248,10 +257,10 @@ public class Friends extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         int index = friendRequestList.getSelectedIndex();
         if(index >= 0){
-            User selected = client.getCurrentUser().getFriendRequests().get(index);
+            User selected = client.getUser().getFriendRequests().get(index);
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja adicionar " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
-                client.getCurrentUser().addFriend(selected);
+                client.getUser().addFriend(selected);
                 friendRequestList.remove(index);
             }
             listFriendPanel(true);
@@ -261,6 +270,24 @@ public class Friends extends JPanel {
     private void friendRequestListMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_friendRequestListMouseExited
         friendRequestList.clearSelection();
     }//GEN-LAST:event_friendRequestListMouseExited
+
+    private void blockedListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_blockedListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = blockedList.getSelectedIndex();
+        if(index >= 0){
+            User selected = client.getUser().getBlocked().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja desbloquear " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                client.getUser().unblock(selected);
+                blockedList.remove(index);
+            }
+            listFriendPanel(true);
+        }
+    }//GEN-LAST:event_blockedListValueChanged
+
+    private void friendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_friendListValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_friendListValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<User> blockedList;

@@ -66,7 +66,7 @@ public class Client extends JFrame {
         return db;
     }
     
-    public User getCurrentUser(){
+    public User getUser(){
         return currentUser;
     }
     

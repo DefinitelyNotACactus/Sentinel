@@ -25,7 +25,9 @@ public class Home extends javax.swing.JPanel {
     public Home(Client c) {
         initComponents();
         client = c;
-        btUser.setText(c.getCurrentUser().getName());
+        if(c.getUser().getName() != null){ //NullPointerException
+            btUser.setText(c.getUser().getName());
+        }
     }
 
     /**
