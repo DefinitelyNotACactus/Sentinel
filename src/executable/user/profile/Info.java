@@ -16,14 +16,10 @@ public class Info extends javax.swing.JPanel {
     private final Client client;
     
     public Info(Client c) {
-        initComponents();
         this.client = c;
-        //listInfo();
+        initComponents();
     }
 
-    /*private void listInfo(){
-        jLabel1.setText("");
-    }*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +40,7 @@ public class Info extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(959, 580));
+        setPreferredSize(new java.awt.Dimension(1086, 638));
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

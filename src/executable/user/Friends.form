@@ -86,17 +86,23 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="friendListLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Amigos"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;Amigos (&quot;+ client.getUser().getFriends().size() +&quot;)&quot;" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="friendRequestListLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Pedidos de Amizade"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;&lt;html&gt;Pedidos de Amizade &lt;b&gt;(&quot;+ client.getUser().getFriendRequests().size() + &quot; Pendentes)&lt;/b&gt;&quot;" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="blockedListLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bloqueados"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;Bloqueados (&quot;+ client.getUser().getBlocked().size() + &quot;)&quot;" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -152,7 +158,6 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="friendRequestListMouseExited"/>
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="friendRequestListValueChanged"/>
           </Events>
           <AuxValues>

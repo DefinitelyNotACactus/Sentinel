@@ -10,6 +10,7 @@ import executable.Constants;
 import executable.login.Login;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -23,11 +24,8 @@ public class Home extends javax.swing.JPanel {
     private final Client client;
     
     public Home(Client c) {
+        this.client = c;
         initComponents();
-        client = c;
-        if(c.getUser().getName() != null){ //NullPointerException
-            btUser.setText(c.getUser().getName());
-        }
     }
 
     /**
@@ -48,10 +46,11 @@ public class Home extends javax.swing.JPanel {
         page = new javax.swing.JPanel();
 
         userBar.setBackground(new java.awt.Color(51, 102, 0));
+        userBar.setMinimumSize(new java.awt.Dimension(739, 60));
 
         userIcon.setText("userIcon");
 
-        btUser.setText("btUser");
+        btUser.setText("Você");
         btUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserActionPerformed(evt);
@@ -88,7 +87,7 @@ public class Home extends javax.swing.JPanel {
                 .addComponent(userIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btUser, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 547, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btGroups, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -110,6 +109,8 @@ public class Home extends javax.swing.JPanel {
         );
 
         page.setBackground(new java.awt.Color(0, 153, 204));
+        page.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        page.setPreferredSize(new java.awt.Dimension(1280, 660));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -117,20 +118,20 @@ public class Home extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(userBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(userBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE))
+                .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFriendsActionPerformed
         page.removeAll();
-        page.add(new Friends(client));
+        page.add(new Friends(client, this));
         page.revalidate();
     }//GEN-LAST:event_btFriendsActionPerformed
 
@@ -156,7 +157,10 @@ public class Home extends javax.swing.JPanel {
         page.revalidate();
     }//GEN-LAST:event_btUserActionPerformed
 
-
+    public JPanel getPage(){
+        return page;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btFriends;
     private javax.swing.JButton btGroups;

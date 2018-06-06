@@ -26,15 +26,18 @@ public class Friends extends JPanel {
     //JButton[][] friendButton = new JButton[10][2];
     //JLabel[] friendLabel = new JLabel[11];
     private final Client client;
+    private final Home home;
+    
     private DefaultListModel friendModel;
     private DefaultListModel requestModel;
     private DefaultListModel blockedModel;
 
-    public Friends(Client c) {
+    public Friends(Client c, Home home) {
+        this.client = c;
+        this.home = home;
         friendModel = new DefaultListModel();
         requestModel = new DefaultListModel();
         blockedModel = new DefaultListModel();
-        this.client = c;
         initComponents();
         listFriendPanel(false);
     }
@@ -46,18 +49,16 @@ public class Friends extends JPanel {
             blockedModel.clear();   
         }
         Iterator it = client.getUser().getFriends().iterator();
-        while (it.hasNext()) {
-            int i = 0;
+        int i;
+        for(i = 0; it.hasNext(); i++) {
             friendModel.add(i, it.next().toString());
         }
         it = client.getUser().getFriendRequests().iterator();
-        while (it.hasNext()) {
-            int i = 0;
+        for (i = 0; it.hasNext(); i++) {
             requestModel.add(i, it.next().toString());
         }
         it = client.getUser().getBlocked().iterator();
-        while (it.hasNext()) {
-            int i = 0;
+        for (i = 0; it.hasNext(); i++) {
             blockedModel.add(i, it.next().toString());
         }
     }
@@ -108,11 +109,11 @@ public class Friends extends JPanel {
         setBackground(new java.awt.Color(255, 153, 0));
         setPreferredSize(new java.awt.Dimension(1280, 660));
 
-        friendListLabel.setText("Amigos");
+        friendListLabel.setText("Amigos ("+ client.getUser().getFriends().size() +")");
 
-        friendRequestListLabel.setText("Pedidos de Amizade");
+        friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getFriendRequests().size() + " Pendentes)</b>");
 
-        blockedListLabel.setText("Bloqueados");
+        blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
 
         friendList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -134,11 +135,6 @@ public class Friends extends JPanel {
             }
         });
 
-        friendRequestList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                friendRequestListMouseExited(evt);
-            }
-        });
         friendRequestList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 friendRequestListValueChanged(evt);
@@ -267,10 +263,6 @@ public class Friends extends JPanel {
         }
     }//GEN-LAST:event_friendRequestListValueChanged
 
-    private void friendRequestListMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_friendRequestListMouseExited
-        friendRequestList.clearSelection();
-    }//GEN-LAST:event_friendRequestListMouseExited
-
     private void blockedListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_blockedListValueChanged
         Toolkit.getDefaultToolkit().beep();
         int index = blockedList.getSelectedIndex();
@@ -286,7 +278,18 @@ public class Friends extends JPanel {
     }//GEN-LAST:event_blockedListValueChanged
 
     private void friendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_friendListValueChanged
-        // TODO add your handling code here:
+        Toolkit.getDefaultToolkit().beep();
+        int index = friendList.getSelectedIndex();
+        if(index >= 0){
+            User selected = client.getUser().getFriends().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                home.getPage().removeAll();
+                home.getPage().add(new Profile(client, selected));
+                home.getPage().revalidate();
+            }
+            listFriendPanel(true);
+        }
     }//GEN-LAST:event_friendListValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

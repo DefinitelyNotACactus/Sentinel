@@ -5,10 +5,12 @@
  */
 package executable.user;
 
+import executable.user.profile.Wall;
 import executable.Client;
 import executable.user.profile.Info;
-import executable.user.profile.Wall;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import server.User;
 
 /**
  *
@@ -17,12 +19,20 @@ import javax.swing.JPanel;
 public class Profile extends JPanel {
 
     private final Client client;
+    private final User user;
     
     public Profile(Client c) {
         this.client = c;
+        this.user = c.getUser();
         initComponents();
     }
 
+    public Profile(Client c, User user) {
+        this.client = c;
+        this.user = user;
+        initComponents();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,27 +55,25 @@ public class Profile extends JPanel {
         userPhotoLabel.setText("userPhotoLabel");
         userPhotoLabel.setOpaque(true);
 
-        btUserName.setText("btUserName");
-        btUserName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btUserNameActionPerformed(evt);
-            }
-        });
+        btUserName.setText("" + user.getName());
+        btUserName.setToolTipText("" + user.getName());
 
-        btUserInfo.setText("btUserInfo");
+        btUserInfo.setText("Perfil");
         btUserInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserInfoActionPerformed(evt);
             }
         });
 
-        btUserWall.setText("btUserWall");
+        btUserWall.setText("Mural");
         btUserWall.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserWallActionPerformed(evt);
             }
         });
 
+        page.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -81,7 +89,7 @@ public class Profile extends JPanel {
                     .addComponent(btUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btUserWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, 1086, Short.MAX_VALUE)
+                .addComponent(page, javax.swing.GroupLayout.PREFERRED_SIZE, 1086, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -89,7 +97,7 @@ public class Profile extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(userPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -100,16 +108,19 @@ public class Profile extends JPanel {
                         .addComponent(btUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 312, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-    }// </editor-fold>//GEN-END:initComponents
 
-    private void btUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserNameActionPerformed
-        page.removeAll();
-        page.add(new Wall(client));
-        page.revalidate();
-    }//GEN-LAST:event_btUserNameActionPerformed
+        isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        if(user.getEmail() != client.getUser().getEmail()){
+            if(client.getUser().isFriend(user)){
+                isFriendLabel.setText("É seu amigo");
+            }
+        } else {
+            isFriendLabel.setText("(Você)");
+        }
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserInfoActionPerformed
         page.removeAll();
@@ -118,7 +129,9 @@ public class Profile extends JPanel {
     }//GEN-LAST:event_btUserInfoActionPerformed
 
     private void btUserWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserWallActionPerformed
-        // TODO add your handling code here:
+        page.removeAll();
+        page.add(new Wall(client));
+        page.revalidate();
     }//GEN-LAST:event_btUserWallActionPerformed
 
 
