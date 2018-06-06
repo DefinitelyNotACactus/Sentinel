@@ -152,7 +152,7 @@ public class Home extends javax.swing.JPanel {
 
     private void btUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserActionPerformed
         page.removeAll();
-        page.add(new Profile());
+        page.add(new Profile(client));
         page.revalidate();
     }//GEN-LAST:event_btUserActionPerformed
 
