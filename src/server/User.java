@@ -8,6 +8,7 @@ package server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -21,10 +22,11 @@ public class User implements Serializable{
     private int gender;
     private final String dob;
     
-    private ArrayList<User> friends;
-    private ArrayList<User> friend_request;
+    private List<User> friends;
+    private List<User> friend_request; 
+    private List<User> blocked;
     
-    private ArrayList<User> blocked;
+    private List<Post> posts;
     
     public User(String name, String email, String password, int gender, String dob){
         this.name = name;
@@ -36,6 +38,8 @@ public class User implements Serializable{
         friends = new ArrayList<>();
         friend_request = new ArrayList<>();
         blocked = new ArrayList<>();
+        
+        posts = new ArrayList<>();
     }
     
     public String getName(){
@@ -99,7 +103,7 @@ public class User implements Serializable{
         return false;
     }
     
-    public ArrayList<User> getFriends(){
+    public List<User> getFriends(){
         return friends;
     }
     
@@ -109,7 +113,7 @@ public class User implements Serializable{
         }
     }
     
-    public ArrayList<User> getFriendRequests(){
+    public List<User> getFriendRequests(){
         return friend_request;
     }
     
@@ -133,7 +137,7 @@ public class User implements Serializable{
         return false;
     }
     
-    public ArrayList<User> getBlocked(){
+    public List<User> getBlocked(){
         return blocked;
     }
     
@@ -164,6 +168,22 @@ public class User implements Serializable{
                 break;
             }
         }
+    }
+    
+    public void addPost(Post newPost){
+        posts.add(newPost);
+    }
+    
+    public void removePost(int index){
+        posts.remove(index);
+    }
+    
+    public List<Post> getPosts(){
+        return posts;
+    }
+    
+    public Post getPost(int index){
+        return posts.get(index);
     }
     
     @Override

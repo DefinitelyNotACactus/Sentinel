@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package executable.user;
+package view.user;
 
+import view.user.Groups;
 import executable.Client;
-import executable.Constants;
-import executable.login.Login;
+import util.Constants;
+import view.login.Login;
+import java.awt.Font;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,20 +39,28 @@ public class Home extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        page = new javax.swing.JPanel();
         userBar = new javax.swing.JPanel();
         userIcon = new javax.swing.JLabel();
         btUser = new javax.swing.JButton();
         btFriends = new javax.swing.JButton();
         btGroups = new javax.swing.JButton();
         btLogoff = new javax.swing.JButton();
-        page = new javax.swing.JPanel();
+
+        page.setBackground(new java.awt.Color(0, 153, 204));
+        page.setPreferredSize(new java.awt.Dimension(1280, 660));
+        page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
+        page.removeAll();
+        page.add(new Profile(client));
+        page.revalidate();
 
         userBar.setBackground(new java.awt.Color(51, 102, 0));
         userBar.setMinimumSize(new java.awt.Dimension(739, 60));
 
         userIcon.setText("userIcon");
 
-        btUser.setText("Você");
+        btUser.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btUser.setText(client.getUser().getName());
         btUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserActionPerformed(evt);
@@ -108,11 +118,6 @@ public class Home extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        page.setBackground(new java.awt.Color(0, 153, 204));
-        page.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        page.setPreferredSize(new java.awt.Dimension(1280, 660));
-        page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,12 +135,18 @@ public class Home extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFriendsActionPerformed
+        btFriends.setFont(new Font(Constants.FONT, 1, 12));
+        btGroups.setFont(new Font(Constants.FONT, 0, 12));
+        btUser.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Friends(client, this));
         page.revalidate();
     }//GEN-LAST:event_btFriendsActionPerformed
 
     private void btGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGroupsActionPerformed
+        btGroups.setFont(new Font(Constants.FONT, 1, 12));
+        btFriends.setFont(new Font(Constants.FONT, 0, 12));       
+        btUser.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Groups());
         page.revalidate();
@@ -152,6 +163,9 @@ public class Home extends javax.swing.JPanel {
     }//GEN-LAST:event_btLogoffActionPerformed
 
     private void btUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserActionPerformed
+        btUser.setFont(new Font(Constants.FONT, 1, 12));
+        btFriends.setFont(new Font(Constants.FONT, 0, 12));
+        btGroups.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Profile(client));
         page.revalidate();

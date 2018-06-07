@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package executable.user;
+package view.user;
 
 import executable.Client;
-import executable.Constants;
+import util.Constants;
 import java.awt.Toolkit;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
@@ -44,8 +44,11 @@ public class Friends extends JPanel {
 
     private void listFriendPanel(boolean reload){
         if(reload){
+            friendListLabel.setText("Amigos ("+ client.getUser().getFriends().size() +")");
             friendModel.clear();
+            friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getFriendRequests().size() + " Pendentes)</b>");
             requestModel.clear();
+            blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
             blockedModel.clear();   
         }
         Iterator it = client.getUser().getFriends().iterator();

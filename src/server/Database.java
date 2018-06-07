@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class Database implements Serializable{
     private static final long serialVersionUID = 147788L;
 
-    private HashMap<String, User> users;
+    private Map<String, User> users;
     
     private Database(){
         users = new HashMap<>();

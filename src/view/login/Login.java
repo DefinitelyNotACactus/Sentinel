@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package executable.login;
+package view.login;
 
 import executable.Client;
-import executable.Constants;
-import executable.user.Home;
+import util.Constants;
+import view.user.Home;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;

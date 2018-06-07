@@ -5,7 +5,8 @@
  */
 package executable;
 
-import executable.login.Login;
+import util.Constants;
+import view.login.Login;
 import static java.awt.EventQueue.invokeLater;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -42,7 +43,6 @@ public class Client extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sentinel");
         setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {

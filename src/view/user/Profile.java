@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package executable.user;
+package view.user;
 
-import executable.user.profile.Wall;
+import view.user.profile.Wall;
 import executable.Client;
-import executable.user.profile.Info;
+import util.Constants;
+import view.user.profile.Info;
+import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import server.User;
@@ -33,6 +35,9 @@ public class Profile extends JPanel {
         initComponents();
     }
     
+    public void loadPosts(boolean reload){
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,12 +64,14 @@ public class Profile extends JPanel {
         btUserName.setToolTipText("" + user.getName());
 
         btUserInfo.setText("Perfil");
+        btUserInfo.setFont(new Font(Constants.FONT, Font.PLAIN, 11));
         btUserInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserInfoActionPerformed(evt);
             }
         });
 
+        btUserWall.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btUserWall.setText("Mural");
         btUserWall.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,9 +79,12 @@ public class Profile extends JPanel {
             }
         });
 
-        page.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        page.setBackground(new java.awt.Color(0, 102, 153));
         page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
+        page.removeAll();
+        page.add(new Wall(client, user));
+        page.revalidate();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -107,9 +117,8 @@ public class Profile extends JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -123,14 +132,18 @@ public class Profile extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserInfoActionPerformed
+        btUserInfo.setFont(new java.awt.Font(Constants.FONT, 1, 11));
+        btUserWall.setFont(new java.awt.Font(Constants.FONT, 0, 11));
         page.removeAll();
         page.add(new Info(client));
         page.revalidate();
     }//GEN-LAST:event_btUserInfoActionPerformed
 
     private void btUserWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserWallActionPerformed
+        btUserWall.setFont(new java.awt.Font(Constants.FONT, 1, 11));
+        btUserInfo.setFont(new java.awt.Font(Constants.FONT, 0, 11));
         page.removeAll();
-        page.add(new Wall(client));
+        page.add(new Wall(client, user));
         page.revalidate();
     }//GEN-LAST:event_btUserWallActionPerformed
 

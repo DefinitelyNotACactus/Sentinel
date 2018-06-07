@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package executable.user.profile;
+package view.user.profile;
 
 import executable.Client;
 
@@ -40,6 +40,8 @@ public class Info extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(0, 102, 153));
+        setMaximumSize(new java.awt.Dimension(0, 0));
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
