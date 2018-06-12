@@ -191,6 +191,9 @@ public class Register extends JPanel {
         } else if(!Validator.validateEmail(regEmailField.getText())){
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(client, "O e-mail não é válido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(client.getDatabase().getFromMail(regEmailField.getText()) != null){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(client, "O e-mail está em uso!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else if(genderBox.getSelectedIndex() == 0){
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(client, "Escolha um gênero válido!", "Aviso", JOptionPane.WARNING_MESSAGE);

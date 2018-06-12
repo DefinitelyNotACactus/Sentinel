@@ -5,7 +5,6 @@
  */
 package view.user;
 
-import view.user.Groups;
 import executable.Client;
 import util.Constants;
 import view.login.Login;
@@ -18,7 +17,7 @@ import javax.swing.JPanel;
  *
  * @author David
  */
-public class Home extends javax.swing.JPanel {
+public class Home extends JPanel {
 
     /**
      * Creates new form Homed
@@ -67,7 +66,11 @@ public class Home extends javax.swing.JPanel {
             }
         });
 
-        btFriends.setText("Amigos");
+        if(client.getUser().getFriendRequests().size() > 0){
+            btFriends.setText("<html>"+ Constants.BTFRIENDS_TEXT +" <b>("+ client.getUser().getFriendRequests().size() +" Pendentes)</b></html>");
+        } else {
+            btFriends.setText(Constants.BTFRIENDS_TEXT);
+        }
         btFriends.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btFriendsActionPerformed(evt);
@@ -136,6 +139,7 @@ public class Home extends javax.swing.JPanel {
 
     private void btFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFriendsActionPerformed
         btFriends.setFont(new Font(Constants.FONT, 1, 12));
+        btFriends.setText(Constants.BTFRIENDS_TEXT);
         btGroups.setFont(new Font(Constants.FONT, 0, 12));
         btUser.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();

@@ -51,12 +51,12 @@ public class Post implements Serializable {
     }
     
     public void like(User liked){
-        likes.putIfAbsent(liked.getEmail(), true);
+        likes.putIfAbsent(liked.getId(), true);
     }
     
     public void unlike(User unliked){
-        if(likes.containsKey(unliked.getEmail())){
-            likes.remove(unliked.getEmail());
+        if(likes.containsKey(unliked.getId())){
+            likes.remove(unliked.getId());
         }
     }
     

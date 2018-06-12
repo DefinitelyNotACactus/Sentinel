@@ -115,10 +115,14 @@ public class Login extends JPanel {
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
         if(client.getDatabase().emailInUse(loginEmailField.getText().toLowerCase())){
             if(client.getDatabase().getPassword(loginEmailField.getText().toLowerCase()).equals(new String(loginPasswordField.getPassword()))){
+                try{
                 client.setCurrentUser(client.getDatabase().getFromMail(loginEmailField.getText()));
-                client.remove(this);
                 client.add(new Home(client));
+                client.remove(this);
                 client.revalidate();
+                } catch (NullPointerException ex){
+                    JOptionPane.showMessageDialog(client, "Erro Desconhecido", "Aviso", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(client, "Senha incorreta!", "Aviso", JOptionPane.ERROR_MESSAGE);

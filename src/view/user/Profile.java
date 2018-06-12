@@ -122,7 +122,7 @@ public class Profile extends JPanel {
         );
 
         isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        if(user.getEmail() != client.getUser().getEmail()){
+        if(user.getId() != client.getUser().getId()){
             if(client.getUser().isFriend(user)){
                 isFriendLabel.setText("É seu amigo");
             }

@@ -22,6 +22,7 @@ public class Database implements Serializable{
     private static final long serialVersionUID = 147788L;
 
     private Map<String, User> users;
+    private Map<String, Group> groups;
     
     private Database(){
         users = new HashMap<>();
@@ -43,7 +44,7 @@ public class Database implements Serializable{
     }
     
     public void addUserToDb(User newUser){
-        users.put(newUser.getEmail(), newUser);
+        users.put(newUser.getId(), newUser);
     }
     
     public boolean emailInUse(String email){

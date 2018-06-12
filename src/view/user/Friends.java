@@ -212,7 +212,7 @@ public class Friends extends JPanel {
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
         Toolkit.getDefaultToolkit().beep();
         String email = searchBox.getText().toLowerCase();
-        if(email.equals(client.getUser().getEmail())){
+        if(email.equals(client.getUser().getId())){
             JOptionPane.showMessageDialog(client, "Você já é amigo de si mesmo (ou não!)", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         } else if(client.getDatabase().emailInUse(email)){
             Toolkit.getDefaultToolkit().beep();
