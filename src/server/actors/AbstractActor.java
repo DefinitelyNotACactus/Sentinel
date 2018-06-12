@@ -5,7 +5,6 @@
  */
 package server.actors;
 
-import server.actors.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,93 +16,145 @@ import server.Post;
  * @author David
  */
 public abstract class AbstractActor implements Serializable{
-    private String name;
-    private String id;
+    protected String name;
+    protected String id;
 
-    private List<User> friends;//i'll leave friends for now, assuming that a member of a group is also a friend of that group.
-    private List<User> request; 
-    private List<User> blocked;
+    protected List<User> related;//i'll leave friends for now, assuming that a member of a group is also a friend of that group.
+    protected List<User> request; 
+    protected List<User> blocked;
     
-    private List<Post> posts;
+    protected List<Post> posts;
     
+    /**
+     * Creates a new abstract actor
+     * @param name The Actor's name
+     * @param id The Actor's id, used for the mapping.
+     */
     public AbstractActor(String name, String id){
         this.name = name;
         this.id = id;
         
         
-        friends = new ArrayList<>();
+        related = new ArrayList<>();
         request = new ArrayList<>();
         blocked = new ArrayList<>();
         
         posts = new ArrayList<>();
     }
     
-        public String getName(){
+    /**
+     * Returns this actor name.
+     * @return The Actor's name.
+     */
+    public String getName(){
         return name;
     }
     
+    /**
+     * Gives a new name to this actor.
+     * @param newName The actor's new name.
+     */
     public void setName(String newName){
         name = newName;
     }
     
+    /**
+     * Gives the ID of this actor.
+     * @return The Mail if the actor is a User or the group's username if the actor is a Group.
+     */
     public String getId(){
         return id;
     }
     
+    /**
+     * Gives a new ID to this actor.
+     * @param newId The Actor's new ID
+     * @deprecated Unsafe, may crash the database.
+     */
+    @Deprecated
     public void setId(String newId){
         id = newId;
     }
     
-    public void addFriend(User newFriend){
-        if(!isFriend(newFriend)){
-            friends.add(newFriend);
+    /**
+     * Adds a new relative this actor (friend/member).
+     * @param newRelative The user to be added.
+     */
+    public void addRelative(User newRelative){
+        if(!isRelative(newRelative)){
+            related.add(newRelative);
             Object ob = this;
             if(ob instanceof User){
-                newFriend.addFriend((User) ob);
+                newRelative.addRelative((User) ob);
             }
         }
-        removeFriendRequest(newFriend);
+        removeRequest(newRelative);
     }
     
-    public void removeFriend(User friendToRemove){
-        Iterator<User> it = friends.iterator();
+    /**
+     * Ends a relationship beetwen this actor and the param.
+     * @param relativeToRemove The user to be removed.
+     */
+    public void removeRelative(User relativeToRemove){
+        Iterator<User> it = related.iterator();
         while(it.hasNext()){
-            if(friendToRemove.getId().equals(it.next().getId())){
+            if(relativeToRemove.getId().equals(it.next().getId())){
                 it.remove();
                 Object ob = this;
                 if(ob instanceof User){
-                    friendToRemove.removeFriend((User) ob);
+                    relativeToRemove.removeRelative((User) ob);
                 }
                 break;
             }
         }
     }
     
-    public boolean isFriend(User friend){
-        Iterator<User> it = friends.iterator();
+    /**
+     * Tests if a user has a relationship with this actor.
+     * @param relative The user to test.
+     * @return If the user has a relationship with this actor.
+     */
+    public boolean isRelative(User relative){
+        Iterator<User> it = related.iterator();
         while(it.hasNext()){
-            if(friend.getId().equals(it.next().getId())){
+            if(relative.getId().equals(it.next().getId())){
                 return true;
             }
         }
         return false;
     }
     
-    public List<User> getFriends(){
-        return friends;
+    /**
+     * Shows the list of relatives of this actor.
+     * @return An ArrayList with the related users.
+     */
+    public List<User> getRelatives(){
+        return related;
     }
     
-    public void newFriendRequest(User requester){
+    /**
+     * Sends a new Request to this actor.
+     * @param requester The user that is requesting.
+     */
+    public void newRequest(User requester){
         if(!isRequestSent(requester)){
             request.add(requester);
         }
     }
     
-    public List<User> getFriendRequests(){
+    /**
+     * Shows this actor requests.
+     * @return An ArrayList with the users requesting.
+     */
+    public List<User> getRequests(){
         return request;
     }
     
-    public void removeFriendRequest(User toRemove){
+    /**
+     * Removes a request from the request list.
+     * @param toRemove The User to be removed from the list.
+     */
+    public void removeRequest(User toRemove){
         Iterator<User> it = request.iterator();
         while(it.hasNext()){
             if(toRemove.getId().equals(it.next().getId())){
@@ -113,6 +164,11 @@ public abstract class AbstractActor implements Serializable{
         }
     }
     
+    /**
+     * Avoids a duplicate request.
+     * @param requester The user that is requesting.
+     * @return If a request has been previously sent.
+     */
     public boolean isRequestSent(User requester){
         Iterator<User> it = request.iterator();
         while(it.hasNext()){
@@ -123,10 +179,19 @@ public abstract class AbstractActor implements Serializable{
         return false;
     }
     
+    /**
+     * Shows the list of Users blocked by this actor.
+     * @return An ArrayList with the users blocked by this actor.
+     */
     public List<User> getBlocked(){
         return blocked;
     }
     
+    /**
+     * Checks if a user has been blocked by this actor.
+     * @param toSearch The user to search.
+     * @return If a user has been blocked by this actor.
+     */
     public boolean isBlocked(User toSearch){
         Iterator<User> it = blocked.iterator();
         while(it.hasNext()){
@@ -137,18 +202,26 @@ public abstract class AbstractActor implements Serializable{
         return false;
     }
     
+    /**
+     * Blocks a user
+     * @param victim The user to block 
+     */
     public void block(User victim){
         if(!isBlocked(victim)){
             getBlocked().add(victim);
-            removeFriend(victim);
+            removeRelative(victim);
             Object ob = this;
             if(ob instanceof User){
-                victim.removeFriend((User) ob);
+                victim.removeRelative((User) ob);
             }
-            removeFriendRequest(victim);
+            removeRequest(victim);
         }
     }
     
+    /**
+     * Unblocks a user
+     * @param toUnblock The user to unblock
+     */
     public void unblock(User toUnblock){
         Iterator<User> it = blocked.iterator();
         while(it.hasNext()){
@@ -159,18 +232,35 @@ public abstract class AbstractActor implements Serializable{
         }
     }
     
+    /**
+     * Adds a new post to this actor's wall.
+     * @param newPost The post to be added.
+     */
     public void addPost(Post newPost){
         posts.add(newPost);
     }
     
+    /**
+     * Removes a post from this actor's wall by index.
+     * @param index The index of the post to be removed.
+     */
     public void removePost(int index){
         posts.remove(index);
     }
     
+    /**
+     * Shows the posts on this actor's wall.
+     * @return An ArrayList with this actor's posts.
+     */
     public List<Post> getPosts(){
         return posts;
     }
     
+    /**
+     * Gets a post from this actor's wall by index.
+     * @param index The index to be searched.
+     * @return A post from this index.
+     */
     public Post getPost(int index){
         return posts.get(index);
     }
