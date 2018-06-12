@@ -12,7 +12,7 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import server.User;
+import server.actors.User;
 
 /**
  *

@@ -11,7 +11,7 @@ import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import server.User;
+import server.actors.User;
 import util.Validator;
 
 /**

@@ -7,7 +7,6 @@ package view.user.post;
 
 import java.awt.Font;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import server.Post;
 import util.Constants;
 
@@ -48,8 +47,8 @@ public class PostPanel extends javax.swing.JPanel {
         titleLabel = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
 
-        titleLabel.setFont(new Font(Constants.FONT, Font.BOLD, 16));
-        titleLabel.setText(post.getTitle());
+        titleLabel.setFont(new Font(Constants.FONT, Font.PLAIN, 16));
+        titleLabel.setText("<html><b>" + post.getTitle() + "</b><br/>" + "Autor: " + post.getAuthor() + "</html>");
 
         contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
 

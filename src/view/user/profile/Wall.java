@@ -14,7 +14,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import server.Post;
-import server.User;
+import server.actors.User;
 import view.user.Profile;
 
 /**
@@ -37,9 +37,11 @@ public class Wall extends javax.swing.JPanel {
         isNewPost = true;
         this.client = c;
         this.user = user;
-        userPostModel = new DefaultListModel();
-        initComponents();
         
+        userPostModel = new DefaultListModel();
+        thirdUserPostModel = new DefaultListModel();
+        
+        initComponents();
         listPosts(false);
     }
     
@@ -52,6 +54,10 @@ public class Wall extends javax.swing.JPanel {
         for(i = 0; it.hasNext(); i++) {
             userPostModel.add(i, it.next().toString());
         }
+        it = user.getPostsFromOthers().iterator();
+        for(i = 0; it.hasNext(); i++){
+            thirdUserPostModel.add(i, it.next().toString());
+        }        
     }
     
     /**
@@ -68,7 +74,7 @@ public class Wall extends javax.swing.JPanel {
         userWallPostList = new javax.swing.JList<>(userPostModel);
         thirdPersonWallPostLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        thirPersonWallPostList = new javax.swing.JList<>();
+        thirdPersonWallPostList = new javax.swing.JList<>(thirdUserPostModel);
         postPanel = new javax.swing.JPanel();
         btReply = new javax.swing.JButton();
         btLike = new javax.swing.JButton();
@@ -89,7 +95,12 @@ public class Wall extends javax.swing.JPanel {
 
         thirdPersonWallPostLabel.setText("thirdPersonWallPostLabel");
 
-        jScrollPane2.setViewportView(thirPersonWallPostList);
+        thirdPersonWallPostList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                thirdPersonWallPostListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(thirdPersonWallPostList);
 
         postPanel.setPreferredSize(new java.awt.Dimension(830, 570));
         postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -179,7 +190,11 @@ public class Wall extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(client, Constants.NULL_TEXT, "Aviso", JOptionPane.WARNING_MESSAGE);  
             } else {
                 Post post = new Post(newPost.getTitle(), newPost.getText(), client.getUser());
-                user.addPost(post);
+                if(client.getUser().getId().equals(user.getId())){
+                    user.addPost(post);
+                } else {
+                    user.addPostFromOthers(post);
+                }
                 postPanel.removeAll();
                 postPanel.add(new PostPanel(post));
                 btNewPost.setText("Nova Mensagem");
@@ -191,7 +206,7 @@ public class Wall extends javax.swing.JPanel {
     }//GEN-LAST:event_btNewPostActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        // TODO add your handling code here:
+        //TODO
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void userWallPostListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_userWallPostListValueChanged
@@ -204,6 +219,16 @@ public class Wall extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_userWallPostListValueChanged
 
+    private void thirdPersonWallPostListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_thirdPersonWallPostListValueChanged
+        int index = thirdPersonWallPostList.getSelectedIndex();
+        if(index >= 0){
+            Post post = user.getPostFromOthersByIndex(index);
+            postPanel.removeAll();
+            postPanel.add(new PostPanel(post));
+            postPanel.revalidate();
+        }
+    }//GEN-LAST:event_thirdPersonWallPostListValueChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -213,8 +238,8 @@ public class Wall extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel postPanel;
-    private javax.swing.JList<Post> thirPersonWallPostList;
     private javax.swing.JLabel thirdPersonWallPostLabel;
+    private javax.swing.JList<Post> thirdPersonWallPostList;
     private javax.swing.JLabel userWallPostLabel;
     private javax.swing.JList<Post> userWallPostList;
     // End of variables declaration//GEN-END:variables

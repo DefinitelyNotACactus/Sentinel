@@ -12,7 +12,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import server.Database;
-import server.User;
+import server.actors.User;
 
 /**
  *

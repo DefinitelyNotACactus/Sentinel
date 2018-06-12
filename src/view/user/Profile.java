@@ -12,7 +12,7 @@ import view.user.profile.Info;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import server.User;
+import server.actors.User;
 
 /**
  *

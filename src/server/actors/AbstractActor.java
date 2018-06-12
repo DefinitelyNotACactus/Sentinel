@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.actors;
 
+import server.actors.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import server.Post;
 
 /**
  *
@@ -147,7 +149,7 @@ public abstract class AbstractActor implements Serializable{
         }
     }
     
-    public void unblock (User toUnblock){
+    public void unblock(User toUnblock){
         Iterator<User> it = blocked.iterator();
         while(it.hasNext()){
             if(toUnblock.getId().equals(it.next().getId())){

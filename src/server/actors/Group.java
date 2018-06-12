@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.actors;
+
+import server.actors.User;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -11,8 +15,13 @@ package server;
  */
 public class Group extends AbstractActor {
     
-    public Group(String name, String id) {
+    private List<User> admins;
+    
+    public Group(String name, String id, User founder) {
         super(name, id);
+        
+        admins = new ArrayList<>();
+        admins.add(founder);
     }
     
 }

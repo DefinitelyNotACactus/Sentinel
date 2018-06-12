@@ -5,6 +5,8 @@
  */
 package server;
 
+import server.actors.Group;
+import server.actors.User;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
