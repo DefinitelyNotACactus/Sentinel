@@ -24,6 +24,7 @@ public class Register extends JPanel {
      * Creates new form Register
      */
     private final Client client;
+    private Home home;
     
     public Register(Client c) {
         initComponents();
@@ -213,7 +214,7 @@ public class Register extends JPanel {
             client.getDatabase().addUserToDb(new User(regNameField.getText(), regEmailField.getText().toLowerCase(), new String(regPasswordField.getPassword()), genderBox.getSelectedIndex()-1, ddBox.getSelectedItem() +"/"+ mmBox.getSelectedItem() +"/" + yyyyBox.getSelectedItem()));
             client.setCurrentUser(client.getDatabase().getFromMail(regEmailField.getText()));
             client.remove(this);
-            client.add(new Home(client));
+            client.add(new Home(client, home));
             client.revalidate();
         }   
     }//GEN-LAST:event_btRegisterActionPerformed

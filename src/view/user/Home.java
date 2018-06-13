@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import server.actors.AbstractActor;
 
 /**
  *
@@ -25,9 +26,11 @@ public class Home extends JPanel {
      * Creates new form Homed
      */
     private final Client client;
+    private final Home home;
     
-    public Home(Client c) {
+    public Home(Client c, Home home) {
         this.client = c;
+        this.home = home;
         initComponents();
     }
 
@@ -165,7 +168,7 @@ public class Home extends JPanel {
         btFriends.setFont(new Font(Constants.FONT, 0, 12));       
         btUser.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
-        page.add(new Groups());
+        page.add(new Groups(client, home));
         page.revalidate();
     }//GEN-LAST:event_btGroupsActionPerformed
 
