@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
+import server.Photo;
 import server.Post;
 
 /**
@@ -26,7 +27,7 @@ public abstract class AbstractActor implements Serializable{
     protected List<User> blocked;
     
     protected List<Post> posts;
-    
+    protected List<Photo> photos;
     /**
      * Creates a new abstract actor
      * @param name The Actor's name
@@ -273,5 +274,21 @@ public abstract class AbstractActor implements Serializable{
      */
     public Post getPost(int index){
         return posts.get(index);
+    }
+    
+    public List<Photo> getPhotos(){
+        return photos;
+    }
+    
+    public Photo getPhoto(int index){
+        return photos.get(index);
+    }
+        
+    public void deletePhoto(int index){
+        photos.remove(index);
+    }
+    
+    public void addPhoto(Photo newPhoto){
+        photos.add(newPhoto);
     }
 }
