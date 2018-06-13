@@ -15,7 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import server.Photo;
 import server.actors.User;
 import util.Constants;
@@ -128,7 +131,7 @@ public class Info extends javax.swing.JPanel {
         genderLabel.setText("<html><b>Gênero: </b>" + user.getGender() + "</html>");
 
         friendsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        friendsLabel.setText(Constants.BTFRIENDS_TEXT + "(" + user.getRelatives().size() + ")");
+        friendsLabel.setText(Constants.BTFRIENDS_TEXT + " (" + user.getRelatives().size() + ")");
 
         friendsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -145,8 +148,8 @@ public class Info extends javax.swing.JPanel {
             }
         });
         if(!isOwner){
-            btUserPhoto.setVisible(false);
-            btUserPhoto.setEnabled(false);
+            btAddPhoto.setVisible(false);
+            btAddPhoto.setEnabled(false);
         }
 
         btSelectPhoto.setText("Selecionar");
@@ -157,6 +160,7 @@ public class Info extends javax.swing.JPanel {
         });
 
         photoCommentField.setText(Constants.NEWPHOTO_COMMENT_TEXT);
+        photoCommentField.setToolTipText("Descrição da sua Imagem, máximo de 100 caracteres");
         photoCommentField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 photoCommentFieldActionPerformed(evt);
@@ -262,6 +266,8 @@ public class Info extends javax.swing.JPanel {
         } else { //sends a new photo
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
                 JOptionPane.showMessageDialog(client, "Arquivo Inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else if(photoCommentField.getText().length() > 100){
+                JOptionPane.showMessageDialog(client, "Máximo de 100 caracteres permitidos!", "Aviso", JOptionPane.WARNING_MESSAGE);
             } else {
                 btSelectPhoto.setVisible(false);
                 btSelectPhoto.setEnabled(false);
@@ -328,10 +334,17 @@ public class Info extends javax.swing.JPanel {
             /*if(isOwner){
                 options = {"Apagar"};
             }*/
-            int selection = JOptionPane.showOptionDialog(client, user.getPhoto(index).getIcon() , "Visualização de Foto", JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
+            JPanel photoPanel = new JPanel();
+            JLabel viewPhotoLabel = new JLabel();
+            viewPhotoLabel.setIcon(user.getPhoto(index).getIcon());
+            photoPanel.add(viewPhotoLabel);
+            JScrollPane scrollPane = new JScrollPane(photoPanel);           
+            scrollPane.setPreferredSize(this.getPreferredSize());
+            int selection = JOptionPane.showOptionDialog(client, scrollPane , user.getPhoto(index).getComment(), JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
             if(selection == 1){
                 if(isOwner){
                     user.deletePhoto(index);
+                    loadPhotos(true);
                 } else {
                     JOptionPane.showMessageDialog(client, "Deus está vendo você tentar apagar as fotos dos outros!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 }
