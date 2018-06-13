@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import server.actors.AbstractActor;
 
 /**
  *
@@ -24,7 +23,7 @@ import server.actors.AbstractActor;
 public class Home extends JPanel {
 
     /**
-     * Creates new form Homed
+     * Creates new form Home
      */
     private final Client client;
     private final Home home;

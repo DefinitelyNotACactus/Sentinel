@@ -19,8 +19,6 @@ public class User extends AbstractActor {
     private String password;
     private int gender;
     private final String dob;
-    private String country;
-    private String phone;
     
     //3rd person wall post
     private List<Post> others_posts;
@@ -31,8 +29,6 @@ public class User extends AbstractActor {
         this.gender = gender;
         this.dob = dob;
         
-        this.country = null;
-        this.phone = null;
         others_posts = new ArrayList<>();
         photos = new ArrayList<>();
     }
@@ -62,22 +58,6 @@ public class User extends AbstractActor {
     
     public String getDob(){
         return dob;
-    }
-    
-    public String getCountry(){
-        return country;
-    }
-    
-    public void setCountry(String newCountry){
-        country = newCountry;
-    }
-    
-    public String getPhoneNumber(){
-        return phone;
-    }
-    
-    public void setPhoneNumber(String newNumber){
-        phone = newNumber;
     }
     
     public void addPostFromOthers(Post newPost){

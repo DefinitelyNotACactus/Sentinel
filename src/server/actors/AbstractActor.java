@@ -18,6 +18,7 @@ import server.Post;
  * @author David
  */
 public abstract class AbstractActor implements Serializable{
+    //
     protected String name;
     protected String id;
     protected ImageIcon icon;
@@ -28,6 +29,7 @@ public abstract class AbstractActor implements Serializable{
     
     protected List<Post> posts;
     protected List<Photo> photos;
+    
     /**
      * Creates a new abstract actor
      * @param name The Actor's name
@@ -79,10 +81,18 @@ public abstract class AbstractActor implements Serializable{
         id = newId;
     }
     
+    /**
+     * Gets the Icon of this Actor.
+     * @return The ImageIcon of this Actor.
+     */
     public ImageIcon getIcon(){
         return icon;
     }
     
+    /**
+     * Sets a new Icon for this Actor.
+     * @param newIcon The new Icon for this actor.
+     */
     public void setIcon(ImageIcon newIcon){
         icon = newIcon;
     }
@@ -276,18 +286,35 @@ public abstract class AbstractActor implements Serializable{
         return posts.get(index);
     }
     
+    /**
+     * Gives the list of photos of this actor.
+     * @return An ArrayList with the photos from this actor.
+     */
     public List<Photo> getPhotos(){
         return photos;
     }
     
+    /**
+     * Gets a photo from this actor on a certain index.
+     * @param index The index to be searched.
+     * @return The photo on the index.
+     */
     public Photo getPhoto(int index){
         return photos.get(index);
     }
         
+    /**
+     * Deletes a photo from this actor on a certain index.
+     * @param index The index to be searched.
+     */
     public void deletePhoto(int index){
         photos.remove(index);
     }
     
+    /**
+     * Adds a photo to this actor.
+     * @param newPhoto The photo to be added.
+     */
     public void addPhoto(Photo newPhoto){
         photos.add(newPhoto);
     }
