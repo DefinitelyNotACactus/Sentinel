@@ -6,10 +6,21 @@
 package view.user.profile;
 
 import executable.Client;
-import javax.swing.JDialog;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import server.Photo;
 import server.actors.User;
 import util.Constants;
-import view.user.post.NewPhotoDialog;
+import util.Validator;
+import view.user.Profile;
 
 /**
  *
@@ -19,20 +30,54 @@ public class Info extends javax.swing.JPanel {
 
     private final Client client;
     private final User user;
-    private JDialog dialog;
+    private final Profile profile;
+    private String selected_file = "";
 
-    public Info(Client c) {
+    private final boolean isOwner;
+    
+    private DefaultListModel<Photo> photoModel;
+    private DefaultListModel friendModel;
+    
+    public Info(Client c, Profile profile) {
         this.client = c;
         this.user = c.getUser();
+        this.profile = profile;
+        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        photoModel = new DefaultListModel<>();
+        friendModel = new DefaultListModel();
         initComponents();
     }
 
-    public Info(Client c, User user) {
+    public Info(Client c, User user, Profile profile) {
         this.client = c;
         this.user = user;
+        this.profile = profile;
+        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        photoModel = new DefaultListModel<>();
+        friendModel = new DefaultListModel();
         initComponents();
     }
     
+    public void loadPhotos(boolean reload){
+        if(reload){
+            photoModel.clear();
+            photoLabel.setText("<html><b>Fotos: </b>(" + user.getPhotos().size() + ")</html>");
+        }
+        Iterator it = user.getPhotos().iterator();
+        int i;
+        for(i = 0; it.hasNext(); i++){
+            photoModel.add(i,(Photo) it.next());
+        }
+        photoList.setCellRenderer(new PhotoRenderer());
+    }
+    
+    public void listFriends(){
+        Iterator it = user.getRelatives().iterator();
+        int i;
+        for(i = 0; it.hasNext(); i++) {
+            friendModel.add(i, it.next().toString());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,17 +87,21 @@ public class Info extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         emailLabel = new javax.swing.JLabel();
         btUserPhoto = new javax.swing.JButton();
         dobLabel = new javax.swing.JLabel();
         genderLabel = new javax.swing.JLabel();
         friendsLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        friendsList = new javax.swing.JList<>();
+        friendsPane = new javax.swing.JScrollPane();
+        friendsList = new javax.swing.JList<>(friendModel);
         btAddPhoto = new javax.swing.JButton();
+        photoFileLabel = new javax.swing.JLabel();
+        btSelectPhoto = new javax.swing.JButton();
+        photoCommentField = new javax.swing.JTextField();
         photoLabel = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        photoList = new javax.swing.JList<>();
+        photoPane = new javax.swing.JScrollPane();
+        photoList = new javax.swing.JList<>(photoModel);
         emailLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 102, 153));
@@ -62,6 +111,15 @@ public class Info extends javax.swing.JPanel {
         emailLabel.setText("<html><b>E-mail: </b>" + user.getId() + "</html>");
 
         btUserPhoto.setText("Editar Foto de Perfil");
+        btUserPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btUserPhotoActionPerformed(evt);
+            }
+        });
+        if(!isOwner){
+            btUserPhoto.setVisible(false);
+            btUserPhoto.setEnabled(false);
+        }
 
         dobLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
@@ -72,7 +130,13 @@ public class Info extends javax.swing.JPanel {
         friendsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         friendsLabel.setText(Constants.BTFRIENDS_TEXT + "(" + user.getRelatives().size() + ")");
 
-        jScrollPane1.setViewportView(friendsList);
+        friendsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                friendsListValueChanged(evt);
+            }
+        });
+        friendsPane.setViewportView(friendsList);
+        listFriends();
 
         btAddPhoto.setText("Adicionar Nova Foto");
         btAddPhoto.addActionListener(new java.awt.event.ActionListener() {
@@ -80,14 +144,38 @@ public class Info extends javax.swing.JPanel {
                 btAddPhotoActionPerformed(evt);
             }
         });
+        if(!isOwner){
+            btUserPhoto.setVisible(false);
+            btUserPhoto.setEnabled(false);
+        }
+
+        btSelectPhoto.setText("Selecionar");
+        btSelectPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelectPhotoActionPerformed(evt);
+            }
+        });
+
+        photoCommentField.setText(Constants.NEWPHOTO_COMMENT_TEXT);
+        photoCommentField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                photoCommentFieldActionPerformed(evt);
+            }
+        });
 
         photoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         photoLabel.setText("<html><b>Fotos: </b>(" + user.getPhotos().size() + ")</html>");
 
-        jScrollPane2.setViewportView(photoList);
+        photoList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                photoListValueChanged(evt);
+            }
+        });
+        photoPane.setViewportView(photoList);
+        loadPhotos(false);
 
         emailLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        emailLabel1.setText("<html><b>Dados Pessoais:<b></html>");
+        emailLabel1.setText("<html><b>Dados Pessoais<b></html>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -101,17 +189,25 @@ public class Info extends javax.swing.JPanel {
                             .addComponent(dobLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(genderLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(emailLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(emailLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(photoFileLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btSelectPhoto))
+                                    .addComponent(photoCommentField, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                            .addComponent(friendsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
                             .addComponent(friendsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(photoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(photoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -129,37 +225,154 @@ public class Info extends javax.swing.JPanel {
                         .addComponent(genderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btSelectPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(photoFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(photoCommentField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(friendsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                .addComponent(photoPane, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        photoFileLabel.setVisible(false);
+        btSelectPhoto.setVisible(false);
+        photoCommentField.setVisible(false);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAddPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddPhotoActionPerformed
-        dialog = new NewPhotoDialog(client, true);
-        dialog.setVisible(true);
+        if(btUserPhoto.isEnabled()){
+            btSelectPhoto.setVisible(true);
+            btSelectPhoto.setEnabled(true);
+            photoFileLabel.setVisible(true);
+            photoFileLabel.setIcon(null);
+            photoFileLabel.setText(Constants.DEFAULT_FILE_TEXT);
+            photoCommentField.setVisible(true);
+            photoCommentField.setText(Constants.NEWPHOTO_COMMENT_TEXT);
+            btAddPhoto.setText("Enviar");
+            btUserPhoto.setEnabled(false);
+        } else { //sends a new photo
+            if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
+                JOptionPane.showMessageDialog(client, "Arquivo Inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                btSelectPhoto.setVisible(false);
+                btSelectPhoto.setEnabled(false);
+                photoFileLabel.setVisible(false);
+                photoCommentField.setVisible(false);
+                user.addPhoto(new Photo(user, selected_file, photoCommentField.getText()));
+                btAddPhoto.setText("Adicionar Nova Foto");
+                btUserPhoto.setEnabled(true);
+                loadPhotos(true);
+            }
+        }
     }//GEN-LAST:event_btAddPhotoActionPerformed
 
+    private void btUserPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserPhotoActionPerformed
+        if(btAddPhoto.isEnabled()){
+            btSelectPhoto.setVisible(true);
+            btSelectPhoto.setEnabled(true);
+            photoFileLabel.setVisible(true);
+            photoFileLabel.setIcon(null);
+            photoFileLabel.setText(Constants.DEFAULT_FILE_TEXT);
+            btUserPhoto.setText("Enviar Nova Imagem de Perfil");
+            btAddPhoto.setEnabled(false);
+        } else {
+            if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
+                JOptionPane.showMessageDialog(client, "Arquivo Inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                btSelectPhoto.setVisible(false);
+                btSelectPhoto.setEnabled(false);
+                photoFileLabel.setVisible(false);
+                user.setIcon(new ImageIcon(selected_file));
+                profile.reloadUserPhoto();
+                btUserPhoto.setText("Editar Foto de Perfil");
+                btAddPhoto.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_btUserPhotoActionPerformed
+
+    private void btSelectPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelectPhotoActionPerformed
+        final JFileChooser fc = new JFileChooser(); 
+        FileFilter imageFilter = new FileNameExtensionFilter("Arquivos de Imagem", ImageIO.getReaderFileSuffixes());
+        fc.setFileFilter(imageFilter);
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            selected_file = fc.getSelectedFile().getAbsolutePath();
+            if(!selected_file.endsWith(".png") && !selected_file.endsWith(".jpg")){
+                selected_file = "Inválido";
+            }
+            ImageIcon preview = new ImageIcon(selected_file);
+            photoFileLabel.setIcon(new ImageIcon(preview.getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH)));
+            photoFileLabel.setText("Arquivo Selecionado: " + selected_file);
+        }
+    }//GEN-LAST:event_btSelectPhotoActionPerformed
+
+    private void photoCommentFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_photoCommentFieldActionPerformed
+        if(photoCommentField.getText().equals(Constants.NEWPHOTO_COMMENT_TEXT)){
+            photoCommentField.setText("");
+        }
+    }//GEN-LAST:event_photoCommentFieldActionPerformed
+
+    private void photoListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_photoListValueChanged
+        int index = photoList.getSelectedIndex();
+        if(index >= 0){
+            String[] options = {"Fechar", "Apagar"};
+            /*if(isOwner){
+                options = {"Apagar"};
+            }*/
+            int selection = JOptionPane.showOptionDialog(client, user.getPhoto(index).getIcon() , "Visualização de Foto", JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
+            if(selection == 1){
+                if(isOwner){
+                    user.deletePhoto(index);
+                } else {
+                    JOptionPane.showMessageDialog(client, "Deus está vendo você tentar apagar as fotos dos outros!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_photoListValueChanged
+
+    private void friendsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_friendsListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = friendsList.getSelectedIndex();
+        if(index >= 0){
+            User selected = user.getRelatives().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                if(selected.isBlocked(client.getUser())){
+                    JOptionPane.showMessageDialog(client, "O usuário lhe bloqueoou!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    profile.getHome().getPage().removeAll();
+                    profile.getHome().getPage().add(new Profile(client, selected, profile.getHome()));
+                    profile.getHome().getPage().revalidate();
+                }
+            }
+        }
+    }//GEN-LAST:event_friendsListValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAddPhoto;
+    private javax.swing.JButton btSelectPhoto;
     private javax.swing.JButton btUserPhoto;
     private javax.swing.JLabel dobLabel;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel emailLabel1;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel friendsLabel;
     private javax.swing.JList<User> friendsList;
+    private javax.swing.JScrollPane friendsPane;
     private javax.swing.JLabel genderLabel;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField photoCommentField;
+    private javax.swing.JLabel photoFileLabel;
     private javax.swing.JLabel photoLabel;
-    private javax.swing.JList<String> photoList;
+    private javax.swing.JList<Photo> photoList;
+    private javax.swing.JScrollPane photoPane;
     // End of variables declaration//GEN-END:variables
 }

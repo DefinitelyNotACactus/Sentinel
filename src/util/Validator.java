@@ -53,4 +53,16 @@ public class Validator {
             return false;
         }
     }
+    
+    /**
+     * This methods checks if email a equals email b
+     * 
+     * @param a
+     * @param b
+     * @return boolean
+     */
+    public static boolean isSameEmail(String a, String b){
+        return a.equals(b);
+    }
+    
 }

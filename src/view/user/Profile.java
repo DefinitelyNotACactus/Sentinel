@@ -12,9 +12,12 @@ import view.user.profile.Info;
 import java.awt.Font;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import server.actors.User;
+import util.Validator;
 
 /**
  *
@@ -23,23 +26,27 @@ import server.actors.User;
 public class Profile extends JPanel {
 
     private final Client client;
+    private final Home home;
     private final User user;
     
-    public Profile(Client c) {
+    private final boolean isOwner;
+    
+    public Profile(Client c, Home home) {
         this.client = c;
+        this.home = home;
         this.user = c.getUser();
+        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
         initComponents();
     }
 
-    public Profile(Client c, User user) {
+    public Profile(Client c, User user, Home home) {
         this.client = c;
         this.user = user;
+        this.home = home;
+        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
         initComponents();
     }
     
-    public void loadPosts(boolean reload){
-        
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,6 +61,7 @@ public class Profile extends JPanel {
         isFriendLabel = new javax.swing.JLabel();
         btUserInfo = new javax.swing.JButton();
         btUserWall = new javax.swing.JButton();
+        btAddFriend = new javax.swing.JButton();
         page = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(0, 102, 153));
@@ -81,6 +89,17 @@ public class Profile extends JPanel {
             }
         });
 
+        btAddFriend.setText("Adicionar Amigo");
+        btAddFriend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAddFriendActionPerformed(evt);
+            }
+        });
+        if(isOwner || client.getUser().isRelative(user)){
+            btAddFriend.setVisible(false);
+            btAddFriend.setEnabled(false);
+        }
+
         page.setBackground(new java.awt.Color(0, 102, 153));
         page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
@@ -97,10 +116,11 @@ public class Profile extends JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(userPhotoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(isFriendLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(btUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btUserWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btUserWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btAddFriend, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(page, javax.swing.GroupLayout.PREFERRED_SIZE, 1086, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -119,12 +139,14 @@ public class Profile extends JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btAddFriend, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        if(user.getId() != client.getUser().getId()){
+        if(!isOwner){
             if(client.getUser().isRelative(user)){
                 isFriendLabel.setText("É seu amigo");
             }
@@ -137,7 +159,7 @@ public class Profile extends JPanel {
         btUserInfo.setFont(new java.awt.Font(Constants.FONT, 1, 11));
         btUserWall.setFont(new java.awt.Font(Constants.FONT, 0, 11));
         page.removeAll();
-        page.add(new Info(client));
+        page.add(new Info(client, user, this));
         page.revalidate();
     }//GEN-LAST:event_btUserInfoActionPerformed
 
@@ -149,8 +171,35 @@ public class Profile extends JPanel {
         page.revalidate();
     }//GEN-LAST:event_btUserWallActionPerformed
 
+    private void btAddFriendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddFriendActionPerformed
+        User requester = client.getUser();
+        if(user.isRequestSent(requester)){
+            JOptionPane.showMessageDialog(client, "O pedido já foi enviado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(user.isRelative(requester)){
+            JOptionPane.showMessageDialog(client, user.getName() + " já é seu amigo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(user.isBlocked(requester)){
+            JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + user.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            user.newRequest(client.getUser());
+            JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btAddFriendActionPerformed
 
+    public void reloadUserPhoto(){
+        userPhotoLabel.setIcon(new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
+        home.getUserIcon().setIcon(new ImageIcon(client.getUser().getIcon().getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH)));
+    }
+    
+    public JLabel getUserPhotoLabel(){
+        return userPhotoLabel;
+    }
+
+    public Home getHome(){
+        return home;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAddFriend;
     private javax.swing.JButton btUserInfo;
     private javax.swing.JButton btUserName;
     private javax.swing.JButton btUserWall;

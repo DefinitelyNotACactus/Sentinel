@@ -148,7 +148,7 @@ public abstract class AbstractActor implements Serializable{
      * @param requester The user that is requesting.
      */
     public void newRequest(User requester){
-        if(!isRequestSent(requester)){
+        if(!isRequestSent(requester) && !isBlocked(requester)){
             request.add(requester);
         }
     }

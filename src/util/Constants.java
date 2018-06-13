@@ -11,12 +11,14 @@ package util;
  */
 public class Constants {
     
-    public static final String VERSION = "1.2.1 Hierarchy Edition";
+    public static final String VERSION = "1.4.0 Info and Photo Edition";
     public static final String FONT = "Tahoma";
     
     public static final String WINDOW_CLOSE_MESSAGE[] = {"Você deseja mesmo sair?", "Aviso"};
     public static final String DEFAULT_SEARCH_MESSAGE = "Digite e-mail para pesquisar...";
+    public static final String DEFAULT_FILE_TEXT = "Nenhum arquivo selecionado...";
     public static final String NEWPOST_TITLE_TEXT = "Insira título da sua mensagem aqui.";
+    public static final String NEWPHOTO_COMMENT_TEXT = "Insira um comentário da sua foto se quiser...";
     public static final String NULL_TITLE = "O título está vazio!";
     public static final String NULL_TEXT = "O texto está vazio!";
     

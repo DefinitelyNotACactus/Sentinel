@@ -29,11 +29,12 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="userPhotoLabel" alignment="0" max="32767" attributes="0"/>
                   <Component id="isFriendLabel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btUserName" alignment="0" pref="164" max="32767" attributes="0"/>
+                  <Component id="btUserName" alignment="0" max="32767" attributes="0"/>
                   <Component id="btUserInfo" alignment="0" max="32767" attributes="0"/>
                   <Component id="btUserWall" max="32767" attributes="0"/>
+                  <Component id="btAddFriend" alignment="0" min="-2" pref="164" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace pref="10" max="32767" attributes="0"/>
               <Component id="page" min="-2" pref="1086" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -55,6 +56,8 @@
                       <Component id="btUserInfo" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btUserWall" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btAddFriend" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -83,7 +86,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="isFriendLabel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(user.getId() != client.getUser().getId()){&#xa;    if(client.getUser().isRelative(user)){&#xa;        isFriendLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    }&#xa;} else {&#xa;    isFriendLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(!isOwner){&#xa;    if(client.getUser().isRelative(user)){&#xa;        isFriendLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    }&#xa;} else {&#xa;    isFriendLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btUserInfo">
@@ -107,6 +110,17 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserWallActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btAddFriend">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Adicionar Amigo"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddFriendActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(isOwner || client.getUser().isRelative(user)){&#xa;    btAddFriend.setVisible(false);&#xa;    btAddFriend.setEnabled(false);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="page">
       <Properties>

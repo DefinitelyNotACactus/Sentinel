@@ -41,7 +41,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Profile(client));&#xa;page.revalidate();"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Profile(client, this));&#xa;page.revalidate();"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>

@@ -137,7 +137,7 @@ public class ListOfActors extends javax.swing.JPanel {
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 home.getPage().removeAll();
-                home.getPage().add(new Profile(client, selected));
+                home.getPage().add(new Profile(client, selected, home));
                 home.getPage().revalidate();
             }
         }

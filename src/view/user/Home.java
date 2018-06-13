@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.AbstractActor;
@@ -56,7 +57,7 @@ public class Home extends JPanel {
         page.setPreferredSize(new java.awt.Dimension(1280, 660));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
         page.removeAll();
-        page.add(new Profile(client));
+        page.add(new Profile(client, this));
         page.revalidate();
 
         userBar.setBackground(new java.awt.Color(51, 102, 0));
@@ -187,7 +188,7 @@ public class Home extends JPanel {
         btFriends.setFont(new Font(Constants.FONT, 0, 12));
         btGroups.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
-        page.add(new Profile(client));
+        page.add(new Profile(client, this));
         page.revalidate();
     }//GEN-LAST:event_btUserActionPerformed
 
@@ -201,6 +202,10 @@ public class Home extends JPanel {
 
     public JPanel getPage(){
         return page;
+    }
+    
+    public JLabel getUserIcon(){
+        return userIcon;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

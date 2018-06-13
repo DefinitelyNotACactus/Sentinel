@@ -5,19 +5,26 @@
  */
 package server;
 
+import java.io.Serializable;
 import javax.swing.ImageIcon;
+import server.actors.User;
 
 /**
  *
  * @author aluno
  */
-public class Photo {   
+public class Photo implements Serializable {   
     
     private final ImageIcon icon;
     private String comment;
+    private final User author;
     
-    public Photo(String iconPath, String comment){
+    public Photo(User author, String iconPath, String comment){
+        this.author = author;
         this.icon = new ImageIcon(iconPath);
+        if(comment == null || comment.trim().equals("")){
+            this.comment = "Sem descrição";
+        }
         this.comment = comment;
     }
     
@@ -32,4 +39,9 @@ public class Photo {
     public ImageIcon getIcon(){
         return icon;
     }
+    
+    public User getAuthor(){
+        return author;
+    }
+    
 }
