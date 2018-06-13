@@ -65,7 +65,9 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="userPhotoLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="userPhotoLabel"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH))" type="code"/>
+        </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
     </Component>
@@ -81,7 +83,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="isFriendLabel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(user.getId() != client.getUser().getId()){&#xa;    if(client.getUser().isFriend(user)){&#xa;        isFriendLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    }&#xa;} else {&#xa;    isFriendLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(user.getId() != client.getUser().getId()){&#xa;    if(client.getUser().isRelative(user)){&#xa;        isFriendLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    }&#xa;} else {&#xa;    isFriendLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btUserInfo">

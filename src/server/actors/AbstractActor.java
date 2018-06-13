@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.ImageIcon;
 import server.Post;
 
 /**
@@ -18,6 +19,7 @@ import server.Post;
 public abstract class AbstractActor implements Serializable{
     protected String name;
     protected String id;
+    protected ImageIcon icon;
 
     protected List<User> related;//i'll leave friends for now, assuming that a member of a group is also a friend of that group.
     protected List<User> request; 
@@ -33,7 +35,7 @@ public abstract class AbstractActor implements Serializable{
     public AbstractActor(String name, String id){
         this.name = name;
         this.id = id;
-        
+        this.icon = new ImageIcon(getClass().getResource("/assets/default_profile.png"));
         
         related = new ArrayList<>();
         request = new ArrayList<>();
@@ -74,6 +76,14 @@ public abstract class AbstractActor implements Serializable{
     @Deprecated
     public void setId(String newId){
         id = newId;
+    }
+    
+    public ImageIcon getIcon(){
+        return icon;
+    }
+    
+    public void setIcon(ImageIcon newIcon){
+        icon = newIcon;
     }
     
     /**

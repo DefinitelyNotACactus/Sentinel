@@ -5,8 +5,8 @@
  */
 package server.actors;
 
-import server.actors.User;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,9 +19,39 @@ public class Group extends AbstractActor {
     
     public Group(String name, String id, User founder) {
         super(name, id);
-        
+        related.add(founder);
         admins = new ArrayList<>();
         admins.add(founder);
+    }
+    
+    public List<User> getAdmins(){
+        return admins;
+    }
+    
+    public void addAdmin(User newAdmin){
+        if(!isAdmin(newAdmin)){
+            admins.add(newAdmin);
+        }
+    }
+    
+    public void removeAdmin(User adminToRemove){
+        Iterator<User> it = admins.iterator();
+        while(it.hasNext()){
+            if(adminToRemove.getId().equals(it.next().getId())){
+                it.remove();
+                break;
+            }
+        }
+    }
+    
+    public boolean isAdmin(User admin){
+        Iterator<User> it = admins.iterator();
+        while(it.hasNext()){
+            if(admin.getId().equals(it.next().getId())){
+                return true;
+            }
+        }
+        return false;
     }
     
 }

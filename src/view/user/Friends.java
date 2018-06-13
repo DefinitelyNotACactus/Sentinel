@@ -44,19 +44,19 @@ public class Friends extends JPanel {
 
     private void listFriendPanel(boolean reload){
         if(reload){
-            friendListLabel.setText("Amigos ("+ client.getUser().getFriends().size() +")");
+            friendListLabel.setText("Amigos ("+ client.getUser().getRelatives().size() +")");
             friendModel.clear();
-            friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getFriendRequests().size() + " Pendentes)</b>");
+            friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getRequests().size() + " Pendentes)</b>");
             requestModel.clear();
             blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
             blockedModel.clear();   
         }
-        Iterator it = client.getUser().getFriends().iterator();
+        Iterator it = client.getUser().getRelatives().iterator();
         int i;
         for(i = 0; it.hasNext(); i++) {
             friendModel.add(i, it.next().toString());
         }
-        it = client.getUser().getFriendRequests().iterator();
+        it = client.getUser().getRequests().iterator();
         for (i = 0; it.hasNext(); i++) {
             requestModel.add(i, it.next().toString());
         }
@@ -112,9 +112,9 @@ public class Friends extends JPanel {
         setBackground(new java.awt.Color(255, 153, 0));
         setPreferredSize(new java.awt.Dimension(1280, 660));
 
-        friendListLabel.setText("Amigos ("+ client.getUser().getFriends().size() +")");
+        friendListLabel.setText("Amigos ("+ client.getUser().getRelatives().size() +")");
 
-        friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getFriendRequests().size() + " Pendentes)</b>");
+        friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getRequests().size() + " Pendentes)</b>");
 
         blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
 
@@ -217,22 +217,22 @@ public class Friends extends JPanel {
         } else if(client.getDatabase().emailInUse(email)){
             Toolkit.getDefaultToolkit().beep();
             String[] options = {"Adicionar", "Bloquear", "Cancelar"};
-            if(client.getUser().isFriend(client.getDatabase().getFromMail(email))){
+            if(client.getUser().isRelative(client.getDatabase().getFromMail(email))){
                 options[0] = "Remover";
             }
             User user = client.getDatabase().getFromMail(email);
             int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + user.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);           
             switch(selection){
                 case 0:// add/remove friend
-                    if(client.getUser().isFriend(user)){
+                    if(client.getUser().isRelative(user)){
                         JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        client.getUser().removeFriend(user);
+                        client.getUser().removeRelative(user);
                         listFriendPanel(true);
                     } else if(user.isBlocked(client.getUser())){
                         JOptionPane.showMessageDialog(client, user.getName() + " bloqueoou você!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        user.newFriendRequest(client.getUser());
+                        user.newRequest(client.getUser());
                         listFriendPanel(true);
                     }
                     break;
@@ -256,10 +256,10 @@ public class Friends extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         int index = friendRequestList.getSelectedIndex();
         if(index >= 0){
-            User selected = client.getUser().getFriendRequests().get(index);
+            User selected = client.getUser().getRequests().get(index);
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja adicionar " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
-                client.getUser().addFriend(selected);
+                client.getUser().addRelative(selected);
                 friendRequestList.remove(index);
             }
             listFriendPanel(true);
@@ -284,7 +284,7 @@ public class Friends extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         int index = friendList.getSelectedIndex();
         if(index >= 0){
-            User selected = client.getUser().getFriends().get(index);
+            User selected = client.getUser().getRelatives().get(index);
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 home.getPage().removeAll();

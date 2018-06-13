@@ -10,6 +10,8 @@ import executable.Client;
 import util.Constants;
 import view.user.profile.Info;
 import java.awt.Font;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import server.actors.User;
@@ -57,7 +59,7 @@ public class Profile extends JPanel {
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1280, 660));
 
-        userPhotoLabel.setText("userPhotoLabel");
+        userPhotoLabel.setIcon(new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
         userPhotoLabel.setOpaque(true);
 
         btUserName.setText("" + user.getName());
@@ -123,7 +125,7 @@ public class Profile extends JPanel {
 
         isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
         if(user.getId() != client.getUser().getId()){
-            if(client.getUser().isFriend(user)){
+            if(client.getUser().isRelative(user)){
                 isFriendLabel.setText("É seu amigo");
             }
         } else {

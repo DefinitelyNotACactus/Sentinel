@@ -9,7 +9,9 @@ import executable.Client;
 import util.Constants;
 import view.login.Login;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -56,7 +58,7 @@ public class Home extends JPanel {
         userBar.setBackground(new java.awt.Color(51, 102, 0));
         userBar.setMinimumSize(new java.awt.Dimension(739, 60));
 
-        userIcon.setText("userIcon");
+        userIcon.setIcon(new ImageIcon(client.getUser().getIcon().getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH)));
 
         btUser.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btUser.setText(client.getUser().getName());
@@ -66,8 +68,8 @@ public class Home extends JPanel {
             }
         });
 
-        if(client.getUser().getFriendRequests().size() > 0){
-            btFriends.setText("<html>"+ Constants.BTFRIENDS_TEXT +" <b>("+ client.getUser().getFriendRequests().size() +" Pendentes)</b></html>");
+        if(client.getUser().getRequests().size() > 0){
+            btFriends.setText("<html>"+ Constants.BTFRIENDS_TEXT +" <b>("+ client.getUser().getRequests().size() +" Pendentes)</b></html>");
         } else {
             btFriends.setText(Constants.BTFRIENDS_TEXT);
         }
