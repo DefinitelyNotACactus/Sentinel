@@ -22,7 +22,7 @@ public abstract class AbstractActor implements Serializable{
     protected String id;
     protected ImageIcon icon;
 
-    protected List<User> related;//i'll leave friends for now, assuming that a member of a group is also a friend of that group.
+    protected List<User> related;
     protected List<User> request; 
     protected List<User> blocked;
     

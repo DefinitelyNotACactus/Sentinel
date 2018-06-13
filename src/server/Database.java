@@ -28,6 +28,7 @@ public class Database implements Serializable{
     
     private Database(){
         users = new HashMap<>();
+        groups = new HashMap<>();
     }
     
     public static Database load(){
@@ -49,13 +50,29 @@ public class Database implements Serializable{
         users.put(newUser.getId(), newUser);
     }
     
+    public Map<String, User> getUsers(){
+        return users;
+    }
+    
     public boolean emailInUse(String email){
         return users.containsKey(email);
+    }
+    
+    public boolean allGroups(String group){
+        return groups.containsKey(group);
     }
     
     public User getFromMail(String email){
         if(users.containsKey(email)){
             return users.get(email);
+        } else {
+            return null;
+        }
+    }
+    
+    public Group getFromGroupId(String group){
+        if(users.containsKey(group)){
+            return groups.get(group);
         } else {
             return null;
         }

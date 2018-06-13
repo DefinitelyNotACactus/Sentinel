@@ -23,6 +23,7 @@ public class Login extends JPanel {
      * Creates new form Login
      */
     private final Client client;
+    private Home home;
     
     public Login(Client c) {
         initComponents();
@@ -117,7 +118,7 @@ public class Login extends JPanel {
             if(client.getDatabase().getPassword(loginEmailField.getText().toLowerCase()).equals(new String(loginPasswordField.getPassword()))){
                 try{
                 client.setCurrentUser(client.getDatabase().getFromMail(loginEmailField.getText()));
-                client.add(new Home(client));
+                client.add(new Home(client, home));
                 client.remove(this);
                 client.revalidate();
                 } catch (NullPointerException ex){

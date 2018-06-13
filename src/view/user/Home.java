@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import server.actors.AbstractActor;
 
 /**
  *
@@ -25,9 +26,11 @@ public class Home extends JPanel {
      * Creates new form Homed
      */
     private final Client client;
+    private final Home home;
     
-    public Home(Client c) {
+    public Home(Client c, Home home) {
         this.client = c;
+        this.home = home;
         initComponents();
     }
 
@@ -47,6 +50,7 @@ public class Home extends JPanel {
         btFriends = new javax.swing.JButton();
         btGroups = new javax.swing.JButton();
         btLogoff = new javax.swing.JButton();
+        btList = new javax.swing.JButton();
 
         page.setBackground(new java.awt.Color(0, 153, 204));
         page.setPreferredSize(new java.awt.Dimension(1280, 660));
@@ -93,6 +97,13 @@ public class Home extends JPanel {
             }
         });
 
+        btList.setText("Buscar usuários");
+        btList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btListActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout userBarLayout = new javax.swing.GroupLayout(userBar);
         userBar.setLayout(userBarLayout);
         userBarLayout.setHorizontalGroup(
@@ -102,6 +113,8 @@ public class Home extends JPanel {
                 .addComponent(userIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btUser, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btList, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -112,14 +125,15 @@ public class Home extends JPanel {
         );
         userBarLayout.setVerticalGroup(
             userBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userBarLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(userBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(userIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(btUser, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(btLogoff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btFriends, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(userBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(userIcon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(btUser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(btLogoff, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btGroups, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btFriends, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -154,7 +168,7 @@ public class Home extends JPanel {
         btFriends.setFont(new Font(Constants.FONT, 0, 12));       
         btUser.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
-        page.add(new Groups());
+        page.add(new Groups(client, home));
         page.revalidate();
     }//GEN-LAST:event_btGroupsActionPerformed
 
@@ -177,6 +191,14 @@ public class Home extends JPanel {
         page.revalidate();
     }//GEN-LAST:event_btUserActionPerformed
 
+    private void btListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btListActionPerformed
+        btList.setFont(new Font(Constants.FONT, 1, 12));
+        btList.setFont(new Font(Constants.FONT, 0, 12));
+        page.removeAll();
+        page.add(new ListOfActors(client.getDatabase(), client, this));
+        page.revalidate();
+    }//GEN-LAST:event_btListActionPerformed
+
     public JPanel getPage(){
         return page;
     }
@@ -184,6 +206,7 @@ public class Home extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btFriends;
     private javax.swing.JButton btGroups;
+    private javax.swing.JButton btList;
     private javax.swing.JButton btLogoff;
     private javax.swing.JButton btUser;
     private javax.swing.JPanel page;
