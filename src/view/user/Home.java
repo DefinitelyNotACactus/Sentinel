@@ -155,19 +155,20 @@ public class Home extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFriendsActionPerformed
-        btFriends.setFont(new Font(Constants.FONT, 1, 12));
-        btFriends.setText(Constants.BTFRIENDS_TEXT);
-        btGroups.setFont(new Font(Constants.FONT, 0, 12));
         btUser.setFont(new Font(Constants.FONT, 0, 12));
+        btFriends.setFont(new Font(Constants.FONT, 1, 12));
+        btGroups.setFont(new Font(Constants.FONT, 0, 12));
+        btList.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Friends(client, this));
         page.revalidate();
     }//GEN-LAST:event_btFriendsActionPerformed
 
     private void btGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGroupsActionPerformed
-        btGroups.setFont(new Font(Constants.FONT, 1, 12));
-        btFriends.setFont(new Font(Constants.FONT, 0, 12));       
         btUser.setFont(new Font(Constants.FONT, 0, 12));
+        btFriends.setFont(new Font(Constants.FONT, 0, 12));
+        btGroups.setFont(new Font(Constants.FONT, 1, 12));
+        btList.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Groups(client, home));
         page.revalidate();
@@ -187,14 +188,17 @@ public class Home extends JPanel {
         btUser.setFont(new Font(Constants.FONT, 1, 12));
         btFriends.setFont(new Font(Constants.FONT, 0, 12));
         btGroups.setFont(new Font(Constants.FONT, 0, 12));
+        btList.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new Profile(client, this));
         page.revalidate();
     }//GEN-LAST:event_btUserActionPerformed
 
     private void btListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btListActionPerformed
+        btUser.setFont(new Font(Constants.FONT, 0, 12));
+        btFriends.setFont(new Font(Constants.FONT, 0, 12));
+        btGroups.setFont(new Font(Constants.FONT, 0, 12));
         btList.setFont(new Font(Constants.FONT, 1, 12));
-        btList.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
         page.add(new ListOfActors(client.getDatabase(), client, this));
         page.revalidate();
