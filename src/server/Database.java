@@ -49,6 +49,10 @@ public class Database implements Serializable{
         users.put(newUser.getId(), newUser);
     }
     
+    public Map<String, User> getUsers(){
+        return users;
+    }
+    
     public boolean emailInUse(String email){
         return users.containsKey(email);
     }
