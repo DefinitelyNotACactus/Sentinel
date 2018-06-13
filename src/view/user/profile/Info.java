@@ -5,6 +5,7 @@
  */
 package view.user.profile;
 
+import util.PhotoRenderer;
 import executable.Client;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import server.Photo;
 import server.actors.User;
 import util.Constants;
+import util.UserRenderer;
 import util.Validator;
 import view.user.Profile;
 
@@ -39,7 +41,7 @@ public class Info extends javax.swing.JPanel {
     private final boolean isOwner;
     
     private DefaultListModel<Photo> photoModel;
-    private DefaultListModel friendModel;
+    private DefaultListModel<User> friendModel;
     
     public Info(Client c, Profile profile) {
         this.client = c;
@@ -47,7 +49,7 @@ public class Info extends javax.swing.JPanel {
         this.profile = profile;
         isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
         photoModel = new DefaultListModel<>();
-        friendModel = new DefaultListModel();
+        friendModel = new DefaultListModel<>();
         initComponents();
     }
 
@@ -57,7 +59,7 @@ public class Info extends javax.swing.JPanel {
         this.profile = profile;
         isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
         photoModel = new DefaultListModel<>();
-        friendModel = new DefaultListModel();
+        friendModel = new DefaultListModel<>();
         initComponents();
     }
     
@@ -78,8 +80,9 @@ public class Info extends javax.swing.JPanel {
         Iterator it = user.getRelatives().iterator();
         int i;
         for(i = 0; it.hasNext(); i++) {
-            friendModel.add(i, it.next().toString());
+            friendModel.add(i, (User) it.next());
         }
+        friendsList.setCellRenderer(new UserRenderer());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -131,7 +134,7 @@ public class Info extends javax.swing.JPanel {
         genderLabel.setText("<html><b>Gênero: </b>" + user.getGender() + "</html>");
 
         friendsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        friendsLabel.setText(Constants.BTFRIENDS_TEXT + " (" + user.getRelatives().size() + ")");
+        friendsLabel.setText("<html><b>" + Constants.BTFRIENDS_TEXT + "</b>: (" + user.getRelatives().size() + ")");
 
         friendsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {

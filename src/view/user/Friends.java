@@ -13,6 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.User;
+import util.UserRenderer;
 
 /**
  *
@@ -28,16 +29,16 @@ public class Friends extends JPanel {
     private final Client client;
     private final Home home;
     
-    private DefaultListModel friendModel;
-    private DefaultListModel requestModel;
-    private DefaultListModel blockedModel;
+    private DefaultListModel<User> friendModel;
+    private DefaultListModel<User> requestModel;
+    private DefaultListModel<User> blockedModel;
 
     public Friends(Client c, Home home) {
         this.client = c;
         this.home = home;
-        friendModel = new DefaultListModel();
-        requestModel = new DefaultListModel();
-        blockedModel = new DefaultListModel();
+        friendModel = new DefaultListModel<>();
+        requestModel = new DefaultListModel<>();
+        blockedModel = new DefaultListModel<>();
         initComponents();
         listFriendPanel(false);
     }
@@ -54,16 +55,19 @@ public class Friends extends JPanel {
         Iterator it = client.getUser().getRelatives().iterator();
         int i;
         for(i = 0; it.hasNext(); i++) {
-            friendModel.add(i, it.next().toString());
+            friendModel.add(i, (User) it.next());
         }
+        friendList.setCellRenderer(new UserRenderer());
         it = client.getUser().getRequests().iterator();
         for (i = 0; it.hasNext(); i++) {
-            requestModel.add(i, it.next().toString());
+            requestModel.add(i, (User) it.next());
         }
+        friendRequestList.setCellRenderer(new UserRenderer());
         it = client.getUser().getBlocked().iterator();
         for (i = 0; it.hasNext(); i++) {
-            blockedModel.add(i, it.next().toString());
+            blockedModel.add(i, (User) it.next());
         }
+        blockedList.setCellRenderer(new UserRenderer());
     }
     
     /*public void loadFriends(){
