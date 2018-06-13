@@ -7,6 +7,7 @@ package server.actors;
 
 import java.util.ArrayList;
 import java.util.List;
+import server.Photo;
 import server.Post;
 
 /**
@@ -33,6 +34,7 @@ public class User extends AbstractActor {
         this.country = null;
         this.phone = null;
         others_posts = new ArrayList<>();
+        photos = new ArrayList<>();
     }
     
     public String getPassword(){

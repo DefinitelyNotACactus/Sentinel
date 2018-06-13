@@ -6,8 +6,10 @@
 package view.user.profile;
 
 import executable.Client;
+import javax.swing.JDialog;
 import server.actors.User;
 import util.Constants;
+import view.user.post.NewPhotoDialog;
 
 /**
  *
@@ -17,7 +19,8 @@ public class Info extends javax.swing.JPanel {
 
     private final Client client;
     private final User user;
-    
+    private JDialog dialog;
+
     public Info(Client c) {
         this.client = c;
         this.user = c.getUser();
@@ -40,20 +43,25 @@ public class Info extends javax.swing.JPanel {
     private void initComponents() {
 
         emailLabel = new javax.swing.JLabel();
+        btUserPhoto = new javax.swing.JButton();
         dobLabel = new javax.swing.JLabel();
         genderLabel = new javax.swing.JLabel();
-        countryLabel = new javax.swing.JLabel();
-        phoneLabel = new javax.swing.JLabel();
         friendsLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        friendsList = new javax.swing.JList<>();
+        btAddPhoto = new javax.swing.JButton();
+        photoLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        photoList = new javax.swing.JList<>();
+        emailLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 102, 153));
-        setMaximumSize(new java.awt.Dimension(0, 0));
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
         emailLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         emailLabel.setText("<html><b>E-mail: </b>" + user.getId() + "</html>");
+
+        btUserPhoto.setText("Editar Foto de Perfil");
 
         dobLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
@@ -61,29 +69,25 @@ public class Info extends javax.swing.JPanel {
         genderLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         genderLabel.setText("<html><b>Gênero: </b>" + user.getGender() + "</html>");
 
-        countryLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        if(user.getCountry() != null){
-            countryLabel.setText("<html><b>País: </b>" + user.getCountry() + "</html>");
-        } else {
-            countryLabel.setText("<html><b>País: </b>Não Informado</html>");
-        }
-
-        phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        if(user.getPhoneNumber() != null){
-            phoneLabel.setText("<html><b>Número de Telefone: </b>" + user.getPhoneNumber() + "</html>");
-        } else {
-            phoneLabel.setText("<html><b>Número de Telefone: </b>Não Informado</html>");
-        }
-
         friendsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         friendsLabel.setText(Constants.BTFRIENDS_TEXT + "(" + user.getRelatives().size() + ")");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jScrollPane1.setViewportView(friendsList);
+
+        btAddPhoto.setText("Adicionar Nova Foto");
+        btAddPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAddPhotoActionPerformed(evt);
+            }
         });
-        jScrollPane1.setViewportView(jList1);
+
+        photoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        photoLabel.setText("<html><b>Fotos: </b>(" + user.getPhotos().size() + ")</html>");
+
+        jScrollPane2.setViewportView(photoList);
+
+        emailLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        emailLabel1.setText("<html><b>Dados Pessoais:<b></html>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -91,49 +95,71 @@ public class Info extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(dobLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(genderLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
-                    .addComponent(countryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(phoneLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
-                    .addComponent(friendsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dobLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(genderLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(emailLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                            .addComponent(friendsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(photoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(friendsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(friendsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emailLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(dobLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(genderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(countryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(321, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btAddPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddPhotoActionPerformed
+        dialog = new NewPhotoDialog(client, true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btAddPhotoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel countryLabel;
+    private javax.swing.JButton btAddPhoto;
+    private javax.swing.JButton btUserPhoto;
     private javax.swing.JLabel dobLabel;
     private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emailLabel1;
     private javax.swing.JLabel friendsLabel;
+    private javax.swing.JList<User> friendsList;
     private javax.swing.JLabel genderLabel;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel phoneLabel;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel photoLabel;
+    private javax.swing.JList<String> photoList;
     // End of variables declaration//GEN-END:variables
 }
