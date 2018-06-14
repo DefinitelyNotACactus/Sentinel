@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import server.Post;
 import server.actors.User;
-import view.user.Profile;
+import util.Validator;
 
 /**
  *
@@ -25,9 +25,11 @@ public class Wall extends javax.swing.JPanel {
 
     private final Client client;
     private final User user;
+    private final boolean isOwner;
     
     private NewPostPanel newPost;
     private boolean isNewPost;
+    private boolean isViewingPost;
 
     private DefaultListModel userPostModel;
     private DefaultListModel thirdUserPostModel;
@@ -35,8 +37,10 @@ public class Wall extends javax.swing.JPanel {
     public Wall(Client c, User user){
         newPost = null;
         isNewPost = true;
+        isViewingPost = false;
         this.client = c;
         this.user = user;
+        isOwner = Validator.isSameEmail(client.getUser().getId(), user.getId());
         
         userPostModel = new DefaultListModel();
         thirdUserPostModel = new DefaultListModel();
@@ -177,6 +181,10 @@ public class Wall extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btNewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNewPostActionPerformed
+        if(isViewingPost){
+            isViewingPost = false;
+            postPanel.removeAll();
+        }
         if(isNewPost){
             newPost = new NewPostPanel();
             postPanel.removeAll();
@@ -190,7 +198,7 @@ public class Wall extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(client, Constants.NULL_TEXT, "Aviso", JOptionPane.WARNING_MESSAGE);  
             } else {
                 Post post = new Post(newPost.getTitle(), newPost.getText(), client.getUser());
-                if(client.getUser().getId().equals(user.getId())){
+                if(isOwner){
                     user.addPost(post);
                 } else {
                     user.addPostFromOthers(post);
@@ -210,6 +218,9 @@ public class Wall extends javax.swing.JPanel {
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void userWallPostListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_userWallPostListValueChanged
+        if(!isViewingPost){
+            isViewingPost = true;
+        }
         int index = userWallPostList.getSelectedIndex();
         if(index >= 0){
             Post post = user.getPost(index);

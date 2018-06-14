@@ -277,6 +277,7 @@ public class Info extends javax.swing.JPanel {
                 photoFileLabel.setVisible(false);
                 photoCommentField.setVisible(false);
                 user.addPhoto(new Photo(user, selected_file, photoCommentField.getText()));
+                selected_file = "";
                 btAddPhoto.setText("Adicionar Nova Foto");
                 btUserPhoto.setEnabled(true);
                 loadPhotos(true);
@@ -301,6 +302,7 @@ public class Info extends javax.swing.JPanel {
                 btSelectPhoto.setEnabled(false);
                 photoFileLabel.setVisible(false);
                 user.setIcon(new ImageIcon(selected_file));
+                selected_file = "";
                 profile.reloadUserPhoto();
                 btUserPhoto.setText("Editar Foto de Perfil");
                 btAddPhoto.setEnabled(true);
@@ -341,8 +343,10 @@ public class Info extends javax.swing.JPanel {
             JLabel viewPhotoLabel = new JLabel();
             viewPhotoLabel.setIcon(user.getPhoto(index).getIcon());
             photoPanel.add(viewPhotoLabel);
-            JScrollPane scrollPane = new JScrollPane(photoPanel);           
-            scrollPane.setPreferredSize(this.getPreferredSize());
+            JScrollPane scrollPane = new JScrollPane(photoPanel);
+            if(user.getPhoto(index).getIcon().getIconHeight() > this.getHeight() || user.getPhoto(index).getIcon().getIconWidth() > this.getWidth()){            
+                scrollPane.setPreferredSize(this.getPreferredSize());
+            }
             int selection = JOptionPane.showOptionDialog(client, scrollPane , user.getPhoto(index).getComment(), JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
             if(selection == 1){
                 if(isOwner){
