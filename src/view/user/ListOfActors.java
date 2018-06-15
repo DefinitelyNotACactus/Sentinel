@@ -16,7 +16,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import server.Database;
 import server.actors.User;
-import util.UserRenderer;
+import view.util.UserRenderer;
 
 /*
 /**

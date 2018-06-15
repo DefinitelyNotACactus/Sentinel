@@ -5,7 +5,6 @@
  */
 package view.user;
 
-import view.user.profile.Wall;
 import executable.Client;
 import util.Constants;
 import view.user.profile.Info;
@@ -18,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import server.actors.User;
 import util.Validator;
+import view.user.profile.Wall;
 
 /**
  *
@@ -73,15 +73,14 @@ public class Profile extends JPanel {
         btUserName.setText("" + user.getName());
         btUserName.setToolTipText("" + user.getName());
 
+        btUserInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btUserInfo.setText("Perfil");
-        btUserInfo.setFont(new Font(Constants.FONT, Font.PLAIN, 11));
         btUserInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserInfoActionPerformed(evt);
             }
         });
 
-        btUserWall.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btUserWall.setText("Mural");
         btUserWall.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,7 +103,7 @@ public class Profile extends JPanel {
         page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
         page.removeAll();
-        page.add(new Wall(client, user));
+        page.add(new Info(client, user, this));
         page.revalidate();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

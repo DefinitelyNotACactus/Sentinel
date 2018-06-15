@@ -13,7 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.User;
-import util.UserRenderer;
+import view.util.UserRenderer;
 
 /**
  *

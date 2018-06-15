@@ -91,20 +91,17 @@
     </Component>
     <Component class="javax.swing.JButton" name="btUserInfo">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Perfil"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserInfoActionPerformed"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btUserInfo.setFont(new Font(Constants.FONT, Font.PLAIN, 11));"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btUserWall">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Mural"/>
       </Properties>
       <Events>
@@ -132,7 +129,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Wall(client, user));&#xa;page.revalidate();"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Info(client, user, this));&#xa;page.revalidate();"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>

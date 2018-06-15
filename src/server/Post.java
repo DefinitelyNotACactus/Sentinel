@@ -7,30 +7,36 @@ package server;
 
 import server.actors.User;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author David
  */
-public class Post implements Serializable {
+public class Post extends Comment implements Serializable {
     
     private String title;
-    private String text;
-    private final User author;
+    private boolean isPublic;
     
-    private Map<String, Boolean> likes;
-    //private List<Comment> comments;
+    private List<Comment> comments;
 
-    public Post(String title, String text, User author){
+    public Post(String title, String text, User author, boolean isPublic){
+        super(text, author);
         this.title = title;
-        this.text = text;
-        this.author = author;
+        this.isPublic = isPublic;
         
-        likes = new HashMap<>();
+        comments = new ArrayList<>();
     }
     
+    public Post(String title, String text, User author, String iconPath, boolean isPublic){
+        super(text, author, iconPath);
+        this.title = title;
+        this.isPublic = isPublic;
+        
+        comments = new ArrayList<>();
+    }
+        
     public String getTitle(){
         return title;
     }
@@ -39,34 +45,19 @@ public class Post implements Serializable {
         this.title = newTitle;
     }
     
-    public String getText(){
-        return text;
+    public boolean isPublic(){
+        return isPublic;
     }
     
-    public void setText(String newText){
-        this.text = newText;
+    public void setVisible(boolean toPublic){
+        isPublic = toPublic;
     }
     
-    public User getAuthor(){
-        return author;
+    public void addComment(Comment newComment){
+        comments.add(newComment);
     }
     
-    public void like(User liked){
-        likes.putIfAbsent(liked.getId(), true);
-    }
-    
-    public void unlike(User unliked){
-        if(likes.containsKey(unliked.getId())){
-            likes.remove(unliked.getId());
-        }
-    }
-    
-    public int getLikes(){
-        return likes.size();
-    }
-    
-    @Override
-    public String toString(){
-        return title;
+    public List<Comment> getComments(){
+        return comments;
     }
 }

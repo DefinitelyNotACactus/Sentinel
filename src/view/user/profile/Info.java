@@ -5,7 +5,7 @@
  */
 package view.user.profile;
 
-import util.PhotoRenderer;
+import view.util.PhotoRenderer;
 import executable.Client;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -17,13 +17,14 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.Photo;
 import server.actors.User;
 import util.Constants;
-import util.UserRenderer;
+import view.util.UserRenderer;
 import util.Validator;
 import view.user.Profile;
 
@@ -31,7 +32,7 @@ import view.user.Profile;
  *
  * @author David
  */
-public class Info extends javax.swing.JPanel {
+public class Info extends JPanel {
 
     private final Client client;
     private final User user;
@@ -100,14 +101,14 @@ public class Info extends javax.swing.JPanel {
         genderLabel = new javax.swing.JLabel();
         friendsLabel = new javax.swing.JLabel();
         friendsPane = new javax.swing.JScrollPane();
-        friendsList = new javax.swing.JList<>(friendModel);
+        friendsList = new JList<>(friendModel);
         btAddPhoto = new javax.swing.JButton();
         photoFileLabel = new javax.swing.JLabel();
         btSelectPhoto = new javax.swing.JButton();
         photoCommentField = new javax.swing.JTextField();
         photoLabel = new javax.swing.JLabel();
         photoPane = new javax.swing.JScrollPane();
-        photoList = new javax.swing.JList<>(photoModel);
+        photoList = new JList<>(photoModel);
         emailLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 102, 153));
@@ -164,9 +165,9 @@ public class Info extends javax.swing.JPanel {
 
         photoCommentField.setText(Constants.NEWPHOTO_COMMENT_TEXT);
         photoCommentField.setToolTipText("Descrição da sua Imagem, máximo de 100 caracteres");
-        photoCommentField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                photoCommentFieldActionPerformed(evt);
+        photoCommentField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                photoCommentFieldMouseClicked(evt);
             }
         });
 
@@ -326,12 +327,6 @@ public class Info extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btSelectPhotoActionPerformed
 
-    private void photoCommentFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_photoCommentFieldActionPerformed
-        if(photoCommentField.getText().equals(Constants.NEWPHOTO_COMMENT_TEXT)){
-            photoCommentField.setText("");
-        }
-    }//GEN-LAST:event_photoCommentFieldActionPerformed
-
     private void photoListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_photoListValueChanged
         int index = photoList.getSelectedIndex();
         if(index >= 0){
@@ -376,6 +371,12 @@ public class Info extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_friendsListValueChanged
+
+    private void photoCommentFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_photoCommentFieldMouseClicked
+        if(photoCommentField.getText().equals(Constants.NEWPHOTO_COMMENT_TEXT)){
+            photoCommentField.setText("");
+        }
+    }//GEN-LAST:event_photoCommentFieldMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAddPhoto;
