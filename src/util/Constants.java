@@ -11,7 +11,7 @@ package util;
  */
 public class Constants {
     
-    public static final String VERSION = "1.5.0 Post Edition";
+    public static final String VERSION = "1.5.1 Post and Comments Edition";
     public static final String FONT = "Tahoma";
     
     public static final String WINDOW_CLOSE_MESSAGE[] = {"Você deseja mesmo sair?", "Aviso"};

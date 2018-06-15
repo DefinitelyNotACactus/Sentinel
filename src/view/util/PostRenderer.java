@@ -42,7 +42,9 @@ public class PostRenderer extends JPanel implements ListCellRenderer<Post>{
 
         if(post.getIcon() == null){
             iconLabel.setText("SEM FOTO");
+            iconLabel.setIcon(null);
         } else {
+            iconLabel.setText("");
             iconLabel.setIcon(new ImageIcon(post.getIcon().getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
         }
         nameLabel.setText("<html>" + post.getTitle() + " <br/><b>Por:</b> " + post.getAuthor().getName() + "</html>");

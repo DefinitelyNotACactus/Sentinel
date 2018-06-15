@@ -9,7 +9,6 @@ import executable.Client;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import server.Post;
 import server.actors.User;
 import util.Validator;
@@ -57,8 +56,6 @@ public class Wall extends javax.swing.JPanel {
         if(reload){
             userPostModel.clear();
             thirdUserPostModel.clear();
-            postPanel.removeAll();
-            postPanel.revalidate();
         }
         int i;
         Iterator it = user.getPosts().iterator();
@@ -88,6 +85,7 @@ public class Wall extends javax.swing.JPanel {
         thirdPersonWallPostLabel = new javax.swing.JLabel();
         tpwpListPanel = new javax.swing.JScrollPane();
         tpwpList = new JList<>(thirdUserPostModel);
+        scrollPane = new javax.swing.JScrollPane();
         postPanel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(0, 102, 153));
@@ -105,8 +103,13 @@ public class Wall extends javax.swing.JPanel {
 
         tpwpListPanel.setViewportView(tpwpList);
 
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setMinimumSize(new java.awt.Dimension(0, 0));
+        scrollPane.setPreferredSize(new java.awt.Dimension(616, 616));
+
         postPanel.add(new NewPost(client, user, this));
-        postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.Y_AXIS));
+        postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        scrollPane.setViewportView(postPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -119,8 +122,8 @@ public class Wall extends javax.swing.JPanel {
                     .addComponent(wopListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tpwpListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -129,6 +132,9 @@ public class Wall extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(wallOwnerPostsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(wopListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -136,11 +142,8 @@ public class Wall extends javax.swing.JPanel {
                         .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(277, 277, 277))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(postPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(356, 356, 356)
-                                .addComponent(tpwpListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(356, 356, 356)
+                        .addComponent(tpwpListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -150,21 +153,14 @@ public class Wall extends javax.swing.JPanel {
         if(index >= 0){
             Post selected = user.getPost(index);
             postPanel.removeAll();
-            Iterator it = selected.getComments().iterator();
-            while(it.hasNext()){
-                postPanel.add(new ViewPost(client, this, (Post) it.next()));
-            }
             postPanel.add(new ViewPost(client, this, selected));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_wopListValueChanged
-
-    public JPanel getPostPanel(){
-        return postPanel;
-    }
-    
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel postPanel;
+    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JLabel thirdPersonWallPostLabel;
     private javax.swing.JList<Post> tpwpList;
     private javax.swing.JScrollPane tpwpListPanel;

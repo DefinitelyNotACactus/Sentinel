@@ -6,7 +6,15 @@
 package view.user.post;
 
 import executable.Client;
+import java.awt.Image;
+import java.util.Iterator;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import server.Comment;
 import server.Post;
 import util.Constants;
 import util.Validator;
@@ -23,6 +31,7 @@ public class ViewPost extends JPanel {
     private final Post post;
     
     private boolean isOwner;
+    private boolean isEditing;
     
     /**
      * Creates new form ViewPost
@@ -36,10 +45,10 @@ public class ViewPost extends JPanel {
         this.wall = wall;
         
         isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
+        isEditing = false;
         
         initComponents();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,14 +58,21 @@ public class ViewPost extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        titleField = new javax.swing.JTextField();
-        textPane = new javax.swing.JScrollPane();
         textField = new javax.swing.JTextPane();
-        btComment = new javax.swing.JButton();
-        btEdit = new javax.swing.JButton();
-        btDelete = new javax.swing.JButton();
-        iconLabel = new javax.swing.JLabel();
+        titleField = new javax.swing.JTextField();
         userLabel = new javax.swing.JLabel();
+        buttonsPanel = new javax.swing.JPanel();
+        btDelete = new javax.swing.JButton();
+        btEdit = new javax.swing.JButton();
+        btComment = new javax.swing.JButton();
+        contentPanel = new javax.swing.JPanel();
+        commentsPanel = new javax.swing.JPanel();
+
+        textField.setEditable(false);
+        textField.setText(post.getText());
+        textField.setToolTipText("");
+
+        setBackground(new java.awt.Color(204, 0, 51));
 
         titleField.setEditable(false);
         titleField.setText(post.getTitle());
@@ -66,10 +82,36 @@ public class ViewPost extends JPanel {
             }
         });
 
-        textField.setEditable(false);
-        textField.setText(post.getText());
-        textField.setToolTipText("");
-        textPane.setViewportView(textField);
+        if(isOwner){
+            userLabel.setText("<html>Autor: <b>(Você)</b></html>");
+        } else {
+            userLabel.setText("<html>Autor: <b>" + post.getAuthor().getName() + "</b></html>");
+        }
+
+        buttonsPanel.setBackground(new java.awt.Color(204, 0, 51));
+        buttonsPanel.setLayout(new java.awt.GridLayout(1, 0));
+
+        btDelete.setText("Apagar");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
+        buttonsPanel.add(btDelete);
+        if(!isOwner){
+            btDelete.setEnabled(false);
+        }
+
+        btEdit.setText("Editar");
+        btEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEditActionPerformed(evt);
+            }
+        });
+        buttonsPanel.add(btEdit);
+        if(!isOwner){
+            btEdit.setEnabled(false);
+        }
 
         btComment.setText("Responder");
         btComment.addActionListener(new java.awt.event.ActionListener() {
@@ -77,39 +119,34 @@ public class ViewPost extends JPanel {
                 btCommentActionPerformed(evt);
             }
         });
+        buttonsPanel.add(btComment);
 
-        btEdit.setText("Editar");
-
-        btDelete.setText("Apagar");
-
-        if(isOwner){
-            userLabel.setText("<html>Autor: <b>(Você)</b></html>");
-        } else {
-            userLabel.setText("<html>Autor: <b>" + post.getAuthor().getName() + "</b></html>");
+        contentPanel.setBackground(new java.awt.Color(204, 0, 51));
+        contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
+        if(post.getIcon() != null){
+            JLabel image = new JLabel();
+            image.setIcon(new ImageIcon(post.getIcon().getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+            contentPanel.add(image);
         }
+        contentPanel.add(new JScrollPane(textField));
+
+        commentsPanel.setLayout(new javax.swing.BoxLayout(commentsPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        loadComments();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(commentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titleField)
+                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(iconLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(userLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                        .addComponent(userLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btComment, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(textPane, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleField))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,25 +155,14 @@ public class ViewPost extends JPanel {
                 .addContainerGap()
                 .addComponent(titleField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(iconLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textPane, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btComment, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(userLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(userLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(commentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        if(!isOwner){
-            btEdit.setEnabled(false);
-        }
-        if(!isOwner){
-            btDelete.setEnabled(false);
-        }
     }// </editor-fold>//GEN-END:initComponents
 
     private void titleFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_titleFieldMouseClicked
@@ -146,18 +172,53 @@ public class ViewPost extends JPanel {
     }//GEN-LAST:event_titleFieldMouseClicked
 
     private void btCommentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCommentActionPerformed
-        wall.getPostPanel().add(new NewComment(client, post));
-        wall.getPostPanel().revalidate();
+        commentsPanel.removeAll();
+        commentsPanel.add(new NewComment(client, post));
+        loadComments();
+        commentsPanel.revalidate();
+        btComment.setEnabled(false);
     }//GEN-LAST:event_btCommentActionPerformed
 
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        client.getUser().getPosts().remove(post);
+        this.getParent().revalidate();
+        this.getParent().add(new NewPost(client, client.getUser(), wall));
+        this.getParent().remove(this);
+        wall.listPosts(true);
+    }//GEN-LAST:event_btDeleteActionPerformed
 
+    private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
+        if(!isEditing){
+            titleField.setEditable(true);
+            textField.setEditable(true);
+            btEdit.setText("Salvar");
+            isEditing = true;
+        } else {
+            titleField.setEditable(false);
+            textField.setEditable(false);
+            post.setTitle(titleField.getText());
+            post.setText(textField.getText());
+            btEdit.setText("Editar");
+            wall.listPosts(true);
+            isEditing = false;
+        }
+    }//GEN-LAST:event_btEditActionPerformed
+
+    public void loadComments(){
+        Iterator it = post.getComments().iterator();
+        while(it.hasNext()){
+            commentsPanel.add(new ViewComment(client, post, (Comment) it.next()));
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btComment;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btEdit;
-    private javax.swing.JLabel iconLabel;
+    private javax.swing.JPanel buttonsPanel;
+    private javax.swing.JPanel commentsPanel;
+    private javax.swing.JPanel contentPanel;
     private javax.swing.JTextPane textField;
-    private javax.swing.JScrollPane textPane;
     private javax.swing.JTextField titleField;
     private javax.swing.JLabel userLabel;
     // End of variables declaration//GEN-END:variables

@@ -7,8 +7,6 @@ package server;
 
 import server.actors.User;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -18,23 +16,17 @@ public class Post extends Comment implements Serializable {
     
     private String title;
     private boolean isPublic;
-    
-    private List<Comment> comments;
 
     public Post(String title, String text, User author, boolean isPublic){
         super(text, author);
         this.title = title;
-        this.isPublic = isPublic;
-        
-        comments = new ArrayList<>();
+        this.isPublic = isPublic;              
     }
     
     public Post(String title, String text, User author, String iconPath, boolean isPublic){
         super(text, author, iconPath);
         this.title = title;
         this.isPublic = isPublic;
-        
-        comments = new ArrayList<>();
     }
         
     public String getTitle(){
@@ -51,13 +43,5 @@ public class Post extends Comment implements Serializable {
     
     public void setVisible(boolean toPublic){
         isPublic = toPublic;
-    }
-    
-    public void addComment(Comment newComment){
-        comments.add(newComment);
-    }
-    
-    public List<Comment> getComments(){
-        return comments;
     }
 }

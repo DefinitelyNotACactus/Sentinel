@@ -7,6 +7,8 @@ package server;
 
 import server.actors.User;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 
 /**
@@ -19,12 +21,14 @@ public class Comment implements Serializable {
     
     private User author;
     private final ImageIcon icon;
-
+    private List<Comment> comments;
+    
     public Comment(String text, User author){
         this.text = text;
         this.author = author;
         
         icon = null;
+        comments = new ArrayList<>();
     }
     
     public Comment(String text, User author, String iconPath){
@@ -32,6 +36,7 @@ public class Comment implements Serializable {
         this.author = author;
         
         icon = new ImageIcon(iconPath);
+        comments = new ArrayList<>();
     }
     
     public String getText(){
@@ -52,5 +57,13 @@ public class Comment implements Serializable {
     
     public ImageIcon getIcon(){
         return icon;
+    }
+    
+    public void addComment(Comment newComment){
+        comments.add(newComment);
+    }
+    
+    public List<Comment> getComments(){
+        return comments;
     }
 }

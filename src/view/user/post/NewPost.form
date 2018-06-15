@@ -17,25 +17,27 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="titleField" max="32767" attributes="0"/>
-                  <Component id="textPane" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="visibilityBox" max="32767" attributes="0"/>
+                              <Component id="visibilityBox" min="-2" pref="410" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btReturn" min="-2" pref="180" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btSend" min="-2" pref="180" max="-2" attributes="0"/>
+                              <Component id="btSend" min="-2" pref="170" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="selectedFileLabel" min="-2" pref="491" max="-2" attributes="0"/>
+                              <Component id="selectedFileLabel" min="-2" pref="481" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btAddPhoto" min="-2" max="-2" attributes="0"/>
                           </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="textPane" alignment="1" max="32767" attributes="0"/>
+                          <Component id="titleField" alignment="1" pref="586" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -51,17 +53,14 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="textPane" min="-2" pref="456" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btAddPhoto" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="selectedFileLabel" min="-2" pref="40" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="selectedFileLabel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btAddPhoto" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btSend" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="btReturn" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="visibilityBox" max="32767" attributes="0"/>
+                  <Component id="btSend" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="visibilityBox" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -107,11 +106,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSendActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btReturn">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Retornar"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btAddPhoto">
       <Properties>

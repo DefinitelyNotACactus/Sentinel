@@ -26,8 +26,10 @@ public class NewComment extends JPanel {
     
     private final Client client;
     private final Post post;
+    private final Comment comment;
+    
+    private String selected_file = "";
 
-    private String selected_file;
     
     /**
      * Creates new form NewComment
@@ -37,9 +39,19 @@ public class NewComment extends JPanel {
     public NewComment(Client c, Post post) {
         client = c;
         this.post = post;
+        comment = null;
+        
         initComponents();
     }
 
+    public NewComment(Client c, Comment comment){
+        client = c;
+        this.comment = comment;
+        post = null;
+        
+        initComponents();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,6 +66,8 @@ public class NewComment extends JPanel {
         btAddPhoto = new javax.swing.JButton();
         selectedFileLabel = new javax.swing.JLabel();
         btSend = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(255, 255, 0));
 
         textField.setColumns(20);
         textField.setRows(5);
@@ -79,14 +93,14 @@ public class NewComment extends JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textPane, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textPane, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btSend, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(selectedFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(selectedFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btAddPhoto)))
                 .addContainerGap())
         );
@@ -94,7 +108,7 @@ public class NewComment extends JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(textPane, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addComponent(textPane, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,12 +139,18 @@ public class NewComment extends JPanel {
         if(textField.getText().trim().equals("")){
             JOptionPane.showMessageDialog(client, "O texto está vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
+            Comment newComment;
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
-                post.addComment(new Comment(textField.getText(), client.getUser()));
+                newComment = new Comment(textField.getText(), client.getUser());
+                post.addComment(newComment);
             } else {
-                post.addComment(new Comment(textField.getText(), client.getUser(), selected_file));
+                newComment = new Comment(textField.getText(), client.getUser(), selected_file);
+                post.addComment(newComment);
             }
             JOptionPane.showMessageDialog(client, "Comentário Enviado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            this.getParent().revalidate();
+            this.getParent().add(new ViewComment(client, post, newComment));
+            this.getParent().remove(this);
         }
     }//GEN-LAST:event_btSendActionPerformed
 
