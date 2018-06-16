@@ -7,8 +7,8 @@ package server.actors;
 
 import java.util.ArrayList;
 import java.util.List;
-import server.Photo;
-import server.Post;
+import server.actors.actions.Photo;
+import server.actors.actions.Post;
 
 /**
  *

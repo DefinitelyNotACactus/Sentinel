@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.actors.actions;
 
 import server.actors.User;
 import java.io.Serializable;
@@ -21,7 +21,9 @@ public class Comment implements Serializable {
     
     private User author;
     private final ImageIcon icon;
+    
     private List<Comment> comments;
+    private List<Answer> answers;
     
     public Comment(String text, User author){
         this.text = text;
@@ -29,14 +31,16 @@ public class Comment implements Serializable {
         
         icon = null;
         comments = new ArrayList<>();
+        answers = new ArrayList<>();
     }
     
     public Comment(String text, User author, String iconPath){
         this.text = text;
         this.author = author;
         
-        icon = new ImageIcon(iconPath);
+        icon = new ImageIcon(iconPath);     
         comments = new ArrayList<>();
+        answers = new ArrayList<>();
     }
     
     public String getText(){
@@ -65,5 +69,13 @@ public class Comment implements Serializable {
     
     public List<Comment> getComments(){
         return comments;
+    }
+    
+    public void addAnswer(Answer newAnswer){
+        answers.add(newAnswer);
+    }
+    
+    public List<Answer> getAnswers(){
+        return answers;
     }
 }

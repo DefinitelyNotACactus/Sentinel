@@ -86,7 +86,7 @@
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;    userLabel.setText(&quot;&lt;html&gt;Autor: &lt;b&gt;(Voc&#xea;)&lt;/b&gt;&lt;/html&gt;&quot;);&#xa;} else {"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner &amp;&amp; !isThirdPerson){&#xa;    userLabel.setText(&quot;&lt;html&gt;Autor: &lt;b&gt;(Voc&#xea;)&lt;/b&gt;&lt;/html&gt;&quot;);&#xa;} else {"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="buttonsPanel">

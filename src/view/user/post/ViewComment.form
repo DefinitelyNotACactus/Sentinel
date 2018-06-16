@@ -80,7 +80,7 @@
         </Component>
         <Container class="javax.swing.JPanel" name="answersContentPanel">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="if(comment.getIcon() != null){&#xa;    JLabel image = new JLabel();&#xa;    image.setIcon(new ImageIcon(comment.getIcon().getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));&#xa;    answersContentPanel.add(image);&#xa;}&#xa;answersContentPanel.add(new JScrollPane(textField));"/>
+            <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="answersContentPanel.add(new JScrollPane(textField));"/>
           </AuxValues>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
@@ -198,7 +198,7 @@
     </Container>
     <Container class="javax.swing.JPanel" name="commentsPanel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="Iterator it = comment.getComments().iterator();&#xa;while(it.hasNext()){&#xa;    commentsPanel.add(answersPanel);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="loadAnswers();"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">

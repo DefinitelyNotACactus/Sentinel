@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.actors.actions;
 
 import server.actors.User;
 import java.io.Serializable;

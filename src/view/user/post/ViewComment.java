@@ -12,8 +12,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import server.Comment;
-import server.Post;
+import server.actors.actions.Answer;
+import server.actors.actions.Comment;
+import server.actors.actions.Post;
 
 /**
  *
@@ -103,11 +104,6 @@ public class ViewComment extends JPanel {
         }
 
         answersContentPanel.setLayout(new javax.swing.BoxLayout(answersContentPanel, javax.swing.BoxLayout.LINE_AXIS));
-        if(comment.getIcon() != null){
-            JLabel image = new JLabel();
-            image.setIcon(new ImageIcon(comment.getIcon().getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
-            answersContentPanel.add(image);
-        }
         answersContentPanel.add(new JScrollPane(textField));
 
         javax.swing.GroupLayout answersPanelLayout = new javax.swing.GroupLayout(answersPanel);
@@ -182,10 +178,7 @@ public class ViewComment extends JPanel {
         contentPanel.add(new JScrollPane(textField));
 
         commentsPanel.setLayout(new javax.swing.BoxLayout(commentsPanel, javax.swing.BoxLayout.PAGE_AXIS));
-        Iterator it = comment.getComments().iterator();
-        while(it.hasNext()){
-            commentsPanel.add(answersPanel);
-        }
+        loadAnswers();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -245,6 +238,12 @@ public class ViewComment extends JPanel {
         this.getParent().remove(this);
     }//GEN-LAST:event_btDeleteActionPerformed
 
+    public void loadAnswers(){
+        Iterator it = comment.getAnswers().iterator();
+        while(it.hasNext()){
+            commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next()));
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel answersButtonsPanel;
     private javax.swing.JPanel answersContentPanel;

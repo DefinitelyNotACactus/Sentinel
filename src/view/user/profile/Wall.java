@@ -10,7 +10,7 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import server.Post;
+import server.actors.actions.Post;
 import server.actors.User;
 import util.Validator;
 import view.user.post.NewPost;

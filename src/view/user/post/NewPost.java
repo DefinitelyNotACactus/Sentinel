@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import server.Post;
+import server.actors.actions.Post;
 import server.actors.User;
 import util.Constants;
 import util.Validator;

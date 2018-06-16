@@ -12,8 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import server.Comment;
-import server.Post;
+import server.actors.actions.Comment;
+import server.actors.actions.Post;
 import server.actors.User;
 import util.Constants;
 import util.Validator;
@@ -98,7 +98,7 @@ public class ViewPost extends JPanel {
             }
         });
 
-        if(isOwner){
+        if(isOwner && !isThirdPerson){
             userLabel.setText("<html>Autor: <b>(Você)</b></html>");
         } else {
             userLabel.setText("<html>Autor: <b>" + post.getAuthor().getName() + "</b></html>");

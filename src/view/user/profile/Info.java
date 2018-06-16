@@ -21,7 +21,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import server.Photo;
+import server.actors.actions.Photo;
 import server.actors.User;
 import util.Constants;
 import view.util.UserRenderer;

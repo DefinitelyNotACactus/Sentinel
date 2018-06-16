@@ -15,8 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import server.Comment;
-import server.Post;
+import server.actors.actions.Answer;
+import server.actors.actions.Comment;
+import server.actors.actions.Post;
 import util.Constants;
 
 /**
@@ -68,8 +69,6 @@ public class NewComment extends JPanel {
         selectedFileLabel = new javax.swing.JLabel();
         btSend = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(255, 255, 0));
-
         textField.setColumns(20);
         textField.setRows(5);
         textPane.setViewportView(textField);
@@ -80,6 +79,9 @@ public class NewComment extends JPanel {
                 btAddPhotoActionPerformed(evt);
             }
         });
+        if(post == null){
+            btAddPhoto.setEnabled(false);
+        }
 
         selectedFileLabel.setText(Constants.DEFAULT_FILE_TEXT);
 
@@ -141,17 +143,32 @@ public class NewComment extends JPanel {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(client, "O texto está vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-            Comment newComment;
+            Comment newComment = null;
+            Answer answer = null;
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
-                newComment = new Comment(textField.getText(), client.getUser());
-                post.addComment(newComment);
+                if(post != null){
+                    newComment = new Comment(textField.getText(), client.getUser());
+                    post.addComment(newComment);
+                } else {
+                    answer = new Answer(textField.getText(), client.getUser());
+                    comment.addAnswer(answer);
+                }
             } else {
-                newComment = new Comment(textField.getText(), client.getUser(), selected_file);
-                post.addComment(newComment);
+                if(post != null){
+                    newComment = new Comment(textField.getText(), client.getUser(), selected_file);
+                    post.addComment(newComment);
+                } else {
+                    answer = new Answer(textField.getText(), client.getUser());
+                    comment.addAnswer(answer);
+                }
             }
             JOptionPane.showMessageDialog(client, "Comentário Enviado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             this.getParent().revalidate();
-            this.getParent().add(new ViewComment(client, post, newComment));
+            if(post != null){
+                this.getParent().add(new ViewComment(client, post, newComment));
+            } else {
+                this.getParent().add(new ViewAnswer(client, post, answer));
+            }
             this.getParent().remove(this);
         }
     }//GEN-LAST:event_btSendActionPerformed
