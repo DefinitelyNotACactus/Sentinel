@@ -24,14 +24,20 @@ public class ViewAnswer extends JPanel {
     private final Answer answer;
 
     private final boolean isOwner;
+    private final boolean isThirdPerson;
     private boolean isEditing;
     
-    public ViewAnswer(Client c, Comment comment, Answer answer) {
+    public ViewAnswer(Client c, Comment comment, Answer answer, boolean isThirdPerson){
         client = c;
         this.comment = comment;
         this.answer = answer;
         
-        isOwner = Validator.isSameEmail(c.getUser().getId(), answer.getAuthor().getId());
+        this.isThirdPerson = isThirdPerson;
+        if(isThirdPerson){
+            isOwner = Validator.isSameEmail(answer.getAuthor().getId(), comment.getAuthor().getId());
+        } else {
+            isOwner = true;
+        }
         isEditing = false;
         
         initComponents();
@@ -58,7 +64,7 @@ public class ViewAnswer extends JPanel {
         textField.setText(answer.getAnswer());
         textField.setToolTipText("");
 
-        answersButtonsPanel.setLayout(new java.awt.GridLayout());
+        answersButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         btDeleteAnswer.setText("Apagar");
         btDeleteAnswer.addActionListener(new java.awt.event.ActionListener() {
@@ -82,11 +88,7 @@ public class ViewAnswer extends JPanel {
             btEditAnswer.setEnabled(false);
         }
 
-        if(isOwner){
-            answersLabel.setText("<html><b>(Você)</b> respondeu: </html>");
-        } else {
-            answersLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
-        }
+        answersLabel.setText("<html><b>" + answer.getAuthor().getName() + "</b> respondeu: </html>");
 
         answersContentPanel.setLayout(new javax.swing.BoxLayout(answersContentPanel, javax.swing.BoxLayout.LINE_AXIS));
         answersContentPanel.add(new JScrollPane(textField));

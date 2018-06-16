@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
+import util.Validator;
 
 /**
  *
@@ -27,30 +28,43 @@ public class ViewComment extends JPanel {
     private final Post post;
     
     private final boolean isOwner;
+    private final boolean isThirdPerson;
+    
     private boolean isEditing;
     /**
      * Creates new form ViewComment
      * @param c
      * @param post
      * @param comment
+     * @param isThirdPerson
      */
-    public ViewComment(Client c, Post post, Comment comment) {
+    public ViewComment(Client c, Post post, Comment comment, boolean isThirdPerson) {
         this.client = c;
         this.post = post;
         this.comment = comment;
         
-        isOwner = true;
+        this.isThirdPerson = isThirdPerson;
+        if(isThirdPerson){
+            isOwner = Validator.isSameEmail(comment.getAuthor().getId(), client.getUser().getId());
+        } else {
+            isOwner = true;
+        }
         isEditing = false;
         
         initComponents();
     }
 
-    public ViewComment(Client c, Comment comment) {
+    public ViewComment(Client c, Comment comment, boolean isThirdPerson) {
         this.client = c;
         this.post = null;
         this.comment = comment;
         
-        isOwner = true;
+        this.isThirdPerson = isThirdPerson;
+        if(isThirdPerson){
+            isOwner = Validator.isSameEmail(comment.getAuthor().getId(), client.getUser().getId());
+        } else {
+            isOwner = true;
+        }
         isEditing = false;
         
         initComponents();
@@ -164,10 +178,9 @@ public class ViewComment extends JPanel {
         buttonsPanel.add(btComment);
 
         if(isOwner){
-            userLabel.setText("<html><b>(Você)</b> comentou: </html>");
-        } else {
-            userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
+            userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
         }
+        userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
 
         contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
         if(comment.getIcon() != null){
@@ -241,9 +254,15 @@ public class ViewComment extends JPanel {
     public void loadAnswers(){
         Iterator it = comment.getAnswers().iterator();
         while(it.hasNext()){
-            commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next()));
+            Answer answer = (Answer) it.next();
+            if(!isThirdPerson){
+                commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next(), false));
+            } else {
+                commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next(), !Validator.isSameEmail(answer.getAuthor().getId(), client.getUser().getId())));
+            }
         }
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel answersButtonsPanel;
     private javax.swing.JPanel answersContentPanel;

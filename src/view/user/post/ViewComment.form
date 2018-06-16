@@ -185,8 +185,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;    userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; comentou: &lt;/html&gt;&quot;);&#xa;} else {"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;}"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="contentPanel">

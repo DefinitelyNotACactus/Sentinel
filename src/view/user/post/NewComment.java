@@ -165,9 +165,9 @@ public class NewComment extends JPanel {
             JOptionPane.showMessageDialog(client, "Comentário Enviado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             this.getParent().revalidate();
             if(post != null){
-                this.getParent().add(new ViewComment(client, post, newComment));
+                this.getParent().add(new ViewComment(client, post, newComment, false));
             } else {
-                this.getParent().add(new ViewAnswer(client, post, answer));
+                this.getParent().add(new ViewAnswer(client, post, answer, false));
             }
             this.getParent().remove(this);
         }

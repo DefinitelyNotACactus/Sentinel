@@ -108,13 +108,9 @@
         <Component class="javax.swing.JLabel" name="answersLabel">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;&lt;html&gt;&lt;b&gt;&quot; + comment.getAuthor().getName() + &quot;&lt;/b&gt; respondeu: &lt;/html&gt;&quot;" type="code"/>
+              <Connection code="&quot;&lt;html&gt;&lt;b&gt;&quot; + answer.getAuthor().getName() + &quot;&lt;/b&gt; respondeu: &lt;/html&gt;&quot;" type="code"/>
             </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;    answersLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;} else {"/>
-          </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="answersContentPanel">
           <AuxValues>
