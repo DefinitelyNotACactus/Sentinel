@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
+import util.Validator;
 
 /**
  *
@@ -26,6 +27,7 @@ public class ViewComment extends JPanel {
     private final Post post;
     
     private final boolean isOwner;
+    private final boolean isWallOwner;
     
     private boolean isEditing = false;
     /**
@@ -33,14 +35,19 @@ public class ViewComment extends JPanel {
      * @param c
      * @param post
      * @param comment
-     * @param isOwner
+     * @param isWallOwner
      */
-    public ViewComment(Client c, Post post, Comment comment, boolean isOwner) {
+    public ViewComment(Client c, Post post, Comment comment, boolean isWallOwner) {
         this.client = c;
         this.post = post;
         this.comment = comment;
         
-        this.isOwner = isOwner;
+        this.isWallOwner = isWallOwner;
+        if(isWallOwner){
+            isOwner = true;
+        } else {
+            isOwner = Validator.isSameEmail(client.getUser().getId(), comment.getAuthor().getId());
+        }
         
         initComponents();
     }
@@ -229,7 +236,7 @@ public class ViewComment extends JPanel {
 
     public void loadAnswers(){
         for (Answer answer : comment.getAnswers()) {
-            commentsPanel.add(new ViewAnswer(client, comment, answer, isOwner));
+            commentsPanel.add(new ViewAnswer(client, comment, answer, isWallOwner));
         }
     }
     

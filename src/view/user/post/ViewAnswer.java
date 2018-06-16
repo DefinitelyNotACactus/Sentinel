@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
+import util.Validator;
 
 /**
  *
@@ -23,11 +24,16 @@ public class ViewAnswer extends JPanel {
     private final boolean isOwner;
     private boolean isEditing;
     
-    public ViewAnswer(Client c, Comment comment, Answer answer, boolean isOwner){
+    public ViewAnswer(Client c, Comment comment, Answer answer, boolean isWallOwner){
         this.comment = comment;
         this.answer = answer;
         
-        this.isOwner = isOwner;
+        if(isWallOwner){
+            isOwner = true;
+        } else {
+            isOwner = Validator.isSameEmail(c.getUser().getId(), answer.getAuthor().getId());
+        }
+        
         isEditing = false;
         
         initComponents();

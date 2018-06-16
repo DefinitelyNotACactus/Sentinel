@@ -221,12 +221,7 @@ public class ViewPost extends JPanel {
     public void loadComments(){
         Iterator it = post.getComments().iterator();
         while(it.hasNext()){
-            if(isWallOwner){
-                commentsPanel.add(new ViewComment(client, post, (Comment) it.next(), true));
-            } else {
-                Comment comment = (Comment) it.next();
-                commentsPanel.add(new ViewComment(client, post, comment, Validator.isSameEmail(client.getUser().getId(), comment.getAuthor().getId())));
-            }
+            commentsPanel.add(new ViewComment(client, post, (Comment) it.next(), isWallOwner));
         }
     }
     
