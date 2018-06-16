@@ -10,12 +10,11 @@ import java.awt.Image;
 import java.util.Iterator;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import server.Comment;
 import server.Post;
+import server.actors.User;
 import util.Constants;
 import util.Validator;
 import view.user.profile.Wall;
@@ -29,26 +28,43 @@ public class ViewPost extends JPanel {
     private final Client client;
     private final Wall wall;
     private final Post post;
+    private final User user;
     
-    private boolean isOwner;
-    private boolean isEditing;
+    private final boolean isOwner;
+    private final boolean isThirdPerson;
+    private boolean isEditing = false;
     
     /**
      * Creates new form ViewPost
      * @param c
      * @param wall
      * @param post
+     * @param thirdPerson
      */
-    public ViewPost(Client c, Wall wall, Post post) {
+    public ViewPost(Client c, Wall wall, Post post, boolean thirdPerson) {
         client = c;
+        user = c.getUser();
+        this.post = post;
+        this.wall = wall;
+        
+        isOwner = true;
+        isThirdPerson = thirdPerson;
+        
+        initComponents();
+    }
+    
+    public ViewPost(Client c, User user, Wall wall, Post post) {
+        client = c;
+        this.user = user;
         this.post = post;
         this.wall = wall;
         
         isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
-        isEditing = false;
-        
+        isThirdPerson = true;
+
         initComponents();
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -180,7 +196,11 @@ public class ViewPost extends JPanel {
     }//GEN-LAST:event_btCommentActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        client.getUser().getPosts().remove(post);
+        if(isThirdPerson){
+            user.getPostsFromOthers().remove(post);
+        } else {
+            client.getUser().getPosts().remove(post);
+        }
         this.getParent().revalidate();
         this.getParent().add(new NewPost(client, client.getUser(), wall));
         this.getParent().remove(this);

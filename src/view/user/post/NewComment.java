@@ -7,6 +7,7 @@ package view.user.post;
 
 import executable.Client;
 import java.awt.Image;
+import java.awt.Toolkit;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -137,6 +138,7 @@ public class NewComment extends JPanel {
 
     private void btSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSendActionPerformed
         if(textField.getText().trim().equals("")){
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(client, "O texto está vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             Comment newComment;

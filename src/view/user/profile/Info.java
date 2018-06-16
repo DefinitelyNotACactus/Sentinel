@@ -94,15 +94,12 @@ public class Info extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fileChooser = new javax.swing.JFileChooser();
         emailLabel = new javax.swing.JLabel();
-        btUserPhoto = new javax.swing.JButton();
         dobLabel = new javax.swing.JLabel();
         genderLabel = new javax.swing.JLabel();
         friendsLabel = new javax.swing.JLabel();
         friendsPane = new javax.swing.JScrollPane();
         friendsList = new JList<>(friendModel);
-        btAddPhoto = new javax.swing.JButton();
         photoFileLabel = new javax.swing.JLabel();
         btSelectPhoto = new javax.swing.JButton();
         photoCommentField = new javax.swing.JTextField();
@@ -110,23 +107,15 @@ public class Info extends JPanel {
         photoPane = new javax.swing.JScrollPane();
         photoList = new JList<>(photoModel);
         emailLabel1 = new javax.swing.JLabel();
+        buttonsPanel = new javax.swing.JPanel();
+        btUserPhoto = new javax.swing.JButton();
+        btAddPhoto = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
         emailLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         emailLabel.setText("<html><b>E-mail: </b>" + user.getId() + "</html>");
-
-        btUserPhoto.setText("Editar Foto de Perfil");
-        btUserPhoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btUserPhotoActionPerformed(evt);
-            }
-        });
-        if(!isOwner){
-            btUserPhoto.setVisible(false);
-            btUserPhoto.setEnabled(false);
-        }
 
         dobLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
@@ -144,17 +133,6 @@ public class Info extends JPanel {
         });
         friendsPane.setViewportView(friendsList);
         listFriends();
-
-        btAddPhoto.setText("Adicionar Nova Foto");
-        btAddPhoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAddPhotoActionPerformed(evt);
-            }
-        });
-        if(!isOwner){
-            btAddPhoto.setVisible(false);
-            btAddPhoto.setEnabled(false);
-        }
 
         btSelectPhoto.setText("Selecionar");
         btSelectPhoto.addActionListener(new java.awt.event.ActionListener() {
@@ -185,6 +163,33 @@ public class Info extends JPanel {
         emailLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         emailLabel1.setText("<html><b>Dados Pessoais<b></html>");
 
+        buttonsPanel.setBackground(new java.awt.Color(0, 102, 153));
+        buttonsPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
+
+        btUserPhoto.setText("Editar Foto de Perfil");
+        btUserPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btUserPhotoActionPerformed(evt);
+            }
+        });
+        if(!isOwner){
+            btUserPhoto.setVisible(false);
+            btUserPhoto.setEnabled(false);
+        }
+        buttonsPanel.add(btUserPhoto);
+
+        btAddPhoto.setText("Adicionar Nova Foto");
+        btAddPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAddPhotoActionPerformed(evt);
+            }
+        });
+        if(!isOwner){
+            btAddPhoto.setVisible(false);
+            btAddPhoto.setEnabled(false);
+        }
+        buttonsPanel.add(btAddPhoto);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -200,19 +205,16 @@ public class Info extends JPanel {
                             .addComponent(emailLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(photoFileLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btSelectPhoto))
-                                    .addComponent(photoCommentField, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(photoCommentField)
+                                    .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(friendsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                            .addComponent(friendsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(friendsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(photoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -226,7 +228,7 @@ public class Info extends JPanel {
                     .addComponent(friendsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(dobLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -240,14 +242,12 @@ public class Info extends JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(photoCommentField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btAddPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(friendsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(friendsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(photoPane, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                .addComponent(photoPane, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -382,14 +382,15 @@ public class Info extends JPanel {
     private javax.swing.JButton btAddPhoto;
     private javax.swing.JButton btSelectPhoto;
     private javax.swing.JButton btUserPhoto;
+    private javax.swing.JPanel buttonsPanel;
     private javax.swing.JLabel dobLabel;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel emailLabel1;
-    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel friendsLabel;
     private javax.swing.JList<User> friendsList;
     private javax.swing.JScrollPane friendsPane;
     private javax.swing.JLabel genderLabel;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField photoCommentField;
     private javax.swing.JLabel photoFileLabel;
     private javax.swing.JLabel photoLabel;

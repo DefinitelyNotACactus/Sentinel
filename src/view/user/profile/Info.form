@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
-  <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="fileChooser">
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="99" green="66" red="0" type="rgb"/>
@@ -39,24 +35,20 @@
                           <Component id="emailLabel1" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="btUserPhoto" min="-2" pref="262" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btAddPhoto" min="-2" pref="262" max="-2" attributes="0"/>
-                                  </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="photoFileLabel" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="btSelectPhoto" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="photoCommentField" alignment="0" min="-2" pref="542" max="-2" attributes="0"/>
+                                  <Component id="photoCommentField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="buttonsPanel" alignment="1" min="-2" pref="542" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="friendsPane" pref="520" max="32767" attributes="0"/>
+                          <Component id="friendsPane" min="-2" pref="520" max="-2" attributes="0"/>
                           <Component id="friendsLabel" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -76,7 +68,7 @@
                   <Component id="emailLabel1" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="dobLabel" min="-2" pref="38" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -91,17 +83,14 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="photoCommentField" min="-2" pref="38" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btAddPhoto" min="-2" pref="42" max="-2" attributes="0"/>
-                          <Component id="btUserPhoto" min="-2" pref="42" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="buttonsPanel" min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="friendsPane" min="-2" pref="262" max="-2" attributes="0"/>
+                  <Component id="friendsPane" min="-2" pref="257" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="photoLabel" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="photoPane" pref="255" max="32767" attributes="0"/>
+              <Component id="photoPane" pref="253" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -117,17 +106,6 @@
           <Connection code="&quot;&lt;html&gt;&lt;b&gt;E-mail: &lt;/b&gt;&quot; + user.getId() + &quot;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btUserPhoto">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Editar Foto de Perfil"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserPhotoActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btUserPhoto.setVisible(false);&#xa;btUserPhoto.setEnabled(false);&#xa;}"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="dobLabel">
       <Properties>
@@ -183,17 +161,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btAddPhoto">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Adicionar Nova Foto"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddPhotoActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btAddPhoto.setVisible(false);&#xa;btAddPhoto.setEnabled(false);&#xa;}"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="photoFileLabel">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="photoFileLabel.setVisible(false);"/>
@@ -268,5 +235,42 @@
         </Property>
       </Properties>
     </Component>
+    <Container class="javax.swing.JPanel" name="buttonsPanel">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="99" green="66" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="horizontalGap" type="int" value="5"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="btUserPhoto">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Editar Foto de Perfil"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserPhotoActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btUserPhoto.setVisible(false);&#xa;btUserPhoto.setEnabled(false);&#xa;}"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btAddPhoto">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Adicionar Nova Foto"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddPhotoActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btAddPhoto.setVisible(false);&#xa;btAddPhoto.setEnabled(false);&#xa;}"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

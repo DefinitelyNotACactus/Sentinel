@@ -86,6 +86,10 @@ public class NewPost extends JPanel {
         });
 
         visibilityBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Visibilidade", "Público", "Somente Amigos" }));
+        if(!isOwner){
+            visibilityBox.setSelectedIndex(1);
+            visibilityBox.setEnabled(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -156,14 +160,14 @@ public class NewPost extends JPanel {
         } else {
             Post post;
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
-                post = new Post(titleField.getText(), textField.getText(), user, (visibilityBox.getSelectedIndex() == 1));
+                post = new Post(titleField.getText(), textField.getText(), client.getUser(), (visibilityBox.getSelectedIndex() == 1));
                 if(isOwner){
                     user.addPost(post);
                 } else {
                     user.addPostFromOthers(post);
                 }
             } else {
-                post = new Post(titleField.getText(), textField.getText(), user, selected_file, (visibilityBox.getSelectedIndex() == 1));
+                post = new Post(titleField.getText(), textField.getText(), client.getUser(), selected_file, (visibilityBox.getSelectedIndex() == 1));
                 if(isOwner){
                     user.addPost(post);
                 } else {
@@ -172,7 +176,11 @@ public class NewPost extends JPanel {
             }
             JOptionPane.showMessageDialog(client, "Mensagem Enviada!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             this.getParent().revalidate();
-            this.getParent().add(new ViewPost(client, wall, post));
+            if(isOwner){
+                this.getParent().add(new ViewPost(client, wall, post, false));
+            } else {
+                this.getParent().add(new ViewPost(client, user, wall, post));
+            }
             this.getParent().remove(this);
             wall.listPosts(true);
         }

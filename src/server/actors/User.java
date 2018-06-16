@@ -22,12 +22,15 @@ public class User extends AbstractActor {
     
     //3rd person wall post
     private List<Post> others_posts;
+    private boolean isPublicWall;
     
     public User(String name, String email, String password, int gender, String dob){
         super(name, email);
         this.password = password;
         this.gender = gender;
         this.dob = dob;
+        
+        isPublicWall = true;
         
         others_posts = new ArrayList<>();
         photos = new ArrayList<>();
@@ -74,6 +77,14 @@ public class User extends AbstractActor {
     
     public Post getPostFromOthersByIndex(int index){
         return others_posts.get(index);
+    }
+    
+    public boolean isPublicWall(){
+        return isPublicWall;
+    }
+    
+    public void setWallVisibility(boolean newVisibility){
+        isPublicWall = newVisibility;
     }
     
     @Override

@@ -8,6 +8,7 @@ package view.user.profile;
 import executable.Client;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import server.Post;
 import server.actors.User;
@@ -58,14 +59,25 @@ public class Wall extends javax.swing.JPanel {
             thirdUserPostModel.clear();
         }
         int i;
+        //First Person Iteration
         Iterator it = user.getPosts().iterator();
         for(i = 0; it.hasNext(); i++){
-            userPostModel.add(i,(Post) it.next());
+            Post post = (Post) it.next();
+            if(!isOwner && !post.isPublic() && !user.isRelative(client.getUser())){
+                i--;
+            } else {
+                userPostModel.add(i,post);
+            }
         }
         wopList.setCellRenderer(new PostRenderer());
-        it = user.getPostsFromOthers().iterator();
-        for(i = 0; it.hasNext(); i++){
-            thirdUserPostModel.add(i,(Post) it.next());
+        //Third Person Iteration
+        if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
+            //do nothing
+        } else {
+            it = user.getPostsFromOthers().iterator();
+            for(i = 0; it.hasNext(); i++){
+                thirdUserPostModel.add(i,(Post) it.next());
+            }
         }
         tpwpList.setCellRenderer(new PostRenderer());
     }
@@ -87,6 +99,7 @@ public class Wall extends javax.swing.JPanel {
         tpwpList = new JList<>(thirdUserPostModel);
         scrollPane = new javax.swing.JScrollPane();
         postPanel = new javax.swing.JPanel();
+        visibilityBox = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(0, 102, 153));
 
@@ -101,15 +114,37 @@ public class Wall extends javax.swing.JPanel {
 
         thirdPersonWallPostLabel.setText("Mensagens de Outros");
 
+        tpwpList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                tpwpListValueChanged(evt);
+            }
+        });
         tpwpListPanel.setViewportView(tpwpList);
 
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setMinimumSize(new java.awt.Dimension(0, 0));
         scrollPane.setPreferredSize(new java.awt.Dimension(616, 616));
 
-        postPanel.add(new NewPost(client, user, this));
+        if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
+            postPanel.add(new JLabel("Apenas amigos de " + user.getName() + " podem publicar novas mensagens."));
+        } else {
+            postPanel.add(new NewPost(client, user, this));
+        }
         postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.PAGE_AXIS));
         scrollPane.setViewportView(postPanel);
+
+        visibilityBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Visível para todos", "Visível somente para amigos" }));
+        if(!isOwner){
+            visibilityBox.setVisible(false);
+            visibilityBox.setEnabled(false);
+        } else {
+            visibilityBox.setSelectedIndex(user.isPublicWall()? 0 : 1);
+        }
+        visibilityBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                visibilityBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -117,11 +152,14 @@ public class Wall extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wallOwnerPostsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(wopListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tpwpListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(visibilityBox, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -133,18 +171,18 @@ public class Wall extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(wallOwnerPostsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(wopListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(277, 277, 277))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(356, 356, 356)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(thirdPersonWallPostLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(visibilityBox))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tpwpListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(12, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -153,10 +191,28 @@ public class Wall extends javax.swing.JPanel {
         if(index >= 0){
             Post selected = user.getPost(index);
             postPanel.removeAll();
-            postPanel.add(new ViewPost(client, this, selected));
+            postPanel.add(new ViewPost(client, this, selected, false));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_wopListValueChanged
+
+    private void tpwpListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tpwpListValueChanged
+        int index = tpwpList.getSelectedIndex();
+        if(index >= 0){
+            Post selected = user.getPostFromOthersByIndex(index);
+            postPanel.removeAll();
+            if(isOwner){
+                postPanel.add(new ViewPost(client, this, selected, true));
+            } else {
+                postPanel.add(new ViewPost(client, user, this, selected));
+            }
+            postPanel.revalidate();
+        }
+    }//GEN-LAST:event_tpwpListValueChanged
+
+    private void visibilityBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visibilityBoxActionPerformed
+        user.setWallVisibility((visibilityBox.getSelectedIndex() != 1));
+    }//GEN-LAST:event_visibilityBoxActionPerformed
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel postPanel;
@@ -164,6 +220,7 @@ public class Wall extends javax.swing.JPanel {
     private javax.swing.JLabel thirdPersonWallPostLabel;
     private javax.swing.JList<Post> tpwpList;
     private javax.swing.JScrollPane tpwpListPanel;
+    private javax.swing.JComboBox<String> visibilityBox;
     private javax.swing.JLabel wallOwnerPostsLabel;
     private javax.swing.JList<Post> wopList;
     private javax.swing.JScrollPane wopListPanel;
