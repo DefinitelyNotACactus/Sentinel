@@ -176,11 +176,7 @@ public class NewPost extends JPanel {
             }
             JOptionPane.showMessageDialog(client, "Mensagem Enviada!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             this.getParent().revalidate();
-            if(isOwner){
-                this.getParent().add(new ViewPost(client, wall, post, false));
-            } else {
-                this.getParent().add(new ViewPost(client, user, wall, post));
-            }
+            this.getParent().add(new ViewPost(client, user, wall, post));
             this.getParent().remove(this);
             wall.listPosts(true);
         }

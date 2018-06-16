@@ -30,6 +30,7 @@ public class ViewPost extends JPanel {
     private final Post post;
     private final User user;
     
+    private final boolean isWallOwner;
     private final boolean isOwner;
     private final boolean isThirdPerson;
     private boolean isEditing = false;
@@ -37,30 +38,23 @@ public class ViewPost extends JPanel {
     /**
      * Creates new form ViewPost
      * @param c
+     * @param user
      * @param wall
      * @param post
-     * @param thirdPerson
-     */
-    public ViewPost(Client c, Wall wall, Post post, boolean thirdPerson) {
-        client = c;
-        user = c.getUser();
-        this.post = post;
-        this.wall = wall;
-        
-        isOwner = true;
-        isThirdPerson = thirdPerson;
-        
-        initComponents();
-    }
-    
+     */    
     public ViewPost(Client c, User user, Wall wall, Post post) {
         client = c;
         this.user = user;
         this.post = post;
         this.wall = wall;
         
-        isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
-        isThirdPerson = true;
+        isWallOwner = Validator.isSameEmail(client.getUser().getId(), wall.getWallOwner().getId());
+        if(isWallOwner){        
+            isOwner = true;
+        } else {
+            isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
+        }
+        isThirdPerson = !Validator.isSameEmail(post.getAuthor().getId(), wall.getWallOwner().getId());
 
         initComponents();
     }
@@ -227,11 +221,11 @@ public class ViewPost extends JPanel {
     public void loadComments(){
         Iterator it = post.getComments().iterator();
         while(it.hasNext()){
-            if(isOwner && !isThirdPerson){
-                commentsPanel.add(new ViewComment(client, post, (Comment) it.next(), false));
+            if(isWallOwner){
+                commentsPanel.add(new ViewComment(client, post, (Comment) it.next(), true));
             } else {
                 Comment comment = (Comment) it.next();
-                commentsPanel.add(new ViewComment(client, post, comment, !Validator.isSameEmail(client.getUser().getId(), comment.getAuthor().getId())));
+                commentsPanel.add(new ViewComment(client, post, comment, Validator.isSameEmail(client.getUser().getId(), comment.getAuthor().getId())));
             }
         }
     }

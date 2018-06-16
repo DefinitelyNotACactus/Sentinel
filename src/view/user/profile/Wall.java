@@ -10,6 +10,7 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import server.actors.actions.Post;
 import server.actors.User;
 import util.Validator;
@@ -21,7 +22,7 @@ import view.util.PostRenderer;
  *
  * @author David
  */
-public class Wall extends javax.swing.JPanel {
+public class Wall extends JPanel {
 
     private final Client client;
     private final User user;
@@ -40,17 +41,6 @@ public class Wall extends javax.swing.JPanel {
         
         initComponents();
         listPosts(false);
-    }
-
-    public Wall(Client c){
-        client = c;
-        user = c.getUser();
-        isOwner = Validator.isSameEmail(client.getUser().getId(), user.getId());
-        
-        userPostModel = new DefaultListModel<>();
-        thirdUserPostModel = new DefaultListModel<>();
-        
-        initComponents();
     }
     
     public void listPosts(boolean reload){
@@ -191,7 +181,7 @@ public class Wall extends javax.swing.JPanel {
         if(index >= 0){
             Post selected = user.getPost(index);
             postPanel.removeAll();
-            postPanel.add(new ViewPost(client, this, selected, false));
+            postPanel.add(new ViewPost(client, user, this, selected));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_wopListValueChanged
@@ -201,11 +191,7 @@ public class Wall extends javax.swing.JPanel {
         if(index >= 0){
             Post selected = user.getPostFromOthersByIndex(index);
             postPanel.removeAll();
-            if(isOwner){
-                postPanel.add(new ViewPost(client, this, selected, true));
-            } else {
-                postPanel.add(new ViewPost(client, user, this, selected));
-            }
+            postPanel.add(new ViewPost(client, user, this, selected));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_tpwpListValueChanged
@@ -214,6 +200,10 @@ public class Wall extends javax.swing.JPanel {
         user.setWallVisibility((visibilityBox.getSelectedIndex() != 1));
     }//GEN-LAST:event_visibilityBoxActionPerformed
  
+    public User getWallOwner(){
+        return user;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel postPanel;
     private javax.swing.JScrollPane scrollPane;

@@ -7,7 +7,6 @@ package view.user.post;
 
 import executable.Client;
 import java.awt.Image;
-import java.util.Iterator;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,7 +14,6 @@ import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
-import util.Validator;
 
 /**
  *
@@ -28,47 +26,25 @@ public class ViewComment extends JPanel {
     private final Post post;
     
     private final boolean isOwner;
-    private final boolean isThirdPerson;
     
-    private boolean isEditing;
+    private boolean isEditing = false;
     /**
      * Creates new form ViewComment
      * @param c
      * @param post
      * @param comment
-     * @param isThirdPerson
+     * @param isOwner
      */
-    public ViewComment(Client c, Post post, Comment comment, boolean isThirdPerson) {
+    public ViewComment(Client c, Post post, Comment comment, boolean isOwner) {
         this.client = c;
         this.post = post;
         this.comment = comment;
         
-        this.isThirdPerson = isThirdPerson;
-        if(isThirdPerson){
-            isOwner = Validator.isSameEmail(comment.getAuthor().getId(), client.getUser().getId());
-        } else {
-            isOwner = true;
-        }
-        isEditing = false;
+        this.isOwner = isOwner;
         
         initComponents();
     }
-
-    public ViewComment(Client c, Comment comment, boolean isThirdPerson) {
-        this.client = c;
-        this.post = null;
-        this.comment = comment;
-        
-        this.isThirdPerson = isThirdPerson;
-        if(isThirdPerson){
-            isOwner = Validator.isSameEmail(comment.getAuthor().getId(), client.getUser().getId());
-        } else {
-            isOwner = true;
-        }
-        isEditing = false;
-        
-        initComponents();
-    }
+    
     /** 
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -252,14 +228,8 @@ public class ViewComment extends JPanel {
     }//GEN-LAST:event_btDeleteActionPerformed
 
     public void loadAnswers(){
-        Iterator it = comment.getAnswers().iterator();
-        while(it.hasNext()){
-            Answer answer = (Answer) it.next();
-            if(!isThirdPerson){
-                commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next(), false));
-            } else {
-                commentsPanel.add(new ViewAnswer(client, comment, (Answer) it.next(), !Validator.isSameEmail(answer.getAuthor().getId(), client.getUser().getId())));
-            }
+        for (Answer answer : comment.getAnswers()) {
+            commentsPanel.add(new ViewAnswer(client, comment, answer, isOwner));
         }
     }
     

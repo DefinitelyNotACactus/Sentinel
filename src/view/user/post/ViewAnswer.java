@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
-import util.Validator;
 
 /**
  *
@@ -18,26 +17,17 @@ import util.Validator;
  */
 public class ViewAnswer extends JPanel {
 
-    
-    private final Client client;
     private final Comment comment;
     private final Answer answer;
 
     private final boolean isOwner;
-    private final boolean isThirdPerson;
     private boolean isEditing;
     
-    public ViewAnswer(Client c, Comment comment, Answer answer, boolean isThirdPerson){
-        client = c;
+    public ViewAnswer(Client c, Comment comment, Answer answer, boolean isOwner){
         this.comment = comment;
         this.answer = answer;
         
-        this.isThirdPerson = isThirdPerson;
-        if(isThirdPerson){
-            isOwner = Validator.isSameEmail(answer.getAuthor().getId(), comment.getAuthor().getId());
-        } else {
-            isOwner = true;
-        }
+        this.isOwner = isOwner;
         isEditing = false;
         
         initComponents();
