@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import server.actors.AbstractActor;
+import server.actors.Group;
 import server.actors.actions.Post;
 import server.actors.User;
 import util.Constants;
@@ -27,18 +29,24 @@ import view.user.profile.Wall;
 public class NewPost extends JPanel {
 
     private final Client client;
-    private final User user;
+    private final AbstractActor actor;
     private final Wall wall;
     
     private final boolean isOwner;
     
     private String selected_file = "";
     
-    public NewPost(Client c, User user, Wall wall) {
+    public NewPost(Client c, AbstractActor actor, Wall wall) {
         client = c;
-        this.user = user;
+        this.actor = actor;
         this.wall = wall;
-        isOwner = Validator.isSameEmail(client.getUser().getId(), user.getId());
+        
+        if(actor instanceof User){
+            isOwner = Validator.isSameEmail(client.getUser().getId(), actor.getId());
+        } else {
+            isOwner = false;
+        }
+        
         initComponents();
     }
     
@@ -159,24 +167,25 @@ public class NewPost extends JPanel {
             JOptionPane.showMessageDialog(client, "Escolha uma visibilidade para sua mensagem!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             Post post;
+            User user = (User) actor;
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
                 post = new Post(titleField.getText(), textField.getText(), client.getUser(), (visibilityBox.getSelectedIndex() == 1));
-                if(isOwner){
-                    user.addPost(post);
-                } else {
+                if(isOwner || actor instanceof Group){
+                    actor.addPost(post);
+                } else { 
                     user.addPostFromOthers(post);
                 }
             } else {
                 post = new Post(titleField.getText(), textField.getText(), client.getUser(), selected_file, (visibilityBox.getSelectedIndex() == 1));
-                if(isOwner){
-                    user.addPost(post);
+                if(isOwner || actor instanceof Group){
+                    actor.addPost(post);
                 } else {
                     user.addPostFromOthers(post);
                 }
             }
             JOptionPane.showMessageDialog(client, "Mensagem Enviada!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             this.getParent().revalidate();
-            this.getParent().add(new ViewPost(client, user, wall, post));
+            this.getParent().add(new ViewPost(client, actor, wall, post));
             this.getParent().remove(this);
             wall.listPosts(true);
         }

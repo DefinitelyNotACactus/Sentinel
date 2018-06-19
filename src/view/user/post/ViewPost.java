@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import server.actors.AbstractActor;
+import server.actors.Group;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
 import server.actors.User;
@@ -28,7 +30,7 @@ public class ViewPost extends JPanel {
     private final Client client;
     private final Wall wall;
     private final Post post;
-    private final User user;
+    private final AbstractActor actor;
     
     private final boolean isWallOwner;
     private final boolean isOwner;
@@ -38,22 +40,34 @@ public class ViewPost extends JPanel {
     /**
      * Creates new form ViewPost
      * @param c
-     * @param user
+     * @param actor
      * @param wall
      * @param post
      */    
-    public ViewPost(Client c, User user, Wall wall, Post post) {
+    public ViewPost(Client c, AbstractActor actor, Wall wall, Post post) {
         client = c;
-        this.user = user;
+        this.actor = actor;
         this.post = post;
         this.wall = wall;
         
-        isWallOwner = Validator.isSameEmail(client.getUser().getId(), wall.getWallOwner().getId());
-        if(isWallOwner){        
-            isOwner = true;
+        if(actor instanceof User){
+            isWallOwner = Validator.isSameEmail(client.getUser().getId(), wall.getWallOwner().getId());
+            if(isWallOwner){        
+                isOwner = true;
+            } else {
+                isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
+            }
         } else {
-            isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
+            Group group = (Group) actor;
+            if(group.isAdmin(c.getUser())){
+                isWallOwner = true;
+                isOwner = true;
+            } else {
+                isWallOwner = false;
+                isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
+            }             
         }
+        
         isThirdPerson = !Validator.isSameEmail(post.getAuthor().getId(), wall.getWallOwner().getId());
 
         initComponents();
@@ -190,10 +204,11 @@ public class ViewPost extends JPanel {
     }//GEN-LAST:event_btCommentActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        if(isThirdPerson){
+        if(isThirdPerson && actor instanceof User){
+            User user = (User) actor;
             user.getPostsFromOthers().remove(post);
         } else {
-            client.getUser().getPosts().remove(post);
+            actor.getPosts().remove(post);
         }
         this.getParent().revalidate();
         this.getParent().add(new NewPost(client, client.getUser(), wall));

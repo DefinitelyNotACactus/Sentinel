@@ -11,6 +11,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import server.actors.AbstractActor;
+import server.actors.Group;
 import server.actors.actions.Post;
 import server.actors.User;
 import util.Validator;
@@ -25,22 +27,31 @@ import view.util.PostRenderer;
 public class Wall extends JPanel {
 
     private final Client client;
-    private final User user;
+    private final AbstractActor actor;
     private final boolean isOwner;
     
     private DefaultListModel<Post> userPostModel;
     private DefaultListModel<Post> thirdUserPostModel;
     
-    public Wall(Client c, User user) {
+    public Wall(Client c, AbstractActor actor) {
         client = c;
-        this.user = user;
-        isOwner = Validator.isSameEmail(client.getUser().getId(), user.getId());
-        
+        this.actor = actor;
+        if(actor instanceof Group){
+            isOwner = ((Group) actor).isAdmin(client.getUser());
+        } else {
+            isOwner = Validator.isSameEmail(client.getUser().getId(), actor.getId());
+        }
         userPostModel = new DefaultListModel<>();
         thirdUserPostModel = new DefaultListModel<>();
         
         initComponents();
         listPosts(false);
+        
+        if(actor instanceof Group){
+            thirdPersonWallPostLabel.setVisible(false);
+            tpwpListPanel.setVisible(false);
+            tpwpListPanel.setEnabled(false);
+        }
     }
     
     public void listPosts(boolean reload){
@@ -50,10 +61,10 @@ public class Wall extends JPanel {
         }
         int i;
         //First Person Iteration
-        Iterator it = user.getPosts().iterator();
+        Iterator it = actor.getPosts().iterator();
         for(i = 0; it.hasNext(); i++){
             Post post = (Post) it.next();
-            if(!isOwner && !post.isPublic() && !user.isRelative(client.getUser())){
+            if(!isOwner && !post.isPublic() && !actor.isRelative(client.getUser())){
                 i--;
             } else {
                 userPostModel.add(i,post);
@@ -61,15 +72,18 @@ public class Wall extends JPanel {
         }
         wopList.setCellRenderer(new PostRenderer());
         //Third Person Iteration
-        if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
-            //do nothing
-        } else {
-            it = user.getPostsFromOthers().iterator();
-            for(i = 0; it.hasNext(); i++){
-                thirdUserPostModel.add(i,(Post) it.next());
+        if(actor instanceof User){
+            User user = (User) actor;
+            if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
+                //do nothing
+            } else {
+                it = user.getPostsFromOthers().iterator();
+                for(i = 0; it.hasNext(); i++){
+                    thirdUserPostModel.add(i,(Post) it.next());
+                }
             }
+            tpwpList.setCellRenderer(new PostRenderer());
         }
-        tpwpList.setCellRenderer(new PostRenderer());
     }
     
     /**
@@ -93,7 +107,7 @@ public class Wall extends JPanel {
 
         setBackground(new java.awt.Color(0, 102, 153));
 
-        wallOwnerPostsLabel.setText("<html>Mensagens de <b>" + user.getName() + "</b></html>");
+        wallOwnerPostsLabel.setText("<html>Mensagens de <b>" + actor.getName() + "</b></html>");
 
         wopList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -115,19 +129,29 @@ public class Wall extends JPanel {
         scrollPane.setMinimumSize(new java.awt.Dimension(0, 0));
         scrollPane.setPreferredSize(new java.awt.Dimension(616, 616));
 
-        if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
-            postPanel.add(new JLabel("Apenas amigos de " + user.getName() + " podem publicar novas mensagens."));
-        } else {
-            postPanel.add(new NewPost(client, user, this));
+        if(actor instanceof User){
+            User user = (User) actor;
+            if(!isOwner && !user.isPublicWall() && !user.isRelative(client.getUser())){
+                postPanel.add(new JLabel("Apenas amigos de " + user.getName() + " podem publicar novas mensagens."));
+            } else {
+                postPanel.add(new NewPost(client, actor, this));
+            }
+        } else { //instanceof Group
+            if(!actor.isRelative(client.getUser())){
+                postPanel.add(new JLabel("Apenas membros de " + actor.getName() + " podem publicar novas mensagens."));
+            } else {
+                postPanel.add(new NewPost(client, client.getUser(), this));
+            }
         }
         postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.PAGE_AXIS));
         scrollPane.setViewportView(postPanel);
 
         visibilityBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Visível para todos", "Visível somente para amigos" }));
-        if(!isOwner){
+        if(!isOwner || actor instanceof Group){
             visibilityBox.setVisible(false);
             visibilityBox.setEnabled(false);
         } else {
+            User user = (User) actor;
             visibilityBox.setSelectedIndex(user.isPublicWall()? 0 : 1);
         }
         visibilityBox.addActionListener(new java.awt.event.ActionListener() {
@@ -179,29 +203,39 @@ public class Wall extends JPanel {
     private void wopListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_wopListValueChanged
         int index = wopList.getSelectedIndex();
         if(index >= 0){
-            Post selected = user.getPost(index);
+            Post selected = actor.getPost(index);
             postPanel.removeAll();
-            postPanel.add(new ViewPost(client, user, this, selected));
+            postPanel.add(new ViewPost(client, (User) actor, this, selected));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_wopListValueChanged
 
     private void tpwpListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tpwpListValueChanged
-        int index = tpwpList.getSelectedIndex();
-        if(index >= 0){
-            Post selected = user.getPostFromOthersByIndex(index);
-            postPanel.removeAll();
-            postPanel.add(new ViewPost(client, user, this, selected));
-            postPanel.revalidate();
+        if(actor instanceof User){
+            User user = (User) actor;
+            int index = tpwpList.getSelectedIndex();
+            if(index >= 0){
+                Post selected = user.getPostFromOthersByIndex(index);
+                postPanel.removeAll();
+                postPanel.add(new ViewPost(client, user, this, selected));
+                postPanel.revalidate();
+            }
         }
     }//GEN-LAST:event_tpwpListValueChanged
 
     private void visibilityBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visibilityBoxActionPerformed
-        user.setWallVisibility((visibilityBox.getSelectedIndex() != 1));
+        if(actor instanceof User){
+            User user = (User) actor;
+            user.setWallVisibility((visibilityBox.getSelectedIndex() != 1));
+        }
     }//GEN-LAST:event_visibilityBoxActionPerformed
  
     public User getWallOwner(){
-        return user;
+        if(actor instanceof User){
+            return (User) actor;
+        } else {
+            return null;
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

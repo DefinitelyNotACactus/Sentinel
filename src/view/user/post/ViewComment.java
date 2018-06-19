@@ -235,9 +235,9 @@ public class ViewComment extends JPanel {
     }//GEN-LAST:event_btDeleteActionPerformed
 
     public void loadAnswers(){
-        for (Answer answer : comment.getAnswers()) {
+        comment.getAnswers().forEach((answer) -> {
             commentsPanel.add(new ViewAnswer(client, comment, answer, isWallOwner));
-        }
+        });
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

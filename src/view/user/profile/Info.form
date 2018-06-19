@@ -146,7 +146,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;friendsLabel.setText(&quot;&lt;html&gt;&lt;b&gt;&quot; + Constants.BTGROUPS_TEXT + &quot;&lt;/b&gt;: (&quot; + actor.getRelatives().size() + &quot;)&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;    friendsLabel.setText(&quot;&lt;html&gt;&lt;b&gt;Membros&lt;/b&gt;: (&quot; + actor.getRelatives().size() + &quot;)&quot;);&#xa;}"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="friendsPane">

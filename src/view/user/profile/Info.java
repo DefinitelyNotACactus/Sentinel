@@ -154,7 +154,7 @@ public class Info extends JPanel {
         if(actor instanceof User){
             friendsLabel.setText("<html><b>" + Constants.BTFRIENDS_TEXT + "</b>: (" + actor.getRelatives().size() + ")");
         } else {
-            friendsLabel.setText("<html><b>" + Constants.BTGROUPS_TEXT + "</b>: (" + actor.getRelatives().size() + ")");
+            friendsLabel.setText("<html><b>Membros</b>: (" + actor.getRelatives().size() + ")");
         }
 
         friendsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {

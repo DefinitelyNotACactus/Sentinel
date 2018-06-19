@@ -27,12 +27,12 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="userPhotoLabel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="isFriendLabel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btUserName" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btUserInfo" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btUserWall" max="32767" attributes="0"/>
-                  <Component id="btAddFriend" alignment="1" min="-2" pref="164" max="-2" attributes="0"/>
+                  <Component id="actorPhotoLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="isRelativeLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btActorName" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btActorInfo" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btActorWall" max="32767" attributes="0"/>
+                  <Component id="btAddActor" alignment="1" min="-2" pref="164" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="10" max="32767" attributes="0"/>
               <Component id="page" min="-2" pref="1086" max="-2" attributes="0"/>
@@ -47,17 +47,17 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="page" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="userPhotoLabel" min="-2" pref="164" max="-2" attributes="0"/>
+                      <Component id="actorPhotoLabel" min="-2" pref="164" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btUserName" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btActorName" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="isFriendLabel" min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="isRelativeLabel" min="-2" pref="28" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btUserInfo" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btActorInfo" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btUserWall" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btActorWall" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btAddFriend" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btAddActor" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -66,31 +66,31 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="userPhotoLabel">
+    <Component class="javax.swing.JLabel" name="actorPhotoLabel">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH))" type="code"/>
+          <Connection code="new ImageIcon(actor.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH))" type="code"/>
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btUserName">
+    <Component class="javax.swing.JButton" name="btActorName">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&quot; + user.getName()" type="code"/>
+          <Connection code="&quot;&quot; + actor.getName()" type="code"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&quot; + user.getName()" type="code"/>
+          <Connection code="&quot;&quot; + actor.getName()" type="code"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="isFriendLabel">
+    <Component class="javax.swing.JLabel" name="isRelativeLabel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(!isOwner){&#xa;    if(client.getUser().isRelative(user)){&#xa;        isFriendLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    }&#xa;} else {&#xa;    isFriendLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isRelativeLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(!isOwner &amp;&amp; actor instanceof User){&#xa;    if(client.getUser().isRelative((User) actor)){&#xa;        isRelativeLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    } else {&#xa;        isRelativeLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;    }&#xa;}"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JButton" name="btUserInfo">
+    <Component class="javax.swing.JButton" name="btActorInfo">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="11" style="1"/>
@@ -98,26 +98,29 @@
         <Property name="text" type="java.lang.String" value="Perfil"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserInfoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btActorInfoActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btUserWall">
+    <Component class="javax.swing.JButton" name="btActorWall">
       <Properties>
         <Property name="text" type="java.lang.String" value="Mural"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserWallActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btActorWallActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(actor instanceof Group &amp;&amp; !actor.isRelative(client.getUser())){&#xa;    btActorWall.setEnabled(false);&#xa;}"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JButton" name="btAddFriend">
+    <Component class="javax.swing.JButton" name="btAddActor">
       <Properties>
         <Property name="text" type="java.lang.String" value="Adicionar Amigo"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddFriendActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddActorActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(isOwner || client.getUser().isRelative(user)){&#xa;    btAddFriend.setVisible(false);&#xa;    btAddFriend.setEnabled(false);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(actor instanceof Group){&#xa;    if(actor.isRelative(client.getUser())){&#xa;        btAddActor.setText(&quot;Pedir para Entrar&quot;);&#xa;    } else {&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;} else { //instanceof User&#xa;    if(isOwner || client.getUser().isRelative((User) actor)){&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;}"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="page">
@@ -130,7 +133,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Info(client, user, this));&#xa;page.revalidate();"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="page.removeAll();&#xa;page.add(new Info(client, actor, this));&#xa;page.revalidate();"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>

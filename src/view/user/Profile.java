@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import server.actors.AbstractActor;
+import server.actors.Group;
 import server.actors.User;
 import util.Validator;
 import view.user.profile.Wall;
@@ -26,23 +28,28 @@ public class Profile extends JPanel {
 
     private final Client client;
     private final Home home;
-    private final User user;
-    
+    private final AbstractActor actor;
+    private Group group = null;
     private final boolean isOwner;
     
     public Profile(Client c, Home home) {
         this.client = c;
         this.home = home;
-        this.user = c.getUser();
-        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        this.actor = c.getUser();
+        isOwner = Validator.isSameEmail(actor.getId(), client.getUser().getId());
         initComponents();
     }
 
-    public Profile(Client c, User user, Home home) {
+    public Profile(Client c, AbstractActor actor, Home home) {
         this.client = c;
-        this.user = user;
+        this.actor = actor;
         this.home = home;
-        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        if(actor instanceof User){
+            isOwner = Validator.isSameEmail(actor.getId(), client.getUser().getId());
+        } else {
+            group = (Group) actor;
+            isOwner = group.isAdmin(client.getUser());
+        }
         initComponents();
     }
     
@@ -55,55 +62,67 @@ public class Profile extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        userPhotoLabel = new javax.swing.JLabel();
-        btUserName = new javax.swing.JButton();
-        isFriendLabel = new javax.swing.JLabel();
-        btUserInfo = new javax.swing.JButton();
-        btUserWall = new javax.swing.JButton();
-        btAddFriend = new javax.swing.JButton();
+        actorPhotoLabel = new javax.swing.JLabel();
+        btActorName = new javax.swing.JButton();
+        isRelativeLabel = new javax.swing.JLabel();
+        btActorInfo = new javax.swing.JButton();
+        btActorWall = new javax.swing.JButton();
+        btAddActor = new javax.swing.JButton();
         page = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1280, 660));
 
-        userPhotoLabel.setIcon(new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
-        userPhotoLabel.setOpaque(true);
+        actorPhotoLabel.setIcon(new ImageIcon(actor.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
+        actorPhotoLabel.setOpaque(true);
 
-        btUserName.setText("" + user.getName());
-        btUserName.setToolTipText("" + user.getName());
-        btUserName.setEnabled(false);
+        btActorName.setText("" + actor.getName());
+        btActorName.setToolTipText("" + actor.getName());
+        btActorName.setEnabled(false);
 
-        btUserInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btUserInfo.setText("Perfil");
-        btUserInfo.addActionListener(new java.awt.event.ActionListener() {
+        btActorInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btActorInfo.setText("Perfil");
+        btActorInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btUserInfoActionPerformed(evt);
+                btActorInfoActionPerformed(evt);
             }
         });
 
-        btUserWall.setText("Mural");
-        btUserWall.addActionListener(new java.awt.event.ActionListener() {
+        btActorWall.setText("Mural");
+        btActorWall.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btUserWallActionPerformed(evt);
+                btActorWallActionPerformed(evt);
             }
         });
+        if(actor instanceof Group && !actor.isRelative(client.getUser())){
+            btActorWall.setEnabled(false);
+        }
 
-        btAddFriend.setText("Adicionar Amigo");
-        btAddFriend.addActionListener(new java.awt.event.ActionListener() {
+        btAddActor.setText("Adicionar Amigo");
+        btAddActor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAddFriendActionPerformed(evt);
+                btAddActorActionPerformed(evt);
             }
         });
-        if(isOwner || client.getUser().isRelative(user)){
-            btAddFriend.setVisible(false);
-            btAddFriend.setEnabled(false);
+        if(actor instanceof Group){
+            if(actor.isRelative(client.getUser())){
+                btAddActor.setText("Pedir para Entrar");
+            } else {
+                btAddActor.setVisible(false);
+                btAddActor.setEnabled(false);
+            }
+        } else { //instanceof User
+            if(isOwner || client.getUser().isRelative((User) actor)){
+                btAddActor.setVisible(false);
+                btAddActor.setEnabled(false);
+            }
         }
 
         page.setBackground(new java.awt.Color(0, 102, 153));
         page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
         page.removeAll();
-        page.add(new Info(client, user, this));
+        page.add(new Info(client, actor, this));
         page.revalidate();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -113,12 +132,12 @@ public class Profile extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(userPhotoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(isFriendLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btUserWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btAddFriend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(actorPhotoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(isRelativeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btActorName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btActorInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btActorWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btAddActor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(page, javax.swing.GroupLayout.PREFERRED_SIZE, 1086, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -130,69 +149,81 @@ public class Profile extends JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(userPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(actorPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btActorName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(isFriendLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(isRelativeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btActorInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btActorWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btAddFriend, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btAddActor, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        isFriendLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        if(!isOwner){
-            if(client.getUser().isRelative(user)){
-                isFriendLabel.setText("É seu amigo");
+        isRelativeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        if(!isOwner && actor instanceof User){
+            if(client.getUser().isRelative((User) actor)){
+                isRelativeLabel.setText("É seu amigo");
+            } else {
+                isRelativeLabel.setText("(Você)");
             }
-        } else {
-            isFriendLabel.setText("(Você)");
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserInfoActionPerformed
-        btUserInfo.setFont(new java.awt.Font(Constants.FONT, 1, 11));
-        btUserWall.setFont(new java.awt.Font(Constants.FONT, 0, 11));
-        btUserWall.setText("Mural");
+    private void btActorInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActorInfoActionPerformed
+        btActorInfo.setFont(new java.awt.Font(Constants.FONT, 1, 11));
+        btActorWall.setFont(new java.awt.Font(Constants.FONT, 0, 11));
+        btActorWall.setText("Mural");
         page.removeAll();
-        page.add(new Info(client, user, this));
-        page.revalidate();
-    }//GEN-LAST:event_btUserInfoActionPerformed
-
-    private void btUserWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserWallActionPerformed
-        btUserWall.setFont(new java.awt.Font(Constants.FONT, 1, 11));
-        btUserWall.setText("Nova Mensagem");
-        btUserInfo.setFont(new java.awt.Font(Constants.FONT, 0, 11));
-        page.removeAll();
-        page.add(new Wall(client, user));
-        page.revalidate();
-    }//GEN-LAST:event_btUserWallActionPerformed
-
-    private void btAddFriendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddFriendActionPerformed
-        User requester = client.getUser();
-        if(user.isRequestSent(requester)){
-            JOptionPane.showMessageDialog(client, "O pedido já foi enviado!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else if(user.isRelative(requester)){
-            JOptionPane.showMessageDialog(client, user.getName() + " já é seu amigo!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else if(user.isBlocked(requester)){
-            JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + user.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        if(actor instanceof User){
+            page.add(new Info(client, (User) actor, this));
         } else {
-            user.sendNewRequest(client.getUser());
-            JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            page.add(new Info(client, (Group) actor, this));
         }
-    }//GEN-LAST:event_btAddFriendActionPerformed
+        page.revalidate();
+    }//GEN-LAST:event_btActorInfoActionPerformed
+
+    private void btActorWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActorWallActionPerformed
+        btActorWall.setFont(new java.awt.Font(Constants.FONT, 1, 11));
+        btActorWall.setText("Nova Mensagem");
+        btActorInfo.setFont(new java.awt.Font(Constants.FONT, 0, 11));
+        page.removeAll();
+        if(actor instanceof User){
+            page.add(new Wall(client, (User) actor));
+        } else {
+            //page.add(new Wall(client, group)); TODO
+        }
+        page.revalidate();
+    }//GEN-LAST:event_btActorWallActionPerformed
+
+    private void btAddActorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddActorActionPerformed
+        User requester = client.getUser();
+        if(actor.isRequestSent(requester)){
+            JOptionPane.showMessageDialog(client, "O pedido já foi enviado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(actor.isRelative(requester)){
+            if(actor instanceof User){
+                JOptionPane.showMessageDialog(client, actor.getName() + " já é seu amigo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(client, "Você já é membro de " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        } else if(actor.isBlocked(requester)){
+            JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            actor.sendNewRequest(client.getUser());
+            JOptionPane.showMessageDialog(client, "Pedido enviado para " + actor.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btAddActorActionPerformed
 
     public void reloadUserPhoto(){
-        userPhotoLabel.setIcon(new ImageIcon(user.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
+        actorPhotoLabel.setIcon(new ImageIcon(actor.getIcon().getImage().getScaledInstance(164, 164, Image.SCALE_SMOOTH)));
         home.getUserIcon().setIcon(new ImageIcon(client.getUser().getIcon().getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH)));
     }
     
     public JLabel getUserPhotoLabel(){
-        return userPhotoLabel;
+        return actorPhotoLabel;
     }
 
     public Home getHome(){
@@ -200,12 +231,12 @@ public class Profile extends JPanel {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btAddFriend;
-    private javax.swing.JButton btUserInfo;
-    private javax.swing.JButton btUserName;
-    private javax.swing.JButton btUserWall;
-    private javax.swing.JLabel isFriendLabel;
+    private javax.swing.JLabel actorPhotoLabel;
+    private javax.swing.JButton btActorInfo;
+    private javax.swing.JButton btActorName;
+    private javax.swing.JButton btActorWall;
+    private javax.swing.JButton btAddActor;
+    private javax.swing.JLabel isRelativeLabel;
     private javax.swing.JPanel page;
-    private javax.swing.JLabel userPhotoLabel;
     // End of variables declaration//GEN-END:variables
 }
