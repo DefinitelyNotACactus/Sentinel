@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import server.Database;
 import server.actors.User;
+import view.util.UserRenderer;
 
 /*
 /**
@@ -26,7 +27,7 @@ public class ListOfActors extends javax.swing.JPanel {
     
     
     private Database db;
-    private DefaultListModel usersModel;
+    private DefaultListModel<User> usersModel;
     
     private List<String> emails;
     private final Client client;
@@ -37,7 +38,7 @@ public class ListOfActors extends javax.swing.JPanel {
         this.client = c;
         this.home = home;
         this.db = db;
-        usersModel = new DefaultListModel();
+        usersModel = new DefaultListModel<>();
         emails = new ArrayList<>();
         initComponents();
         listFriendPanel();
@@ -50,12 +51,13 @@ public class ListOfActors extends javax.swing.JPanel {
             Map.Entry pair = (Map.Entry) it.next();
             User user = (User) pair.getValue();
             if(!user.isBlocked(client.getUser())){
-                usersModel.add(i, user.toString());
+                usersModel.add(i, user);
                 emails.add(pair.getKey().toString());
             } else {
                 i--;
             }
         }
+        usersList.setCellRenderer(new UserRenderer());
     }
     
     /**

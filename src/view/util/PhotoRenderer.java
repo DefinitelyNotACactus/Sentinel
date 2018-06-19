@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package view.util;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import server.Photo;
+import server.actors.actions.Photo;
 
 /**
  *

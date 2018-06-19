@@ -5,11 +5,9 @@
  */
 package view.user;
 
-import view.user.profile.Wall;
 import executable.Client;
 import util.Constants;
 import view.user.profile.Info;
-import java.awt.Font;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import server.actors.User;
 import util.Validator;
+import view.user.profile.Wall;
 
 /**
  *
@@ -72,16 +71,16 @@ public class Profile extends JPanel {
 
         btUserName.setText("" + user.getName());
         btUserName.setToolTipText("" + user.getName());
+        btUserName.setEnabled(false);
 
+        btUserInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btUserInfo.setText("Perfil");
-        btUserInfo.setFont(new Font(Constants.FONT, Font.PLAIN, 11));
         btUserInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserInfoActionPerformed(evt);
             }
         });
 
-        btUserWall.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btUserWall.setText("Mural");
         btUserWall.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,7 +103,7 @@ public class Profile extends JPanel {
         page.setPreferredSize(new java.awt.Dimension(1086, 638));
         page.setLayout(new javax.swing.BoxLayout(page, javax.swing.BoxLayout.LINE_AXIS));
         page.removeAll();
-        page.add(new Wall(client, user));
+        page.add(new Info(client, user, this));
         page.revalidate();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -119,7 +118,7 @@ public class Profile extends JPanel {
                     .addComponent(btUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btUserWall, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btAddFriend, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btAddFriend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(page, javax.swing.GroupLayout.PREFERRED_SIZE, 1086, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -140,7 +139,7 @@ public class Profile extends JPanel {
                         .addComponent(btUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btUserWall, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btAddFriend, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -158,6 +157,7 @@ public class Profile extends JPanel {
     private void btUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserInfoActionPerformed
         btUserInfo.setFont(new java.awt.Font(Constants.FONT, 1, 11));
         btUserWall.setFont(new java.awt.Font(Constants.FONT, 0, 11));
+        btUserWall.setText("Mural");
         page.removeAll();
         page.add(new Info(client, user, this));
         page.revalidate();
@@ -165,6 +165,7 @@ public class Profile extends JPanel {
 
     private void btUserWallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserWallActionPerformed
         btUserWall.setFont(new java.awt.Font(Constants.FONT, 1, 11));
+        btUserWall.setText("Nova Mensagem");
         btUserInfo.setFont(new java.awt.Font(Constants.FONT, 0, 11));
         page.removeAll();
         page.add(new Wall(client, user));

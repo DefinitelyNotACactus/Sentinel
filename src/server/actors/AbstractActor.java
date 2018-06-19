@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
-import server.Photo;
-import server.Post;
+import server.actors.actions.Photo;
+import server.actors.actions.Post;
 
 /**
  *

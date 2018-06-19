@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.actors.actions;
 
 import java.io.Serializable;
 import javax.swing.ImageIcon;
 import server.actors.User;
+import util.Constants;
 
 /**
  *
@@ -22,7 +23,7 @@ public class Photo implements Serializable {
     public Photo(User author, String iconPath, String comment){
         this.author = author;
         this.icon = new ImageIcon(iconPath);
-        if(comment == null || comment.trim().equals("")){
+        if(comment == null || comment.trim().equals("") || comment.equals(Constants.NEWPHOTO_COMMENT_TEXT)){
             this.comment = "Sem descrição";
         }
         this.comment = comment;
@@ -42,6 +43,5 @@ public class Photo implements Serializable {
     
     public User getAuthor(){
         return author;
-    }
-    
+    }  
 }

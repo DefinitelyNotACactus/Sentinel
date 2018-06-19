@@ -13,7 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.User;
-import util.UserRenderer;
+import view.util.UserRenderer;
 
 /**
  *
@@ -48,6 +48,11 @@ public class Friends extends JPanel {
             friendListLabel.setText("Amigos ("+ client.getUser().getRelatives().size() +")");
             friendModel.clear();
             friendRequestListLabel.setText("<html>Pedidos de Amizade <b>("+ client.getUser().getRequests().size() + " Pendentes)</b>");
+            if(client.getUser().getRequests().size() > 0){
+                home.getBtFriends().setText("<html>"+ Constants.BTFRIENDS_TEXT +" <b>("+ client.getUser().getRequests().size() +" Pendentes)</b></html>");
+            } else {
+                home.getBtFriends().setText(Constants.BTFRIENDS_TEXT);
+            }
             requestModel.clear();
             blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
             blockedModel.clear();   
@@ -262,6 +267,9 @@ public class Friends extends JPanel {
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja adicionar " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 client.getUser().addRelative(selected);
+                friendRequestList.remove(index);
+            } else if(confirm == 1) {
+                client.getUser().removeRequest(selected);
                 friendRequestList.remove(index);
             }
             listFriendPanel(true);
