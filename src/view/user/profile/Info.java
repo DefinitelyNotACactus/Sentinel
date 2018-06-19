@@ -21,6 +21,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import server.actors.AbstractActor;
+import server.actors.Group;
 import server.actors.actions.Photo;
 import server.actors.User;
 import util.Constants;
@@ -35,7 +37,9 @@ import view.user.Profile;
 public class Info extends JPanel {
 
     private final Client client;
-    private final User user;
+    private final AbstractActor actor;
+    private Group group = null;
+    
     private final Profile profile;
     private String selected_file = "";
 
@@ -46,30 +50,38 @@ public class Info extends JPanel {
     
     public Info(Client c, Profile profile) {
         this.client = c;
-        this.user = c.getUser();
+        this.actor = c.getUser();
         this.profile = profile;
-        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        isOwner = Validator.isSameEmail(actor.getId(), client.getUser().getId());
+        
         photoModel = new DefaultListModel<>();
         friendModel = new DefaultListModel<>();
+        
         initComponents();
     }
 
-    public Info(Client c, User user, Profile profile) {
+    public Info(Client c, AbstractActor actor, Profile profile) {
         this.client = c;
-        this.user = user;
+        this.actor = actor;
         this.profile = profile;
-        isOwner = Validator.isSameEmail(user.getId(), client.getUser().getId());
+        if(actor instanceof User){
+            isOwner = Validator.isSameEmail(actor.getId(), client.getUser().getId());
+        } else {
+            group = (Group) actor;
+            isOwner = group.isAdmin(client.getUser());
+        }
         photoModel = new DefaultListModel<>();
         friendModel = new DefaultListModel<>();
+        
         initComponents();
     }
     
     public void loadPhotos(boolean reload){
         if(reload){
             photoModel.clear();
-            photoLabel.setText("<html><b>Fotos: </b>(" + user.getPhotos().size() + ")</html>");
+            photoLabel.setText("<html><b>Fotos: </b>(" + actor.getPhotos().size() + ")</html>");
         }
-        Iterator it = user.getPhotos().iterator();
+        Iterator it = actor.getPhotos().iterator();
         int i;
         for(i = 0; it.hasNext(); i++){
             photoModel.add(i,(Photo) it.next());
@@ -78,7 +90,7 @@ public class Info extends JPanel {
     }
     
     public void listFriends(){
-        Iterator it = user.getRelatives().iterator();
+        Iterator it = actor.getRelatives().iterator();
         int i;
         for(i = 0; it.hasNext(); i++) {
             friendModel.add(i, (User) it.next());
@@ -115,16 +127,35 @@ public class Info extends JPanel {
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
         emailLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        emailLabel.setText("<html><b>E-mail: </b>" + user.getId() + "</html>");
+        if(actor instanceof User){
+            User user = (User) actor;
+            emailLabel.setText("<html><b>E-mail: </b>" + user.getId() + "</html>");
+        } else {
+            emailLabel.setVisible(false);
+        }
 
         dobLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
+        if(actor instanceof User){
+            User user = (User) actor; //why
+            dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
+        } else {
+            dobLabel.setText("<html><b>E-mail: </b>" + actor.getId() + "</html>");
+        }
 
         genderLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        genderLabel.setText("<html><b>Gênero: </b>" + user.getGender() + "</html>");
+        if(actor instanceof User){
+            User user = (User) actor;
+            genderLabel.setText("<html><b>Gênero: </b>" + user.getGender() + "</html>");
+        } else {
+            genderLabel.setVisible(false);
+        }
 
         friendsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        friendsLabel.setText("<html><b>" + Constants.BTFRIENDS_TEXT + "</b>: (" + user.getRelatives().size() + ")");
+        if(actor instanceof User){
+            friendsLabel.setText("<html><b>" + Constants.BTFRIENDS_TEXT + "</b>: (" + actor.getRelatives().size() + ")");
+        } else {
+            friendsLabel.setText("<html><b>" + Constants.BTGROUPS_TEXT + "</b>: (" + actor.getRelatives().size() + ")");
+        }
 
         friendsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -150,7 +181,7 @@ public class Info extends JPanel {
         });
 
         photoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        photoLabel.setText("<html><b>Fotos: </b>(" + user.getPhotos().size() + ")</html>");
+        photoLabel.setText("<html><b>Fotos: </b>(" + actor.getPhotos().size() + ")</html>");
 
         photoList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -166,7 +197,11 @@ public class Info extends JPanel {
         buttonsPanel.setBackground(new java.awt.Color(0, 102, 153));
         buttonsPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
-        btUserPhoto.setText("Editar Foto de Perfil");
+        if(actor instanceof User){
+            btUserPhoto.setText("Editar Foto de Perfil");
+        } else {
+            btUserPhoto.setText("Editar Foto do Grupo");
+        }
         btUserPhoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btUserPhotoActionPerformed(evt);
@@ -277,7 +312,11 @@ public class Info extends JPanel {
                 btSelectPhoto.setEnabled(false);
                 photoFileLabel.setVisible(false);
                 photoCommentField.setVisible(false);
-                user.addPhoto(new Photo(user, selected_file, photoCommentField.getText()));
+                if(actor instanceof Group){
+                    actor.addPhoto(new Photo(client.getUser(), selected_file, photoCommentField.getText()));
+                } else {
+                    actor.addPhoto(new Photo((User) actor, selected_file, photoCommentField.getText()));
+                }
                 selected_file = "";
                 btAddPhoto.setText("Adicionar Nova Foto");
                 btUserPhoto.setEnabled(true);
@@ -302,7 +341,7 @@ public class Info extends JPanel {
                 btSelectPhoto.setVisible(false);
                 btSelectPhoto.setEnabled(false);
                 photoFileLabel.setVisible(false);
-                user.setIcon(new ImageIcon(selected_file));
+                actor.setIcon(new ImageIcon(selected_file));
                 selected_file = "";
                 profile.reloadUserPhoto();
                 btUserPhoto.setText("Editar Foto de Perfil");
@@ -336,16 +375,16 @@ public class Info extends JPanel {
             }*/
             JPanel photoPanel = new JPanel();
             JLabel viewPhotoLabel = new JLabel();
-            viewPhotoLabel.setIcon(user.getPhoto(index).getIcon());
+            viewPhotoLabel.setIcon(actor.getPhoto(index).getIcon());
             photoPanel.add(viewPhotoLabel);
             JScrollPane scrollPane = new JScrollPane(photoPanel);
-            if(user.getPhoto(index).getIcon().getIconHeight() > this.getHeight() || user.getPhoto(index).getIcon().getIconWidth() > this.getWidth()){            
+            if(actor.getPhoto(index).getIcon().getIconHeight() > this.getHeight() || actor.getPhoto(index).getIcon().getIconWidth() > this.getWidth()){            
                 scrollPane.setPreferredSize(this.getPreferredSize());
             }
-            int selection = JOptionPane.showOptionDialog(client, scrollPane , user.getPhoto(index).getComment(), JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
+            int selection = JOptionPane.showOptionDialog(client, scrollPane , actor.getPhoto(index).getComment(), JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
             if(selection == 1){
                 if(isOwner){
-                    user.deletePhoto(index);
+                    actor.deletePhoto(index);
                     loadPhotos(true);
                 } else {
                     JOptionPane.showMessageDialog(client, "Deus está vendo você tentar apagar as fotos dos outros!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -358,7 +397,7 @@ public class Info extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         int index = friendsList.getSelectedIndex();
         if(index >= 0){
-            User selected = user.getRelatives().get(index);
+            User selected = actor.getRelatives().get(index);
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 if(selected.isBlocked(client.getUser())){
@@ -390,7 +429,6 @@ public class Info extends JPanel {
     private javax.swing.JList<User> friendsList;
     private javax.swing.JScrollPane friendsPane;
     private javax.swing.JLabel genderLabel;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField photoCommentField;
     private javax.swing.JLabel photoFileLabel;
     private javax.swing.JLabel photoLabel;

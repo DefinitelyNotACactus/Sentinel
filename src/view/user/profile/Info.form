@@ -99,43 +99,55 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="emailLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" postCode="if(actor instanceof User){&#xa;User user = (User) actor;">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="&quot;&lt;html&gt;&lt;b&gt;E-mail: &lt;/b&gt;&quot; + user.getId() + &quot;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;emailLabel.setVisible(false);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="dobLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" postCode="if(actor instanceof User){&#xa;User user = (User) actor; //why">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="&quot;&lt;html&gt;&lt;b&gt;Data de Nascimento: &lt;/b&gt;&quot; + user.getDob() + &quot;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;dobLabel.setText(&quot;&lt;html&gt;&lt;b&gt;E-mail: &lt;/b&gt;&quot; + actor.getId() + &quot;&lt;/html&gt;&quot;);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="genderLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" postCode="if(actor instanceof User){&#xa;User user = (User) actor;">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="&quot;&lt;html&gt;&lt;b&gt;G&#xea;nero: &lt;/b&gt;&quot; + user.getGender() + &quot;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;genderLabel.setVisible(false);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="friendsLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" postCode="if(actor instanceof User){">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;b&gt;&quot; + Constants.BTFRIENDS_TEXT + &quot;&lt;/b&gt;: (&quot; + user.getRelatives().size() + &quot;)&quot;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;b&gt;&quot; + Constants.BTFRIENDS_TEXT + &quot;&lt;/b&gt;: (&quot; + actor.getRelatives().size() + &quot;)&quot;" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;friendsLabel.setText(&quot;&lt;html&gt;&lt;b&gt;&quot; + Constants.BTGROUPS_TEXT + &quot;&lt;/b&gt;: (&quot; + actor.getRelatives().size() + &quot;)&quot;);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="friendsPane">
       <AuxValues>
@@ -197,7 +209,7 @@
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;b&gt;Fotos: &lt;/b&gt;(&quot; + user.getPhotos().size() + &quot;)&lt;/html&gt;&quot;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;b&gt;Fotos: &lt;/b&gt;(&quot; + actor.getPhotos().size() + &quot;)&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
     </Component>
@@ -256,6 +268,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btUserPhotoActionPerformed"/>
           </Events>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;btUserPhoto.setText(&quot;Editar Foto do Grupo&quot;);&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(actor instanceof User){"/>
             <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btUserPhoto.setVisible(false);&#xa;btUserPhoto.setEnabled(false);&#xa;}"/>
           </AuxValues>
         </Component>
