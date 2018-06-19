@@ -58,6 +58,10 @@ public class Database implements Serializable{
         return users.containsKey(email);
     }
     
+    public void addGroupToDb(Group newGroup){
+        groups.put(newGroup.getId(), newGroup);
+    }
+    
     public boolean allGroups(String group){
         return groups.containsKey(group);
     }

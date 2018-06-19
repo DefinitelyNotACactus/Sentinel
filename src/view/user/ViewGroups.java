@@ -9,6 +9,7 @@ import executable.Client;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import server.actors.Group;
 import util.Constants;
 
 /**
@@ -18,7 +19,8 @@ import util.Constants;
 public class ViewGroups extends JPanel {
 
     private final Client client;
-    private final Home home; 
+    private final Home home;
+    private Group group;
     /**
      * Creates new form Groups
      */
@@ -167,15 +169,24 @@ public class ViewGroups extends JPanel {
 
     private void searchBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxActionPerformed
         Toolkit.getDefaultToolkit().beep();
-        String grupo = searchBox.getText().toLowerCase();
-        if(grupo.equals(client.getDatabase().allGroups(grupo))){
-            //se é membro
-            if(client.getDatabase().getFromGroupId(grupo).isRelative(client.getUser())){
-                String[] options = {"Sair do grupo", "Cancelar"};
+        String id = searchGroup.getText();
+        System.out.println(id);
+        if(client.getDatabase().allGroups(id)){
+            Group group = client.getDatabase().getFromGroupId(id);
+            String[] options = {"Solicitar entrada", "Cancelar"};
+            if(group.isRelative(client.getUser())){
+                options[0] = "Sair do grupo";
             }
-            //se não é
-            else{
-                String[] options = {"Solicitar entrada", "Cancelar"};
+            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + group.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if (selection == 0){
+                if(group.isRelative(client.getUser())){
+                    JOptionPane.showMessageDialog(client, "Você saiu do grupo " +  group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    group.removeRelative(client.getUser());
+                    //listGroupPanel(true);
+                } else {
+                    JOptionPane.showMessageDialog(client, "Pedido enviado para " + group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    group.sendNewRequest(client.getUser());
+                }
             }
         } else {
             JOptionPane.showMessageDialog(client, "Não existe nenhum grupo com esse nome!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -202,7 +213,11 @@ public class ViewGroups extends JPanel {
             if(name.trim().equals("")){
                 JOptionPane.showMessageDialog(client, "Nome Inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                //creates a new group
+                System.out.println(name);
+                System.out.println(createGroup.getText());
+                System.out.println(client.getUser());
+                group = new Group(name, createGroup.getText(), client.getUser());
+                client.getDatabase().addGroupToDb(group);
             }
         }
     }//GEN-LAST:event_createActionPerformed

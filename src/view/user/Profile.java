@@ -181,7 +181,7 @@ public class Profile extends JPanel {
         } else if(user.isBlocked(requester)){
             JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + user.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-            user.newRequest(client.getUser());
+            user.sendNewRequest(client.getUser());
             JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btAddFriendActionPerformed

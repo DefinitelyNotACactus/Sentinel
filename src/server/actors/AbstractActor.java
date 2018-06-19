@@ -157,7 +157,7 @@ public abstract class AbstractActor implements Serializable{
      * Sends a new Request to this actor.
      * @param requester The user that is requesting.
      */
-    public void newRequest(User requester){
+    public void sendNewRequest(User requester){
         if(!isRequestSent(requester) && !isBlocked(requester)){
             request.add(requester);
         }

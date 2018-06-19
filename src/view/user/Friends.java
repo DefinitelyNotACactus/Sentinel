@@ -239,7 +239,7 @@ public class Friends extends JPanel {
                         JOptionPane.showMessageDialog(client, user.getName() + " bloqueoou você!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                        user.newRequest(client.getUser());
+                        user.sendNewRequest(client.getUser());
                         listFriendPanel(true);
                     }
                     break;

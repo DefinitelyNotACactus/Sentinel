@@ -23,4 +23,5 @@ public class Constants {
     public static final String NULL_TEXT = "O texto está vazio!";
     
     public static final String BTFRIENDS_TEXT = "Amigos";
+    public static final String BTGROUPS_TEXT = "Groupos";
 }
