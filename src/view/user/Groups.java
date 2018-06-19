@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.AbstractActor;
+import server.actors.User;
 import util.Constants;
 
 /**
@@ -170,14 +171,12 @@ public class Groups extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         String grupo = searchBox.getText().toLowerCase();
         if(grupo.equals(client.getDatabase().allGroups(grupo))){
-            //se é membro
+            String[] options = {"Solicitar entrada", "Cancelar"};
             if(client.getDatabase().getFromGroupId(grupo).isRelative(client.getUser())){
-                String[] options = {"Sair do grupo", "Cancelar"};
+                options[0] = "Sair do grupo";
             }
-            //se não é
-            else{
-                String[] options = {"Solicitar entrada", "Cancelar"};
-            }
+            User user = client.getDatabase().getFromMail(email);
+            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + user.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         } else {
             JOptionPane.showMessageDialog(client, "Não existe nenhum grupo com esse nome!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
@@ -197,7 +196,9 @@ public class Groups extends JPanel {
         Toolkit.getDefaultToolkit().beep();
         String grupoCreate = create.getText().toLowerCase();
         if(!grupoCreate.equals(client.getDatabase().allGroups(grupoCreate))){
-            
+            //group name
+            // group id
+            //client user
         } else {
             JOptionPane.showMessageDialog(client, "Já existe um grupo com esse nome!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
