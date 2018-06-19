@@ -120,7 +120,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddActorActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(actor instanceof Group){&#xa;    if(actor.isRelative(client.getUser())){&#xa;        btAddActor.setText(&quot;Pedir para Entrar&quot;);&#xa;    } else {&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;} else { //instanceof User&#xa;    if(isOwner || client.getUser().isRelative((User) actor)){&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(actor instanceof Group){&#xa;    if(!actor.isRelative(client.getUser())){&#xa;        btAddActor.setText(&quot;Pedir para Entrar&quot;);&#xa;    } else {&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;} else { //instanceof User&#xa;    if(isOwner || client.getUser().isRelative((User) actor)){&#xa;        btAddActor.setVisible(false);&#xa;        btAddActor.setEnabled(false);&#xa;    }&#xa;}"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="page">

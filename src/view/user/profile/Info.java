@@ -29,6 +29,7 @@ import util.Constants;
 import view.util.UserRenderer;
 import util.Validator;
 import view.user.Profile;
+import view.util.GroupUserRenderer;
 
 /**
  *
@@ -95,7 +96,11 @@ public class Info extends JPanel {
         for(i = 0; it.hasNext(); i++) {
             friendModel.add(i, (User) it.next());
         }
-        friendsList.setCellRenderer(new UserRenderer());
+        if(actor instanceof User){
+            friendsList.setCellRenderer(new UserRenderer());
+        } else {
+            friendsList.setCellRenderer(new GroupUserRenderer(group));
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,7 +144,7 @@ public class Info extends JPanel {
             User user = (User) actor; //why
             dobLabel.setText("<html><b>Data de Nascimento: </b>" + user.getDob() + "</html>");
         } else {
-            dobLabel.setText("<html><b>E-mail: </b>" + actor.getId() + "</html>");
+            dobLabel.setText("<html><b>ID: </b>" + actor.getId() + "</html>");
         }
 
         genderLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -192,7 +197,11 @@ public class Info extends JPanel {
         loadPhotos(false);
 
         emailLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        emailLabel1.setText("<html><b>Dados Pessoais<b></html>");
+        if(actor instanceof User){
+            emailLabel1.setText("<html><b>Dados Pessoais<b></html>");
+        } else {
+            emailLabel1.setText("<html><b>Dados do Grupo<b></html>");
+        }
 
         buttonsPanel.setBackground(new java.awt.Color(0, 102, 153));
         buttonsPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
@@ -208,8 +217,10 @@ public class Info extends JPanel {
             }
         });
         if(!isOwner){
-            btUserPhoto.setVisible(false);
             btUserPhoto.setEnabled(false);
+            if(actor instanceof User){
+                btUserPhoto.setVisible(false);
+            }
         }
         buttonsPanel.add(btUserPhoto);
 
@@ -219,7 +230,7 @@ public class Info extends JPanel {
                 btAddPhotoActionPerformed(evt);
             }
         });
-        if(!isOwner){
+        if(!isOwner && actor instanceof User){
             btAddPhoto.setVisible(false);
             btAddPhoto.setEnabled(false);
         }

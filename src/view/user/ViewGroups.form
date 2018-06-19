@@ -22,160 +22,155 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="1" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel1" min="-2" pref="631" max="-2" attributes="0"/>
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" pref="624" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="searchGroupField" min="-2" pref="514" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btSearchGroup" min="-2" pref="100" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="aScrollPane" min="-2" pref="620" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jScrollPane1" min="-2" pref="623" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="createGroup" min="-2" pref="506" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="create" min="-2" pref="105" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="searchGroup" min="-2" pref="506" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="searchBox" min="-2" pref="105" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jScrollPane2" min="-2" pref="624" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="createGroupLabel" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="myGroupsLabel" max="32767" attributes="0"/>
+                  <Component id="createGroupNameField" max="32767" attributes="0"/>
+                  <Component id="createGroupIdLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="createGroupIdField" alignment="0" max="32767" attributes="0"/>
+                  <Component id="createGroupTosBox" alignment="0" pref="618" max="32767" attributes="0"/>
+                  <Component id="btCreateGroup" alignment="0" max="32767" attributes="0"/>
+                  <Component id="createGroupNameLabel" alignment="1" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel1" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="myGroupsLabel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="createGroupLabel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane1" min="-2" pref="548" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="createGroupNameLabel" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="createGroup" min="-2" pref="30" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane2" min="-2" pref="548" max="-2" attributes="0"/>
+                      <Component id="createGroupNameField" min="-2" pref="34" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="searchGroup" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="searchBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="create" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="createGroupIdLabel" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="createGroupIdField" min="-2" pref="34" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="createGroupTosBox" min="-2" pref="34" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btCreateGroup" min="-2" pref="34" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="309" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="aScrollPane" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="searchGroupField" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                  <Component id="btSearchGroup" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JList" name="groupList">
-          <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JList" name="allGroupsList">
-          <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Component class="javax.swing.JTextField" name="searchGroup">
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="searchGroupMouseClicked"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchGroupActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="searchGroup.setText(Constants.DEFAULT_SEARCH_MESSAGE);"/>
-      </AuxValues>
+    <Component class="javax.swing.JLabel" name="myGroupsLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Crie seu Grupo:"/>
+      </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="searchBox">
+    <Container class="javax.swing.JScrollPane" name="aScrollPane">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JList" name="myGroupsList">
+          <Properties>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="myGroupsListValueChanged"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JList&lt;&gt;(groupModel)"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Group&gt;"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JTextField" name="searchGroupField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Pesquise um grupo pelo ID aqui..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="searchGroupFieldMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btSearchGroup">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pesquisar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchBoxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSearchGroupActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="createGroupLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;C&#xf3;digo do Usu&#xe1;rio&gt;"/>
+        <Property name="text" type="java.lang.String" value="Seus Grupos:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JTextField" name="createGroupNameField">
+    </Component>
+    <Component class="javax.swing.JLabel" name="createGroupNameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;C&#xf3;digo do Usu&#xe1;rio&gt;"/>
+        <Property name="text" type="java.lang.String" value="Nome do Grupo"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="createGroup">
+    <Component class="javax.swing.JLabel" name="createGroupIdLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ID do Grupo"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="createGroupIdField">
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="createGroupTosBox">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="0" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="N&#xe3;o li, mas concordo com os Termos de Servi&#xe7;o"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btCreateGroup">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Criar"/>
+      </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="createGroupMouseClicked"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createGroupActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="searchGroup.setText(Constants.DEFAULT_SEARCH_MESSAGE);"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="create">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Criar Grupo"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCreateGroupActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

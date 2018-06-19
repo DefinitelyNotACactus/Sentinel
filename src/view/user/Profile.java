@@ -105,7 +105,7 @@ public class Profile extends JPanel {
             }
         });
         if(actor instanceof Group){
-            if(actor.isRelative(client.getUser())){
+            if(!actor.isRelative(client.getUser())){
                 btAddActor.setText("Pedir para Entrar");
             } else {
                 btAddActor.setVisible(false);
@@ -191,11 +191,7 @@ public class Profile extends JPanel {
         btActorWall.setText("Nova Mensagem");
         btActorInfo.setFont(new java.awt.Font(Constants.FONT, 0, 11));
         page.removeAll();
-        if(actor instanceof User){
-            page.add(new Wall(client, (User) actor));
-        } else {
-            //page.add(new Wall(client, group)); TODO
-        }
+        page.add(new Wall(client, actor));
         page.revalidate();
     }//GEN-LAST:event_btActorWallActionPerformed
 

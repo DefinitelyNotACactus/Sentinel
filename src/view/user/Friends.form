@@ -118,7 +118,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="friendListValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;(friendModel)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JList&lt;&gt;(friendModel)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;User&gt;"/>
           </AuxValues>
         </Component>
@@ -157,7 +157,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="friendRequestListValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;(requestModel)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JList&lt;&gt;(requestModel)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;User&gt;"/>
           </AuxValues>
         </Component>
@@ -180,7 +180,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="blockedListValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;(blockedModel)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JList&lt;&gt;(blockedModel)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;User&gt;"/>
           </AuxValues>
         </Component>

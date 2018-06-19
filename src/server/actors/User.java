@@ -32,7 +32,6 @@ public class User extends AbstractActor {
         isPublicWall = true;
         
         others_posts = new ArrayList<>();
-        photos = new ArrayList<>();
     }
     
     public String getPassword(){

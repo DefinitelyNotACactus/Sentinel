@@ -15,7 +15,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import server.Database;
+import server.actors.Group;
 import server.actors.User;
+import view.util.GroupRenderer;
 import view.util.UserRenderer;
 
 /*
@@ -27,9 +29,13 @@ public class ListOfActors extends javax.swing.JPanel {
     
     
     private Database db;
+    
     private DefaultListModel<User> usersModel;
+    private DefaultListModel<Group> groupsModel;
     
     private List<String> emails;
+    private List<String> ids;
+    
     private final Client client;
     private final Home home;
 
@@ -38,15 +44,21 @@ public class ListOfActors extends javax.swing.JPanel {
         this.client = c;
         this.home = home;
         this.db = db;
+        
         usersModel = new DefaultListModel<>();
+        groupsModel = new DefaultListModel<>();
+        
         emails = new ArrayList<>();
+        ids = new ArrayList<>();
+        
         initComponents();
-        listFriendPanel();
+        listAllActors();
     }
 
-    private void listFriendPanel(){
+    private void listAllActors(){
         Iterator it = db.getUsers().entrySet().iterator();
         int i;
+        //user iteration
         for(i = 0; it.hasNext(); i++){
             Map.Entry pair = (Map.Entry) it.next();
             User user = (User) pair.getValue();
@@ -58,6 +70,19 @@ public class ListOfActors extends javax.swing.JPanel {
             }
         }
         usersList.setCellRenderer(new UserRenderer());
+        //group iteration
+        it = db.getGroups().entrySet().iterator();
+        for(i = 0; it.hasNext(); i++){
+            Map.Entry pair = (Map.Entry) it.next();
+            Group group = (Group) pair.getValue();
+            if(!group.isBlocked(client.getUser())){
+                groupsModel.add(i, group);
+                ids.add(pair.getKey().toString());
+            } else {
+                i--;
+            }
+        }
+        groupsList.setCellRenderer(new GroupRenderer());
     }
     
     /**
@@ -70,10 +95,11 @@ public class ListOfActors extends javax.swing.JPanel {
     private void initComponents() {
 
         UsersListLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        ScrollPane1 = new javax.swing.JScrollPane();
         usersList = new JList<>(usersModel);
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        ScrollPane2 = new javax.swing.JScrollPane();
+        groupsList = new JList<>(groupsModel);
+        GroupsListLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(153, 153, 255));
         setPreferredSize(new java.awt.Dimension(1280, 660));
@@ -88,18 +114,19 @@ public class ListOfActors extends javax.swing.JPanel {
                 usersListValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(usersList);
+        ScrollPane1.setViewportView(usersList);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
-        );
+        groupsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                groupsListValueChanged(evt);
+            }
+        });
+        ScrollPane2.setViewportView(groupsList);
+
+        GroupsListLabel.setText("Grupos");
+        GroupsListLabel.setMaximumSize(new java.awt.Dimension(103, 14));
+        GroupsListLabel.setMinimumSize(new java.awt.Dimension(103, 14));
+        GroupsListLabel.setPreferredSize(new java.awt.Dimension(103, 14));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -109,21 +136,25 @@ public class ListOfActors extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(UsersListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+                    .addComponent(GroupsListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(UsersListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(UsersListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GroupsListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                    .addComponent(ScrollPane1))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -141,12 +172,27 @@ public class ListOfActors extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_usersListValueChanged
 
+    private void groupsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_groupsListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = groupsList.getSelectedIndex();
+        if(index >= 0){
+            Group selected = client.getDatabase().getFromGroupId(ids.get(index));
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                home.getPage().removeAll();
+                home.getPage().add(new Profile(client, selected, home));
+                home.getPage().revalidate();
+            }
+        }
+    }//GEN-LAST:event_groupsListValueChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel GroupsListLabel;
+    private javax.swing.JScrollPane ScrollPane1;
+    private javax.swing.JScrollPane ScrollPane2;
     private javax.swing.JLabel UsersListLabel;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<Group> groupsList;
     private javax.swing.JList<User> usersList;
     // End of variables declaration//GEN-END:variables
 }

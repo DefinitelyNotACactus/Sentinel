@@ -10,6 +10,7 @@ import util.Constants;
 import java.awt.Toolkit;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.User;
@@ -110,13 +111,13 @@ public class Friends extends JPanel {
         friendRequestListLabel = new javax.swing.JLabel();
         blockedListLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        friendList = new javax.swing.JList<>(friendModel);
+        friendList = new JList<>(friendModel);
         searchBox = new javax.swing.JTextField();
         btSearch = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        friendRequestList = new javax.swing.JList<>(requestModel);
+        friendRequestList = new JList<>(requestModel);
         jScrollPane3 = new javax.swing.JScrollPane();
-        blockedList = new javax.swing.JList<>(blockedModel);
+        blockedList = new JList<>(blockedModel);
 
         setBackground(new java.awt.Color(255, 153, 0));
         setPreferredSize(new java.awt.Dimension(1280, 660));
@@ -301,7 +302,6 @@ public class Friends extends JPanel {
                 home.getPage().add(new Profile(client, selected, home));
                 home.getPage().revalidate();
             }
-            listFriendPanel(true);
         }
     }//GEN-LAST:event_friendListValueChanged
 

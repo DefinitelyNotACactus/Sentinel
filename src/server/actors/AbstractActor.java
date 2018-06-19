@@ -18,7 +18,8 @@ import server.actors.actions.Post;
  * @author David
  */
 public abstract class AbstractActor implements Serializable{
-    //
+    private static final long serialVersionUID = 19618L;
+
     protected String name;
     protected String id;
     protected ImageIcon icon;
@@ -38,13 +39,17 @@ public abstract class AbstractActor implements Serializable{
     public AbstractActor(String name, String id){
         this.name = name;
         this.id = id;
-        this.icon = new ImageIcon(getClass().getResource("/assets/default_profile.png"));
-        
+        if(this instanceof User){
+            this.icon = new ImageIcon(getClass().getResource("/assets/default_profile.png"));
+        } else {
+            this.icon = new ImageIcon(getClass().getResource("/assets/default_group.png"));
+        }
         related = new ArrayList<>();
         request = new ArrayList<>();
         blocked = new ArrayList<>();
         
         posts = new ArrayList<>();
+        photos = new ArrayList<>();
     }
     
     /**

@@ -170,7 +170,7 @@ public class Home extends JPanel {
         btGroups.setFont(new Font(Constants.FONT, 1, 12));
         btList.setFont(new Font(Constants.FONT, 0, 12));
         page.removeAll();
-        page.add(new ViewGroups(client, home));
+        page.add(new ViewGroups(client, this));
         page.revalidate();
     }//GEN-LAST:event_btGroupsActionPerformed
 

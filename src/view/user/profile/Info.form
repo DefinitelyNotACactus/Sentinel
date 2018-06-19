@@ -120,7 +120,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;dobLabel.setText(&quot;&lt;html&gt;&lt;b&gt;E-mail: &lt;/b&gt;&quot; + actor.getId() + &quot;&lt;/html&gt;&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;dobLabel.setText(&quot;&lt;html&gt;&lt;b&gt;ID: &lt;/b&gt;&quot; + actor.getId() + &quot;&lt;/html&gt;&quot;);&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="genderLabel">
@@ -239,13 +239,16 @@
     </Container>
     <Component class="javax.swing.JLabel" name="emailLabel1">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" postCode="if(actor instanceof User){">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="&quot;&lt;html&gt;&lt;b&gt;Dados Pessoais&lt;b&gt;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;emailLabel1.setText(&quot;&lt;html&gt;&lt;b&gt;Dados do Grupo&lt;b&gt;&lt;/html&gt;&quot;);&#xa;}"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="buttonsPanel">
       <Properties>
@@ -270,7 +273,7 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;btUserPhoto.setText(&quot;Editar Foto do Grupo&quot;);&#xa;}"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(actor instanceof User){"/>
-            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btUserPhoto.setVisible(false);&#xa;btUserPhoto.setEnabled(false);&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;    btUserPhoto.setEnabled(false);&#xa;    if(actor instanceof User){&#xa;        btUserPhoto.setVisible(false);&#xa;    }&#xa;}"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btAddPhoto">
@@ -281,7 +284,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddPhotoActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;btAddPhoto.setVisible(false);&#xa;btAddPhoto.setEnabled(false);&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner &amp;&amp; actor instanceof User){&#xa;    btAddPhoto.setVisible(false);&#xa;    btAddPhoto.setEnabled(false);&#xa;}"/>
           </AuxValues>
         </Component>
       </SubComponents>

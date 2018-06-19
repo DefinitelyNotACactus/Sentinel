@@ -62,7 +62,15 @@ public class Database implements Serializable{
         groups.put(newGroup.getId(), newGroup);
     }
     
-    public boolean allGroups(String group){
+    public void removeGroupFromDb(Group toRemove){
+        groups.remove(toRemove.getId());
+    }
+    
+    public Map<String, Group> getGroups(){
+        return groups;
+    }
+        
+    public boolean groupIdInUse(String group){
         return groups.containsKey(group);
     }
     
@@ -75,7 +83,7 @@ public class Database implements Serializable{
     }
     
     public Group getFromGroupId(String group){
-        if(users.containsKey(group)){
+        if(groups.containsKey(group)){
             return groups.get(group);
         } else {
             return null;

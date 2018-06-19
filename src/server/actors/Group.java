@@ -19,7 +19,9 @@ public class Group extends AbstractActor {
     
     public Group(String name, String id, User founder) {
         super(name, id);
+        
         related.add(founder);
+        
         admins = new ArrayList<>();
         admins.add(founder);
     }
@@ -53,5 +55,4 @@ public class Group extends AbstractActor {
         }
         return false;
     }
-    
 }

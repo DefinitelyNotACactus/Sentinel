@@ -122,6 +122,7 @@ public class Login extends JPanel {
                 client.remove(this);
                 client.revalidate();
                 } catch (NullPointerException ex){
+                    Toolkit.getDefaultToolkit().beep();
                     JOptionPane.showMessageDialog(client, "Erro Desconhecido", "Aviso", JOptionPane.ERROR_MESSAGE);
                 }
             } else {

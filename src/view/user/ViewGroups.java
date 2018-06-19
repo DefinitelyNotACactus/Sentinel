@@ -7,10 +7,16 @@ package view.user;
 
 import executable.Client;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import server.actors.Group;
-import util.Constants;
+import view.util.GroupRenderer;
 
 /**
  *
@@ -20,17 +26,45 @@ public class ViewGroups extends JPanel {
 
     private final Client client;
     private final Home home;
-    private Group group;
+    
+    private DefaultListModel<Group> groupModel;
+    private List<String> ids;
+    
     /**
      * Creates new form Groups
+     * @param c
+     * @param home
      */
     public ViewGroups(Client c, Home home) {
         this.client = c;
         this.home = home;
         
+        groupModel = new DefaultListModel<>();
+        ids = new ArrayList<>();
+        
         initComponents();
+        listMyGroups(false);
     }
 
+    private void listMyGroups(boolean reload){
+        if(reload){
+            groupModel.clear();
+        }
+        Iterator it = client.getDatabase().getGroups().entrySet().iterator();
+        int i;
+        for(i = 0; it.hasNext(); i++){
+            Map.Entry pair = (Map.Entry) it.next();
+            Group group = (Group) pair.getValue();
+            if(group.isRelative(client.getUser())){
+                groupModel.add(i, group);
+                ids.add(pair.getKey().toString());
+            } else {
+                i--;
+            }
+        }
+        myGroupsList.setCellRenderer(new GroupRenderer());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,70 +74,58 @@ public class ViewGroups extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        groupList = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        allGroupsList = new javax.swing.JList<>();
-        searchGroup = new javax.swing.JTextField();
-        searchBox = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        createGroup = new javax.swing.JTextField();
-        create = new javax.swing.JButton();
+        myGroupsLabel = new javax.swing.JLabel();
+        aScrollPane = new javax.swing.JScrollPane();
+        myGroupsList = new JList<>(groupModel);
+        searchGroupField = new javax.swing.JTextField();
+        btSearchGroup = new javax.swing.JButton();
+        createGroupLabel = new javax.swing.JLabel();
+        createGroupNameField = new javax.swing.JTextField();
+        createGroupNameLabel = new javax.swing.JLabel();
+        createGroupIdLabel = new javax.swing.JLabel();
+        createGroupIdField = new javax.swing.JTextField();
+        createGroupTosBox = new javax.swing.JCheckBox();
+        btCreateGroup = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 0, 102));
 
-        groupList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(groupList);
+        myGroupsLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        myGroupsLabel.setText("Crie seu Grupo:");
 
-        allGroupsList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        myGroupsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                myGroupsListValueChanged(evt);
+            }
         });
-        jScrollPane2.setViewportView(allGroupsList);
+        aScrollPane.setViewportView(myGroupsList);
 
-        searchGroup.addMouseListener(new java.awt.event.MouseAdapter() {
+        searchGroupField.setText("Pesquise um grupo pelo ID aqui...");
+        searchGroupField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                searchGroupMouseClicked(evt);
+                searchGroupFieldMouseClicked(evt);
             }
         });
-        searchGroup.addActionListener(new java.awt.event.ActionListener() {
+
+        btSearchGroup.setText("Pesquisar");
+        btSearchGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchGroupActionPerformed(evt);
+                btSearchGroupActionPerformed(evt);
             }
         });
 
-        searchBox.setText("Pesquisar");
-        searchBox.addActionListener(new java.awt.event.ActionListener() {
+        createGroupLabel.setText("Seus Grupos:");
+
+        createGroupNameLabel.setText("Nome do Grupo");
+
+        createGroupIdLabel.setText("ID do Grupo");
+
+        createGroupTosBox.setBackground(new java.awt.Color(255, 0, 102));
+        createGroupTosBox.setText("Não li, mas concordo com os Termos de Serviço");
+
+        btCreateGroup.setText("Criar");
+        btCreateGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("<Código do Usuário>");
-
-        jLabel2.setText("<Código do Usuário>");
-
-        createGroup.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                createGroupMouseClicked(evt);
-            }
-        });
-        createGroup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createGroupActionPerformed(evt);
-            }
-        });
-
-        create.setText("Criar Grupo");
-        create.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createActionPerformed(evt);
+                btCreateGroupActionPerformed(evt);
             }
         });
 
@@ -112,131 +134,149 @@ public class ViewGroups extends JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(searchGroupField, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btSearchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(22, 22, 22))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(aScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 631, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(createGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(searchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(createGroupLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(22, 22, 22)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(myGroupsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createGroupNameField)
+                    .addComponent(createGroupIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createGroupIdField)
+                    .addComponent(createGroupTosBox, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
+                    .addComponent(btCreateGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createGroupNameLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(myGroupsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createGroupLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(createGroupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(createGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(createGroupNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(searchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 12, Short.MAX_VALUE))
+                        .addComponent(createGroupIdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(createGroupIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(createGroupTosBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btCreateGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 309, Short.MAX_VALUE))
+                    .addComponent(aScrollPane))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchGroupField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btSearchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
-
-        searchGroup.setText(Constants.DEFAULT_SEARCH_MESSAGE);
-        searchGroup.setText(Constants.DEFAULT_SEARCH_MESSAGE);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchGroupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchGroupMouseClicked
-        if(searchGroup.getText().equals(Constants.DEFAULT_SEARCH_MESSAGE)){
-            searchBox.setText("");
+    private void btCreateGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreateGroupActionPerformed
+        if(createGroupNameField.getText().trim().equals("")){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(client, "O nome está vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(createGroupIdField.getText().trim().equals("")){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(client, "O ID está vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(client.getDatabase().groupIdInUse(createGroupIdField.getText().toLowerCase())){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(client, "ID em uso!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else if(!createGroupTosBox.isSelected()){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(client, "Você deve concordar com os Termos de Serviço e Política de Privacidade para Criar um Grupo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            Group newGroup = new Group(createGroupNameField.getText(), createGroupIdField.getText().toLowerCase(), client.getUser());
+            client.getDatabase().addGroupToDb(newGroup);
+            home.getPage().removeAll();
+            home.getPage().add(new Profile(client, newGroup, home));
+            home.getPage().revalidate();
         }
-    }//GEN-LAST:event_searchGroupMouseClicked
+    }//GEN-LAST:event_btCreateGroupActionPerformed
 
-    private void searchBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxActionPerformed
+    private void btSearchGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchGroupActionPerformed
         Toolkit.getDefaultToolkit().beep();
-        String id = searchGroup.getText();
-        System.out.println(id);
-        if(client.getDatabase().allGroups(id)){
-            Group group = client.getDatabase().getFromGroupId(id);
-            String[] options = {"Solicitar entrada", "Cancelar"};
-            if(group.isRelative(client.getUser())){
-                options[0] = "Sair do grupo";
+        String id = searchGroupField.getText().toLowerCase();
+        if(client.getDatabase().groupIdInUse(id)){
+            Toolkit.getDefaultToolkit().beep();
+            String[] options = {"Adicionar", "Cancelar"};
+            if(client.getDatabase().getFromGroupId(id).isRelative(client.getUser())){
+                options[0] = "Sair";
             }
-            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + group.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if (selection == 0){
+            Group group = client.getDatabase().getFromGroupId(id);
+            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + group.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);           
+            if(selection == 0){
                 if(group.isRelative(client.getUser())){
-                    JOptionPane.showMessageDialog(client, "Você saiu do grupo " +  group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                    group.removeRelative(client.getUser());
-                    //listGroupPanel(true);
+                    if(group.isAdmin(client.getUser()) && group.getAdmins().size() == 1){
+                        JOptionPane.showMessageDialog(client, "Você era o único moderador de " + group.getName() + " e por isso o grupo foi desfeito!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        client.getDatabase().removeGroupFromDb(group);
+                    } else {
+                        JOptionPane.showMessageDialog(client, "Você saiu de " + group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        group.removeRelative(client.getUser());
+                    }
+                    listMyGroups(true);
+                } else if(group.isBlocked(client.getUser())){
+                    JOptionPane.showMessageDialog(client, group.getName() + " bloqueoou você!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(client, "Pedido enviado para " + group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(client, "Pedido enviado para os moderadores de " + group.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     group.sendNewRequest(client.getUser());
                 }
             }
+            searchGroupField.setText("Pesquise um grupo pelo ID aqui...");  
         } else {
-            JOptionPane.showMessageDialog(client, "Não existe nenhum grupo com esse nome!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(client, "O grupo não existe!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_searchBoxActionPerformed
+    }//GEN-LAST:event_btSearchGroupActionPerformed
 
-    private void createGroupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createGroupMouseClicked
-        if(createGroup.getText().equals(Constants.DEFAULT_SEARCH_MESSAGE)){
-            create.setText("");
-        }
-    }//GEN-LAST:event_createGroupMouseClicked
-
-    private void createGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createGroupActionPerformed
-        
-    }//GEN-LAST:event_createGroupActionPerformed
-
-    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+    private void myGroupsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_myGroupsListValueChanged
         Toolkit.getDefaultToolkit().beep();
-        String grupoCreate = create.getText().toLowerCase();
-        if(client.getDatabase().allGroups(grupoCreate)){//the id is in use
-            JOptionPane.showMessageDialog(client, "O grupo já existe com este ID!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else {
-            String name = JOptionPane.showInputDialog(client, "Insira o nome do Grupo: ", "Criar um Grupo", JOptionPane.QUESTION_MESSAGE);
-            if(name.trim().equals("")){
-                JOptionPane.showMessageDialog(client, "Nome Inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-            } else {
-                System.out.println(name);
-                System.out.println(createGroup.getText());
-                System.out.println(client.getUser());
-                group = new Group(name, createGroup.getText(), client.getUser());
-                client.getDatabase().addGroupToDb(group);
+        int index = myGroupsList.getSelectedIndex();
+        if(index >= 0){
+            Group selected = client.getDatabase().getFromGroupId(ids.get(index));
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja visitar a página de " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                home.getPage().removeAll();
+                home.getPage().add(new Profile(client, selected, home));
+                home.getPage().revalidate();
             }
         }
-    }//GEN-LAST:event_createActionPerformed
+    }//GEN-LAST:event_myGroupsListValueChanged
 
-    private void searchGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchGroupActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchGroupActionPerformed
-
+    private void searchGroupFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchGroupFieldMouseClicked
+        if(searchGroupField.getText().equals("Pesquise um grupo pelo ID aqui...")){
+            searchGroupField.setText("");
+        }
+    }//GEN-LAST:event_searchGroupFieldMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> allGroupsList;
-    private javax.swing.JButton create;
-    private javax.swing.JTextField createGroup;
-    private javax.swing.JList<String> groupList;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JButton searchBox;
-    private javax.swing.JTextField searchGroup;
+    private javax.swing.JScrollPane aScrollPane;
+    private javax.swing.JButton btCreateGroup;
+    private javax.swing.JButton btSearchGroup;
+    private javax.swing.JTextField createGroupIdField;
+    private javax.swing.JLabel createGroupIdLabel;
+    private javax.swing.JLabel createGroupLabel;
+    private javax.swing.JTextField createGroupNameField;
+    private javax.swing.JLabel createGroupNameLabel;
+    private javax.swing.JCheckBox createGroupTosBox;
+    private javax.swing.JLabel myGroupsLabel;
+    private javax.swing.JList<Group> myGroupsList;
+    private javax.swing.JTextField searchGroupField;
     // End of variables declaration//GEN-END:variables
 }
