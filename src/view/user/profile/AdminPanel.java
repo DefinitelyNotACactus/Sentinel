@@ -30,20 +30,23 @@ public class AdminPanel extends JPanel {
     private final AbstractActor actor;
     
     private DefaultListModel<User> userRequestModel;
+    private DefaultListModel<User> blockedUserModel;
     
     public AdminPanel(Client c, AbstractActor actor) {
         this.client = c;
         this.actor = actor;
         
         userRequestModel = new DefaultListModel<>();
+        blockedUserModel = new DefaultListModel<>();
         
         initComponents();
-        listMembers(false);
+        listUsers(false);
     }
 
-    private void listMembers(boolean reload){
+    private void listUsers(boolean reload){
         if(reload){
             userRequestModel.clear();
+            blockedUserModel.clear();
         }
         Iterator it = actor.getRequests().iterator();
         int i;
@@ -51,6 +54,11 @@ public class AdminPanel extends JPanel {
             userRequestModel.add(i, (User) it.next());
         }
         requestList.setCellRenderer(new UserRenderer());
+        it = actor.getBlocked().iterator();
+        for(i = 0; it.hasNext(); i++){
+            blockedUserModel.add(i, (User) it.next());
+        }
+        blockedList.setCellRenderer(new UserRenderer());
     }
     
     /**
@@ -67,7 +75,7 @@ public class AdminPanel extends JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         requestList = new JList<>(userRequestModel);
         jScrollPane2 = new javax.swing.JScrollPane();
-        blockedList = new javax.swing.JList<>();
+        blockedList = new JList<>(blockedUserModel);
         searchBox = new javax.swing.JTextField();
         SearchButton = new javax.swing.JButton();
 
@@ -85,6 +93,11 @@ public class AdminPanel extends JPanel {
         });
         jScrollPane1.setViewportView(requestList);
 
+        blockedList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                blockedListValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(blockedList);
 
         searchBox.setText("jTextField1");
@@ -104,21 +117,18 @@ public class AdminPanel extends JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(newMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(newMembersRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 544, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -185,20 +195,34 @@ public class AdminPanel extends JPanel {
             User selected = actor.getRequests().get(index);
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja aceitar " + selected.getName() + " no grupo?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
-                client.getUser().addRelative(selected);
+                actor.addRelative(selected);
                 requestList.remove(index);
             } else if(confirm == 1) {
-                client.getUser().removeRequest(selected);
+                actor.removeRequest(selected);
                 requestList.remove(index);
             }
-            listMembers(true);
+            listUsers(true);
         }
     }//GEN-LAST:event_requestListValueChanged
+
+    private void blockedListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_blockedListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = blockedList.getSelectedIndex();
+        if(index >= 0){
+            User selected = actor.getBlocked().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja desbloquear " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                actor.unblock(selected);
+                blockedList.remove(index);
+            }
+            listUsers(true);
+        }
+    }//GEN-LAST:event_blockedListValueChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SearchButton;
-    private javax.swing.JList<String> blockedList;
+    private javax.swing.JList<User> blockedList;
     private javax.swing.JLabel blockedMembers;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
