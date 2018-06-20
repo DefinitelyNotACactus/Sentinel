@@ -206,7 +206,7 @@ public class Profile extends JPanel {
         User requester = client.getUser();
         if(btAddAdmin){
             page.removeAll();
-            page.add(new AdminPanel());
+            page.add(new AdminPanel(client, actor));
             page.revalidate();
         } else {
             if(actor.isRequestSent(requester)){

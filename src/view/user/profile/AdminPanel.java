@@ -5,6 +5,13 @@
  */
 package view.user.profile;
 
+import executable.Client;
+import java.awt.Toolkit;
+import javax.swing.JOptionPane;
+import server.actors.AbstractActor;
+import server.actors.Group;
+import server.actors.User;
+
 /**
  *
  * @author user
@@ -14,7 +21,13 @@ public class AdminPanel extends javax.swing.JPanel {
     /**
      * Creates new form AdminPanel
      */
-    public AdminPanel() {
+    private final Client client;
+    private final AbstractActor actor;
+    
+    public AdminPanel(Client c, AbstractActor actor) {
+        this.client = c;
+        this.actor = actor;
+        
         initComponents();
     }
 
@@ -33,8 +46,8 @@ public class AdminPanel extends javax.swing.JPanel {
         RequestList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         BlockedList = new javax.swing.JList<>();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        searchBox = new javax.swing.JTextField();
+        SearchButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1086, 638));
@@ -57,28 +70,40 @@ public class AdminPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(BlockedList);
 
-        jTextField1.setText("jTextField1");
+        searchBox.setText("jTextField1");
 
-        jButton1.setText("jButton1");
+        SearchButton.setText("jButton1");
+        SearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(NewMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)))
-                .addGap(22, 22, 22)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(BlockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(NewMembersRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(BlockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,13 +117,51 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(searchBox)
+                    .addComponent(SearchButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchButtonActionPerformed
+        Group group = (Group) actor;
+        String member = searchBox.getText().toLowerCase();
+        if(member.equals(client.getUser().getId())){
+            JOptionPane.showMessageDialog(client, "Você já é amigo de si mesmo (ou não!)", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        } else if(actor.isRelative(client.getDatabase().getFromMail(member))){
+            Toolkit.getDefaultToolkit().beep();
+            String[] options = {"Tornar Moderador", "Remover", "Bloquear", "Cancelar"};
+            if(group.isAdmin(client.getDatabase().getFromMail(member))){
+                options[0] = "Remover Moderador";
+            }
+            if(actor.isBlocked(client.getDatabase().getFromMail(member))){
+                options[2] = "Desbloquear";
+            }
+            User user = client.getDatabase().getFromMail(member);
+            int selection = JOptionPane.showOptionDialog(client, "O que deseja fazer com " + user.getName() + " ?" , "Opções de Interação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            switch(selection){
+                case 0:
+                  if(group.isAdmin(client.getDatabase().getFromMail(member))){
+                      group.removeAdmin(user);
+                  } else {
+                      group.addAdmin(user);
+                  }
+                  break;
+                case 1:
+                    group.removeRelative(user);
+                    JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case 2:
+                    if(actor.isBlocked(user)){
+                        group.block(user);
+                    } else{
+                        group.unblock(user);
+                    }
+            }
+        }
+    }//GEN-LAST:event_SearchButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -106,9 +169,9 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JLabel BlockedMembers;
     private javax.swing.JLabel NewMembersRequest;
     private javax.swing.JList<String> RequestList;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton SearchButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables
 }
