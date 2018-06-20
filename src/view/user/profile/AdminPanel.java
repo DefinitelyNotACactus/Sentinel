@@ -78,6 +78,11 @@ public class AdminPanel extends JPanel {
 
         blockedMembers.setText("Membros Bloqueados");
 
+        requestList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                requestListValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(requestList);
 
         jScrollPane2.setViewportView(blockedList);
@@ -172,6 +177,23 @@ public class AdminPanel extends JPanel {
             }
         }
     }//GEN-LAST:event_SearchButtonActionPerformed
+
+    private void requestListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_requestListValueChanged
+        Toolkit.getDefaultToolkit().beep();
+        int index = requestList.getSelectedIndex();
+        if(index >= 0){
+            User selected = actor.getRequests().get(index);
+            int confirm = JOptionPane.showConfirmDialog(client, "Você deseja aceitar " + selected.getName() + " no grupo?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == 0) {
+                client.getUser().addRelative(selected);
+                requestList.remove(index);
+            } else if(confirm == 1) {
+                client.getUser().removeRequest(selected);
+                requestList.remove(index);
+            }
+            listMembers(true);
+        }
+    }//GEN-LAST:event_requestListValueChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
