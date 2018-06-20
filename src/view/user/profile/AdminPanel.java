@@ -152,7 +152,7 @@ public class AdminPanel extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Group group = (Group) actor;
         String member = searchBox.getText().toLowerCase();
         if(member.equals(client.getUser().getId())){
@@ -181,15 +181,16 @@ public class AdminPanel extends JPanel {
                     JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 case 2:
-                    if(!actor.isBlocked(user)){
-                        group.block(user);
-                    } else {
+                    if(actor.isBlocked(user)){
                         group.unblock(user);
+                    } else{
+                        group.block(user);
                     }
+                    break;
             }
             listUsers(true);
         }
-    }//GEN-LAST:event_btSearchActionPerformed
+    }                                            
 
     private void requestListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_requestListValueChanged
         Toolkit.getDefaultToolkit().beep();
