@@ -18,6 +18,7 @@ import server.actors.AbstractActor;
 import server.actors.Group;
 import server.actors.User;
 import util.Validator;
+import view.user.profile.AdminPanel;
 import view.user.profile.Wall;
 
 /**
@@ -30,7 +31,9 @@ public class Profile extends JPanel {
     private final Home home;
     private final AbstractActor actor;
     private Group group = null;
+    
     private final boolean isOwner;
+    private boolean btAddAdmin = false;
     
     public Profile(Client c, Home home) {
         this.client = c;
@@ -105,8 +108,12 @@ public class Profile extends JPanel {
             }
         });
         if(actor instanceof Group){
-            if(!actor.isRelative(client.getUser())){
+            Group group = (Group) actor;
+            if(!group.isRelative(client.getUser())){
                 btAddActor.setText("Pedir para Entrar");
+            } else if(group.isAdmin(client.getUser())){
+                btAddActor.setText("Painel de Moderador");
+                btAddAdmin = true;
             } else {
                 btAddActor.setVisible(false);
                 btAddActor.setEnabled(false);
@@ -197,19 +204,25 @@ public class Profile extends JPanel {
 
     private void btAddActorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddActorActionPerformed
         User requester = client.getUser();
-        if(actor.isRequestSent(requester)){
-            JOptionPane.showMessageDialog(client, "O pedido já foi enviado!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else if(actor.isRelative(requester)){
-            if(actor instanceof User){
-                JOptionPane.showMessageDialog(client, actor.getName() + " já é seu amigo!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(client, "Você já é membro de " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
-            }
-        } else if(actor.isBlocked(requester)){
-            JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        if(btAddAdmin){
+            page.removeAll();
+            page.add(new AdminPanel());
+            page.revalidate();
         } else {
-            actor.sendNewRequest(client.getUser());
-            JOptionPane.showMessageDialog(client, "Pedido enviado para " + actor.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            if(actor.isRequestSent(requester)){
+                JOptionPane.showMessageDialog(client, "O pedido já foi enviado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else if(actor.isRelative(requester)){
+                if(actor instanceof User){
+                    JOptionPane.showMessageDialog(client, actor.getName() + " já é seu amigo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(client, "Você já é membro de " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
+            } else if(actor.isBlocked(requester)){
+                JOptionPane.showMessageDialog(client, "Você foi bloqueado por " + actor.getName(), "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else {
+                actor.sendNewRequest(client.getUser());
+                JOptionPane.showMessageDialog(client, "Pedido enviado para " + actor.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btAddActorActionPerformed
 
