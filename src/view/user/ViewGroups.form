@@ -24,23 +24,15 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="searchGroupField" min="-2" pref="514" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btSearchGroup" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="aScrollPane" min="-2" pref="620" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="searchGroupField" min="-2" pref="514" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btSearchGroup" min="-2" pref="100" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="createGroupLabel" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="aScrollPane" alignment="0" max="32767" attributes="0"/>
+                  <Component id="createGroupLabel" alignment="1" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace min="22" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="myGroupsLabel" max="32767" attributes="0"/>
                   <Component id="createGroupNameField" max="32767" attributes="0"/>
@@ -76,11 +68,10 @@
                       <Component id="createGroupTosBox" min="-2" pref="34" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btCreateGroup" min="-2" pref="34" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="309" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="aScrollPane" max="32767" attributes="0"/>
+                  <Component id="aScrollPane" min="-2" pref="542" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="searchGroupField" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
                   <Component id="btSearchGroup" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
