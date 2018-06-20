@@ -7,16 +7,21 @@ package view.user.profile;
 
 import executable.Client;
 import java.awt.Toolkit;
+import java.util.Iterator;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import server.actors.AbstractActor;
 import server.actors.Group;
 import server.actors.User;
+import view.util.UserRenderer;
 
 /**
  *
  * @author user
  */
-public class AdminPanel extends javax.swing.JPanel {
+public class AdminPanel extends JPanel {
 
     /**
      * Creates new form AdminPanel
@@ -24,13 +29,30 @@ public class AdminPanel extends javax.swing.JPanel {
     private final Client client;
     private final AbstractActor actor;
     
+    private DefaultListModel<User> userRequestModel;
+    
     public AdminPanel(Client c, AbstractActor actor) {
         this.client = c;
         this.actor = actor;
         
+        userRequestModel = new DefaultListModel<>();
+        
         initComponents();
+        listMembers(false);
     }
 
+    private void listMembers(boolean reload){
+        if(reload){
+            userRequestModel.clear();
+        }
+        Iterator it = actor.getRequests().iterator();
+        int i;
+        for(i = 0; it.hasNext(); i++){
+            userRequestModel.add(i, (User) it.next());
+        }
+        requestList.setCellRenderer(new UserRenderer());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,35 +62,25 @@ public class AdminPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        NewMembersRequest = new javax.swing.JLabel();
-        BlockedMembers = new javax.swing.JLabel();
+        newMembersRequest = new javax.swing.JLabel();
+        blockedMembers = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        RequestList = new javax.swing.JList<>();
+        requestList = new JList<>(userRequestModel);
         jScrollPane2 = new javax.swing.JScrollPane();
-        BlockedList = new javax.swing.JList<>();
+        blockedList = new javax.swing.JList<>();
         searchBox = new javax.swing.JTextField();
         SearchButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
-        NewMembersRequest.setText("jLabel1");
+        newMembersRequest.setText("Solicitações de Entrada");
 
-        BlockedMembers.setText("jLabel1");
+        blockedMembers.setText("Membros Bloqueados");
 
-        RequestList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(RequestList);
+        jScrollPane1.setViewportView(requestList);
 
-        BlockedList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(BlockedList);
+        jScrollPane2.setViewportView(blockedList);
 
         searchBox.setText("jTextField1");
 
@@ -87,15 +99,13 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(NewMembersRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(newMembersRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
-                                .addComponent(BlockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -111,8 +121,8 @@ public class AdminPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(NewMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                    .addComponent(BlockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(newMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                    .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
@@ -165,13 +175,13 @@ public class AdminPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> BlockedList;
-    private javax.swing.JLabel BlockedMembers;
-    private javax.swing.JLabel NewMembersRequest;
-    private javax.swing.JList<String> RequestList;
     private javax.swing.JButton SearchButton;
+    private javax.swing.JList<String> blockedList;
+    private javax.swing.JLabel blockedMembers;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel newMembersRequest;
+    private javax.swing.JList<User> requestList;
     private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables
 }
