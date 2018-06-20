@@ -70,21 +70,21 @@ public class AdminPanel extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        newMembersRequest = new javax.swing.JLabel();
-        blockedMembers = new javax.swing.JLabel();
+        newMembersRequestLabel = new javax.swing.JLabel();
+        blockedMembersLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         requestList = new JList<>(userRequestModel);
         jScrollPane2 = new javax.swing.JScrollPane();
         blockedList = new JList<>(blockedUserModel);
         searchBox = new javax.swing.JTextField();
-        SearchButton = new javax.swing.JButton();
+        btSearch = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 102, 153));
         setPreferredSize(new java.awt.Dimension(1086, 638));
 
-        newMembersRequest.setText("Solicitações de Entrada");
+        newMembersRequestLabel.setText("Solicitações de Entrada");
 
-        blockedMembers.setText("Membros Bloqueados");
+        blockedMembersLabel.setText("Membros Bloqueados");
 
         requestList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -100,12 +100,17 @@ public class AdminPanel extends JPanel {
         });
         jScrollPane2.setViewportView(blockedList);
 
-        searchBox.setText("jTextField1");
+        searchBox.setText("Insira o email de um membro do grupo para ver opções...");
+        searchBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBoxMouseClicked(evt);
+            }
+        });
 
-        SearchButton.setText("jButton1");
-        SearchButton.addActionListener(new java.awt.event.ActionListener() {
+        btSearch.setText("Pesquisar");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SearchButtonActionPerformed(evt);
+                btSearchActionPerformed(evt);
             }
         });
 
@@ -115,20 +120,17 @@ public class AdminPanel extends JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(newMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 544, Short.MAX_VALUE)))
+                        .addComponent(btSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                    .addComponent(newMembersRequestLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(blockedMembersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,25 +138,25 @@ public class AdminPanel extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(newMembersRequest, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                    .addComponent(blockedMembers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(newMembersRequestLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                    .addComponent(blockedMembersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchBox)
-                    .addComponent(SearchButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                    .addComponent(searchBox, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(btSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchButtonActionPerformed
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
         Group group = (Group) actor;
         String member = searchBox.getText().toLowerCase();
         if(member.equals(client.getUser().getId())){
-            JOptionPane.showMessageDialog(client, "Você já é amigo de si mesmo (ou não!)", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(client, "O Painel do Moderador é para tirar privilégios dos outros, não o seu.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         } else if(actor.isRelative(client.getDatabase().getFromMail(member))){
             Toolkit.getDefaultToolkit().beep();
             String[] options = {"Tornar Moderador", "Remover", "Bloquear", "Cancelar"};
@@ -179,14 +181,15 @@ public class AdminPanel extends JPanel {
                     JOptionPane.showMessageDialog(client, user.getName() + " foi removido!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 case 2:
-                    if(actor.isBlocked(user)){
+                    if(!actor.isBlocked(user)){
                         group.block(user);
-                    } else{
+                    } else {
                         group.unblock(user);
                     }
             }
+            listUsers(true);
         }
-    }//GEN-LAST:event_SearchButtonActionPerformed
+    }//GEN-LAST:event_btSearchActionPerformed
 
     private void requestListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_requestListValueChanged
         Toolkit.getDefaultToolkit().beep();
@@ -219,14 +222,19 @@ public class AdminPanel extends JPanel {
         }
     }//GEN-LAST:event_blockedListValueChanged
 
+    private void searchBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBoxMouseClicked
+        if(searchBox.getText().equals("Insira o email de um membro do grupo para ver opções...")){
+            searchBox.setText("");
+        }
+    }//GEN-LAST:event_searchBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton SearchButton;
     private javax.swing.JList<User> blockedList;
-    private javax.swing.JLabel blockedMembers;
+    private javax.swing.JLabel blockedMembersLabel;
+    private javax.swing.JButton btSearch;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel newMembersRequest;
+    private javax.swing.JLabel newMembersRequestLabel;
     private javax.swing.JList<User> requestList;
     private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables

@@ -284,7 +284,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddPhotoActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner &amp;&amp; actor instanceof User){&#xa;    btAddPhoto.setVisible(false);&#xa;    btAddPhoto.setEnabled(false);&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="if(!isOwner){&#xa;    btAddPhoto.setEnabled(false);&#xa;    if(actor instanceof User){&#xa;        btAddPhoto.setVisible(false);&#xa;    }&#xa;}"/>
           </AuxValues>
         </Component>
       </SubComponents>

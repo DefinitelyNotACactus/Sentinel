@@ -210,7 +210,7 @@ public class ViewGroups extends JPanel {
         String id = searchGroupField.getText().toLowerCase();
         if(client.getDatabase().groupIdInUse(id)){
             Toolkit.getDefaultToolkit().beep();
-            String[] options = {"Adicionar", "Cancelar"};
+            String[] options = {"Solicitar Entrada", "Cancelar"};
             if(client.getDatabase().getFromGroupId(id).isRelative(client.getUser())){
                 options[0] = "Sair";
             }

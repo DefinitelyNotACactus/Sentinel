@@ -230,9 +230,11 @@ public class Info extends JPanel {
                 btAddPhotoActionPerformed(evt);
             }
         });
-        if(!isOwner && actor instanceof User){
-            btAddPhoto.setVisible(false);
+        if(!isOwner){
             btAddPhoto.setEnabled(false);
+            if(actor instanceof User){
+                btAddPhoto.setVisible(false);
+            }
         }
         buttonsPanel.add(btAddPhoto);
 

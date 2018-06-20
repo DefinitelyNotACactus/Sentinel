@@ -129,6 +129,9 @@ public abstract class AbstractActor implements Serializable{
                 Object ob = this;
                 if(ob instanceof User){
                     relativeToRemove.removeRelative((User) ob);
+                } else if(ob instanceof Group){
+                    Group group = (Group) ob;
+                    group.removeAdmin(relativeToRemove);
                 }
                 break;
             }

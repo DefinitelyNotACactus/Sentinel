@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import server.actors.actions.Answer;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
 import util.Validator;

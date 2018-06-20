@@ -26,24 +26,19 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="newMembersRequest" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" pref="522" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="blockedMembers" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="searchBox" min="-2" pref="439" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="searchBox" min="-2" pref="431" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="SearchButton" min="-2" pref="77" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="544" max="32767" attributes="0"/>
+                      <Component id="btSearch" pref="85" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="newMembersRequestLabel" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="blockedMembersLabel" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="522" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -54,8 +49,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="newMembersRequest" pref="26" max="32767" attributes="0"/>
-                  <Component id="blockedMembers" max="32767" attributes="0"/>
+                  <Component id="newMembersRequestLabel" pref="26" max="32767" attributes="0"/>
+                  <Component id="blockedMembersLabel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -64,8 +59,8 @@
               </Group>
               <EmptySpace pref="11" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="searchBox" max="32767" attributes="0"/>
-                  <Component id="SearchButton" pref="31" max="32767" attributes="0"/>
+                  <Component id="searchBox" pref="31" max="32767" attributes="0"/>
+                  <Component id="btSearch" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -73,12 +68,12 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="newMembersRequest">
+    <Component class="javax.swing.JLabel" name="newMembersRequestLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Solicita&#xe7;&#xf5;es de Entrada"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="blockedMembers">
+    <Component class="javax.swing.JLabel" name="blockedMembersLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Membros Bloqueados"/>
       </Properties>
@@ -131,15 +126,18 @@
     </Container>
     <Component class="javax.swing.JTextField" name="searchBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="SearchButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="text" type="java.lang.String" value="Insira o email de um membro do grupo para ver op&#xe7;&#xf5;es..."/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SearchButtonActionPerformed"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="searchBoxMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btSearch">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Pesquisar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSearchActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

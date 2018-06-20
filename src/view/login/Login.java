@@ -50,7 +50,9 @@ public class Login extends JPanel {
 
         setBackground(new java.awt.Color(255, 204, 0));
 
-        loginHeader.setText("logo");
+        loginHeader.setFont(new java.awt.Font("Impact", 0, 48)); // NOI18N
+        loginHeader.setText("Sentinel");
+        loginHeader.setHorizontalAlignment(SwingConstants.CENTER);
 
         loginEmailLabel.setText("E-mail");
 

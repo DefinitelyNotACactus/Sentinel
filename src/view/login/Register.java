@@ -58,7 +58,9 @@ public class Register extends JPanel {
 
         setBackground(new java.awt.Color(0, 153, 153));
 
-        registerHeader.setText("logo");
+        registerHeader.setFont(new java.awt.Font("Impact", 0, 48)); // NOI18N
+        registerHeader.setText("Crie sua conta no Sentinel");
+        registerHeader.setHorizontalAlignment(SwingConstants.CENTER);
 
         nameLabel.setText("Nome");
 

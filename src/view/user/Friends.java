@@ -37,9 +37,11 @@ public class Friends extends JPanel {
     public Friends(Client c, Home home) {
         this.client = c;
         this.home = home;
+        
         friendModel = new DefaultListModel<>();
         requestModel = new DefaultListModel<>();
         blockedModel = new DefaultListModel<>();
+        
         initComponents();
         listFriendPanel(false);
     }
@@ -241,7 +243,6 @@ public class Friends extends JPanel {
                     } else {
                         JOptionPane.showMessageDialog(client, "Pedido enviado para " + user.getName(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
                         user.sendNewRequest(client.getUser());
-                        listFriendPanel(true);
                     }
                     break;
                 case 1://block
