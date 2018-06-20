@@ -180,12 +180,14 @@ public class AdminPanel extends JPanel {
                     break;
                 case 2:
                     if(actor.isBlocked(user)){
-                        group.block(user);
-                    } else{
                         group.unblock(user);
+                    } else{
+                        group.block(user);
                     }
+                    break;
             }
         }
+        listUsers(true);
     }//GEN-LAST:event_SearchButtonActionPerformed
 
     private void requestListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_requestListValueChanged
