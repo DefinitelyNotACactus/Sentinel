@@ -111,10 +111,8 @@ public class ViewPost extends JPanel {
             }
         });
 
-        if(isOwner && !isThirdPerson){
+        if(post.getAuthor().getId().equals(client.getUser().getId())){
             userLabel.setText("<html>Autor: <b>(Você)</b></html>");
-        } else if(post.getAuthor() == null){
-            userLabel.setText("<html><b>Autor Excluído</b></html>");
         } else {
             userLabel.setText("<html>Autor: <b>" + post.getAuthor().getName() + "</b></html>");
         }

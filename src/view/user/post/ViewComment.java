@@ -96,14 +96,10 @@ public class ViewComment extends JPanel {
             btEdit.setEnabled(false);
         }
 
-        if(comment.getAuthor() == null){
-            answersLabel.setText("<html><b>Autor Excluído</b></html>");
+        if(isOwner){
+            userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
         } else {
-            if(isOwner){
-                userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
-            } else {
-                answersLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
-            }
+            answersLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
         }
 
         answersContentPanel.setLayout(new javax.swing.BoxLayout(answersContentPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -166,14 +162,10 @@ public class ViewComment extends JPanel {
         });
         buttonsPanel.add(btComment);
 
-        if(comment.getAuthor() == null){
-            userLabel.setText("<html><b>Autor Excluído</b></html>");
+        if(comment.getAuthor().getId().equals(client.getUser().getId())){
+            userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
         } else {
-            if(comment.getAuthor().getId().equals(client.getUser().getId())){
-                userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
-            } else {
-                userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
-            }
+            userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
         }
 
         contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
