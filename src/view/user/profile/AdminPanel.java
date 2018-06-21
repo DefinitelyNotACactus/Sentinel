@@ -200,12 +200,11 @@ public class AdminPanel extends JPanel {
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja aceitar " + selected.getName() + " no grupo?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 actor.addRelative(selected);
-                requestList.remove(index);
+                listUsers(true);
             } else if(confirm == 1) {
                 actor.removeRequest(selected);
-                requestList.remove(index);
+                listUsers(true);
             }
-            listUsers(true);
         }
     }//GEN-LAST:event_requestListValueChanged
 
@@ -217,9 +216,8 @@ public class AdminPanel extends JPanel {
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja desbloquear " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 actor.unblock(selected);
-                blockedList.remove(index);
+                listUsers(true);
             }
-            listUsers(true);
         }
     }//GEN-LAST:event_blockedListValueChanged
 

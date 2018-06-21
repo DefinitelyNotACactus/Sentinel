@@ -33,7 +33,7 @@ public class Friends extends JPanel {
     private DefaultListModel<User> friendModel;
     private DefaultListModel<User> requestModel;
     private DefaultListModel<User> blockedModel;
-
+    
     public Friends(Client c, Home home) {
         this.client = c;
         this.home = home;
@@ -58,7 +58,7 @@ public class Friends extends JPanel {
             }
             requestModel.clear();
             blockedListLabel.setText("Bloqueados ("+ client.getUser().getBlocked().size() + ")");
-            blockedModel.clear();   
+            blockedModel.clear();  
         }
         Iterator it = client.getUser().getRelatives().iterator();
         int i;
@@ -270,11 +270,12 @@ public class Friends extends JPanel {
             if (confirm == 0) {
                 client.getUser().addRelative(selected);
                 friendRequestList.remove(index);
+                listFriendPanel(true);
             } else if(confirm == 1) {
                 client.getUser().removeRequest(selected);
                 friendRequestList.remove(index);
+                listFriendPanel(true);
             }
-            listFriendPanel(true);
         }
     }//GEN-LAST:event_friendRequestListValueChanged
 
@@ -286,9 +287,8 @@ public class Friends extends JPanel {
             int confirm = JOptionPane.showConfirmDialog(client, "Você deseja desbloquear " + selected.getName() + " ?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm == 0) {
                 client.getUser().unblock(selected);
-                blockedList.remove(index);
+                listFriendPanel(true);
             }
-            listFriendPanel(true);
         }
     }//GEN-LAST:event_blockedListValueChanged
 

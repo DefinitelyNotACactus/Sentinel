@@ -87,7 +87,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="isRelativeLabel">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isRelativeLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(!isOwner &amp;&amp; actor instanceof User){&#xa;    if(client.getUser().isRelative((User) actor)){&#xa;        isRelativeLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    } else {&#xa;        isRelativeLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;    }&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="isRelativeLabel.setHorizontalAlignment(SwingConstants.CENTER);&#xa;if(actor instanceof User){&#xa;    if(client.getUser().isRelative((User) actor)){&#xa;        isRelativeLabel.setText(&quot;&#xc9; seu amigo&quot;);&#xa;    } else if(isOwner){&#xa;        isRelativeLabel.setText(&quot;(Voc&#xea;)&quot;);&#xa;    }&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btActorInfo">

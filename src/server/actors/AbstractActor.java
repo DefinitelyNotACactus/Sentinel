@@ -242,6 +242,7 @@ public abstract class AbstractActor implements Serializable{
             Object ob = this;
             if(ob instanceof User){
                 victim.removeRelative((User) ob);
+                victim.removeRequest((User) ob);
             }
             removeRequest(victim);
         }

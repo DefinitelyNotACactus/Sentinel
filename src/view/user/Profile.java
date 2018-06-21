@@ -171,10 +171,10 @@ public class Profile extends JPanel {
         );
 
         isRelativeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        if(!isOwner && actor instanceof User){
+        if(actor instanceof User){
             if(client.getUser().isRelative((User) actor)){
                 isRelativeLabel.setText("É seu amigo");
-            } else {
+            } else if(isOwner){
                 isRelativeLabel.setText("(Você)");
             }
         }
