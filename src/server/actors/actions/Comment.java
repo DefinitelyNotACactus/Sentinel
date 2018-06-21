@@ -15,19 +15,15 @@ import javax.swing.ImageIcon;
  *
  * @author David
  */
-public class Comment implements Serializable {
+public class Comment extends Answer implements Serializable {
     
-    private String text;
-    
-    private User author;
     private final ImageIcon icon;
     
     private List<Comment> comments;
     private List<Answer> answers;
     
     public Comment(String text, User author){
-        this.text = text;
-        this.author = author;
+        super(text, author);
         
         icon = null;
         comments = new ArrayList<>();
@@ -35,28 +31,11 @@ public class Comment implements Serializable {
     }
     
     public Comment(String text, User author, String iconPath){
-        this.text = text;
-        this.author = author;
+        super(text, author);
         
         icon = new ImageIcon(iconPath);     
         comments = new ArrayList<>();
         answers = new ArrayList<>();
-    }
-    
-    public String getText(){
-        return text;
-    }
-    
-    public void setText(String newText){
-        this.text = newText;
-    }
-    
-    public User getAuthor(){
-        return author;
-    }
-    
-    public void setAuthor(User newAuthor){
-        author = newAuthor;
     }
     
     public ImageIcon getIcon(){

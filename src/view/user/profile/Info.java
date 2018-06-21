@@ -231,7 +231,11 @@ public class Info extends JPanel {
             }
         });
         if(!isOwner){
-            btAddPhoto.setEnabled(false);
+            if(actor instanceof Group && actor.isRelative(client.getUser())){
+                btAddPhoto.setEnabled(true);
+            } else {
+                btAddPhoto.setEnabled(false);
+            }
             if(actor instanceof User){
                 btAddPhoto.setVisible(false);
             }
@@ -305,7 +309,7 @@ public class Info extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAddPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddPhotoActionPerformed
-        if(btUserPhoto.isEnabled()){
+        if(btUserPhoto.isEnabled() || actor instanceof Group && !btSelectPhoto.isVisible()){
             btSelectPhoto.setVisible(true);
             btSelectPhoto.setEnabled(true);
             photoFileLabel.setVisible(true);
@@ -332,7 +336,9 @@ public class Info extends JPanel {
                 }
                 selected_file = "";
                 btAddPhoto.setText("Adicionar Nova Foto");
-                btUserPhoto.setEnabled(true);
+                if(actor instanceof User || actor instanceof User && isOwner){
+                    btUserPhoto.setEnabled(true);
+                }
                 loadPhotos(true);
             }
         }
@@ -396,7 +402,7 @@ public class Info extends JPanel {
             }
             int selection = JOptionPane.showOptionDialog(client, scrollPane , actor.getPhoto(index).getComment(), JOptionPane.DEFAULT_OPTION, -1, null, options, options[0]);   
             if(selection == 1){
-                if(isOwner){
+                if(isOwner || actor instanceof Group && actor.getPhoto(index).getAuthor().getId().equals(client.getUser().getId())){
                     actor.deletePhoto(index);
                     loadPhotos(true);
                 } else {

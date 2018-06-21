@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.util.Iterator;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.actors.AbstractActor;
@@ -30,6 +31,7 @@ public class ViewPost extends JPanel {
     private final Client client;
     private final Wall wall;
     private final Post post;
+    
     private final AbstractActor actor;
     
     private final boolean isWallOwner;
@@ -65,11 +67,14 @@ public class ViewPost extends JPanel {
             } else {
                 isWallOwner = false;
                 isOwner = Validator.isSameEmail(client.getUser().getId(), post.getAuthor().getId());
-            }             
+            }           
         }
         
-        isThirdPerson = !Validator.isSameEmail(post.getAuthor().getId(), wall.getWallOwner().getId());
-
+        if(actor instanceof User){
+            isThirdPerson = !Validator.isSameEmail(post.getAuthor().getId(), wall.getWallOwner().getId());
+        } else {
+            isThirdPerson = !Validator.isSameEmail(post.getAuthor().getId(), client.getUser().getId());
+        }
         initComponents();
     }
     
@@ -108,6 +113,8 @@ public class ViewPost extends JPanel {
 
         if(isOwner && !isThirdPerson){
             userLabel.setText("<html>Autor: <b>(Você)</b></html>");
+        } else if(post.getAuthor() == null){
+            userLabel.setText("<html><b>Autor Excluído</b></html>");
         } else {
             userLabel.setText("<html>Autor: <b>" + post.getAuthor().getName() + "</b></html>");
         }
@@ -218,6 +225,15 @@ public class ViewPost extends JPanel {
 
     private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
         if(!isEditing){
+            if(actor instanceof Group){
+                Group group = (Group) actor;
+                if(group.isAdmin(client.getUser()) && !post.getAuthor().getId().equals(client.getUser().getId())){
+                    int confirm = JOptionPane.showConfirmDialog(client, "Você quer apagar " + post.getAuthor().getName() + " como autor?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (confirm == 0) {
+                        post.setAuthor(Constants.DEFAULT_USER);
+                    }
+                }
+            }
             titleField.setEditable(true);
             textField.setEditable(true);
             btEdit.setText("Salvar");

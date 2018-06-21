@@ -12,22 +12,22 @@ import server.actors.User;
  *
  * @author David
  */
-public class Answer implements Serializable{
+public class Answer implements Serializable {
     
-    private String answer;
+    private String text;
     private User author;
     
-    public Answer(String answer, User author){
-        this.answer = answer;
+    public Answer(String text, User author){
+        this.text = text;
         this.author = author;
     }
     
-    public String getAnswer(){
-        return answer;
+    public String getText(){
+        return text;
     }
     
-    public void setAnswer(String newAnswer){
-        answer = newAnswer;
+    public void setText(String newText){
+        text = newText;
     }
     
     public User getAuthor(){

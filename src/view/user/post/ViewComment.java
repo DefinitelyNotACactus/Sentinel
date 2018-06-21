@@ -9,10 +9,12 @@ import executable.Client;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.actors.actions.Comment;
 import server.actors.actions.Post;
+import util.Constants;
 import util.Validator;
 
 /**
@@ -22,6 +24,7 @@ import util.Validator;
 public class ViewComment extends JPanel {
 
     private final Client client;
+    
     private final Comment comment;
     private final Post post;
     
@@ -93,10 +96,14 @@ public class ViewComment extends JPanel {
             btEdit.setEnabled(false);
         }
 
-        if(isOwner){
-            userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
+        if(comment.getAuthor() == null){
+            answersLabel.setText("<html><b>Autor Excluído</b></html>");
         } else {
-            answersLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
+            if(isOwner){
+                userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
+            } else {
+                answersLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
+            }
         }
 
         answersContentPanel.setLayout(new javax.swing.BoxLayout(answersContentPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -159,10 +166,15 @@ public class ViewComment extends JPanel {
         });
         buttonsPanel.add(btComment);
 
-        if(isOwner){
-            userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
+        if(comment.getAuthor() == null){
+            userLabel.setText("<html><b>Autor Excluído</b></html>");
+        } else {
+            if(comment.getAuthor().getId().equals(client.getUser().getId())){
+                userLabel.setText("<html><b>(Você)</b> respondeu: </html>");
+            } else {
+                userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
+            }
         }
-        userLabel.setText("<html><b>" + comment.getAuthor().getName() + "</b> respondeu: </html>");
 
         contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
         if(comment.getIcon() != null){
@@ -214,6 +226,12 @@ public class ViewComment extends JPanel {
 
     private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
         if(!isEditing){
+            if(isWallOwner && !comment.getAuthor().getId().equals(client.getUser().getId())){
+                int confirm = JOptionPane.showConfirmDialog(client, "Você quer apagar " + comment.getAuthor().getName() + " como autor?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (confirm == 0) {
+                    comment.setAuthor(Constants.DEFAULT_USER);
+                }
+            }
             textField.setEditable(true);
             btEdit.setText("Salvar");
             isEditing = true;

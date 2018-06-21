@@ -94,7 +94,7 @@ public class NewPost extends JPanel {
         });
 
         visibilityBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Visibilidade", "Público", "Somente Amigos" }));
-        if(!isOwner){
+        if(!isOwner || actor instanceof Group){
             visibilityBox.setSelectedIndex(1);
             visibilityBox.setEnabled(false);
         }
@@ -167,12 +167,12 @@ public class NewPost extends JPanel {
             JOptionPane.showMessageDialog(client, "Escolha uma visibilidade para sua mensagem!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             Post post;
-            User user = (User) actor;
             if(selected_file.equals("Inválido") || selected_file.trim().equals("")){
                 post = new Post(titleField.getText(), textField.getText(), client.getUser(), (visibilityBox.getSelectedIndex() == 1));
                 if(isOwner || actor instanceof Group){
                     actor.addPost(post);
                 } else { 
+                    User user = (User) actor;
                     user.addPostFromOthers(post);
                 }
             } else {
@@ -180,6 +180,7 @@ public class NewPost extends JPanel {
                 if(isOwner || actor instanceof Group){
                     actor.addPost(post);
                 } else {
+                    User user = (User) actor;
                     user.addPostFromOthers(post);
                 }
             }

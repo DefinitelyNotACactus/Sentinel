@@ -74,8 +74,8 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;    userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;} else {"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(comment.getAuthor() == null){&#xa;    answersLabel.setText(&quot;&lt;html&gt;&lt;b&gt;Autor Exclu&#xed;do&lt;/b&gt;&lt;/html&gt;&quot;);&#xa;} else {&#xa;    if(isOwner){&#xa;        userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;    } else {"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="answersContentPanel">
@@ -185,7 +185,8 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(isOwner){&#xa;userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(comment.getAuthor() == null){&#xa;    userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;Autor Exclu&#xed;do&lt;/b&gt;&lt;/html&gt;&quot;);&#xa;} else {&#xa;    if(comment.getAuthor().getId().equals(client.getUser().getId())){&#xa;    userLabel.setText(&quot;&lt;html&gt;&lt;b&gt;(Voc&#xea;)&lt;/b&gt; respondeu: &lt;/html&gt;&quot;);&#xa;    } else {"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="contentPanel">

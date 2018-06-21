@@ -5,13 +5,15 @@
  */
 package util;
 
+import server.actors.User;
+
 /**
  *
  * @author David
  */
 public class Constants {
     
-    public static final String VERSION = "2.0.0";
+    public static final String VERSION = "2.0.4";
     public static final String FONT = "Tahoma";
     
     public static final String WINDOW_CLOSE_MESSAGE[] = {"Você deseja mesmo sair?", "Aviso"};
@@ -24,4 +26,7 @@ public class Constants {
     
     public static final String BTFRIENDS_TEXT = "Amigos";
     public static final String BTGROUPS_TEXT = "Groupos";
+    
+    //WHY??
+    public static final User DEFAULT_USER = new User("Autor Excluído", "email", "password", -1, "00/00/0000");
 }

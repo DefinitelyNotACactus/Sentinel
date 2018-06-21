@@ -140,7 +140,7 @@ public class Wall extends JPanel {
             if(!actor.isRelative(client.getUser())){
                 postPanel.add(new JLabel("Apenas membros de " + actor.getName() + " podem publicar novas mensagens."));
             } else {
-                postPanel.add(new NewPost(client, client.getUser(), this));
+                postPanel.add(new NewPost(client, actor, this));
             }
         }
         postPanel.setLayout(new javax.swing.BoxLayout(postPanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -205,7 +205,7 @@ public class Wall extends JPanel {
         if(index >= 0){
             Post selected = actor.getPost(index);
             postPanel.removeAll();
-            postPanel.add(new ViewPost(client, (User) actor, this, selected));
+            postPanel.add(new ViewPost(client, actor, this, selected));
             postPanel.revalidate();
         }
     }//GEN-LAST:event_wopListValueChanged

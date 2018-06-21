@@ -6,10 +6,12 @@
 package view.user.post;
 
 import executable.Client;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import server.actors.actions.Answer;
 import server.actors.actions.Comment;
+import util.Constants;
 import util.Validator;
 
 /**
@@ -18,6 +20,8 @@ import util.Validator;
  */
 public class ViewAnswer extends JPanel {
 
+    private final Client client;
+    
     private final Comment comment;
     private final Answer answer;
 
@@ -25,6 +29,7 @@ public class ViewAnswer extends JPanel {
     private boolean isEditing;
     
     public ViewAnswer(Client c, Comment comment, Answer answer, boolean isWallOwner){
+        this.client = c;
         this.comment = comment;
         this.answer = answer;
         
@@ -57,7 +62,7 @@ public class ViewAnswer extends JPanel {
         answersContentPanel = new javax.swing.JPanel();
 
         textField.setEditable(false);
-        textField.setText(answer.getAnswer());
+        textField.setText(answer.getText());
         textField.setToolTipText("");
 
         answersButtonsPanel.setLayout(new java.awt.GridLayout(1, 0));
@@ -84,7 +89,11 @@ public class ViewAnswer extends JPanel {
             btEditAnswer.setEnabled(false);
         }
 
-        answersLabel.setText("<html><b>" + answer.getAuthor().getName() + "</b> respondeu: </html>");
+        if(answer.getAuthor().getId().equals(client.getUser().getId())){
+            answersLabel.setText("<html><b>(Você)</b> respondeu: </html>");
+        } else {
+            answersLabel.setText("<html><b>" + answer.getAuthor().getName() + "</b> respondeu: </html>");
+        }
 
         answersContentPanel.setLayout(new javax.swing.BoxLayout(answersContentPanel, javax.swing.BoxLayout.LINE_AXIS));
         answersContentPanel.add(new JScrollPane(textField));
@@ -137,12 +146,18 @@ public class ViewAnswer extends JPanel {
 
     private void btEditAnswerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditAnswerActionPerformed
         if(!isEditing){
+            if(isOwner && !answer.getAuthor().getId().equals(client.getUser().getId())){
+                int confirm = JOptionPane.showConfirmDialog(client, "Você quer apagar " + answer.getAuthor().getName() + " como autor?", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (confirm == 0) {
+                    answer.setAuthor(Constants.DEFAULT_USER);
+                }
+            }
             textField.setEditable(true);
             btEditAnswer.setText("Salvar");
             isEditing = true;
         } else {
             textField.setEditable(false);
-            comment.setText(textField.getText());
+            answer.setText(textField.getText());
             btEditAnswer.setText("Editar");
             isEditing = false;
         }
